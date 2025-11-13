@@ -2,6 +2,15 @@
 
 A straightforward, beginner-friendly PHP MVC framework with clear code flow and robust routing.
 
+## 📚 Documentation for Beginners
+
+**New to the framework?** Start here:
+
+- 📖 [Complete Beginner's Guide](docs/README.md) - Start here if you're new!
+- 🚀 [Getting Started](docs/01-Getting-Started.md) - Your first steps
+- 🔄 [Request & Response](docs/02-Request-Response.md) - Understanding data flow
+- 🛤️ [Complete Flow](docs/03-Complete-Flow.md) - How everything connects
+
 ## Features
 
 - **Simple & Clear**: Easy to understand code flow - perfect for learning MVC
