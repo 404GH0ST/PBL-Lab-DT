@@ -18,15 +18,7 @@ class AuthMiddleware implements MiddlewareInterface
         session_start();
 
         if (!isset($_SESSION['user_id'])) {
-            // User is not authenticated
-            if ($request->wantsJson()) {
-                return Response::json([
-                    'error' => 'Unauthorized',
-                    'message' => 'You must be logged in to access this resource'
-                ], 401);
-            }
-
-            // Redirect to login page
+            // User is not authenticated - redirect to login page
             return Response::redirect('/login');
         }
 

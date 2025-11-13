@@ -36,10 +36,10 @@ class CsrfMiddleware implements MiddlewareInterface
         $token = $request->input('_token') ?? $request->header('X-CSRF-Token');
 
         if (!$token || !$this->validateToken($token)) {
-            return Response::json([
-                'error' => 'CSRF token mismatch',
-                'message' => 'Your session has expired. Please refresh and try again.'
-            ], 419);
+            return new Response(
+                'CSRF token mismatch. Your session has expired. Please refresh and try again.',
+                419
+            );
         }
 
         return $next($request);

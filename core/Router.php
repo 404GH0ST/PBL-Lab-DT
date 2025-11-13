@@ -285,10 +285,6 @@ class Router
             return $result;
         }
 
-        if (is_array($result) || is_object($result)) {
-            return new Response(json_encode($result), 200, ['Content-Type' => 'application/json']);
-        }
-
         return new Response((string) $result, 200);
     }
 

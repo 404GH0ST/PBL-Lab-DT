@@ -41,14 +41,6 @@ abstract class Controller
     }
 
     /**
-     * Return a JSON response
-     */
-    protected function json($data, int $statusCode = 200): Response
-    {
-        return Response::json($data, $statusCode);
-    }
-
-    /**
      * Redirect to a URL
      */
     protected function redirect(string $url, int $statusCode = 302): Response

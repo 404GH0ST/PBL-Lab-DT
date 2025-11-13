@@ -37,20 +37,6 @@ class Response
     }
 
     /**
-     * Create a JSON response
-     */
-    public static function json($data, int $statusCode = 200, array $headers = []): self
-    {
-        $headers['Content-Type'] = 'application/json';
-
-        return new static(
-            json_encode($data),
-            $statusCode,
-            $headers
-        );
-    }
-
-    /**
      * Create a redirect response
      */
     public static function redirect(string $url, int $statusCode = 302): self

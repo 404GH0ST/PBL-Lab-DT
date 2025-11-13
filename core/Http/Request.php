@@ -185,35 +185,6 @@ class Request
     }
 
     /**
-     * Get JSON data from request body
-     */
-    public function json(): ?array
-    {
-        if ($this->isJson()) {
-            return json_decode($this->content(), true);
-        }
-
-        return null;
-    }
-
-    /**
-     * Check if request is JSON
-     */
-    public function isJson(): bool
-    {
-        return str_contains($this->header('Content-Type', ''), 'json');
-    }
-
-    /**
-     * Check if request expects JSON response
-     */
-    public function wantsJson(): bool
-    {
-        $acceptable = $this->header('Accept', '');
-        return str_contains($acceptable, 'json');
-    }
-
-    /**
      * Check if request is AJAX
      */
     public function ajax(): bool

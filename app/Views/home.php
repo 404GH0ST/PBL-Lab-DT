@@ -35,10 +35,14 @@
 <div style="margin: 40px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
     <h2 style="color: #667eea; margin-bottom: 15px;">Quick Start</h2>
     <ol style="margin-left: 20px; color: #666;">
-        <li style="margin: 10px 0;">Install: <code style="background: white; padding: 2px 8px; border-radius: 4px;">composer dump-autoload</code></li>
-        <li style="margin: 10px 0;">Configure PostgreSQL in <code style="background: white; padding: 2px 8px; border-radius: 4px;">config/app.php</code></li>
-        <li style="margin: 10px 0;">Define routes in <code style="background: white; padding: 2px 8px; border-radius: 4px;">routes/web.php</code></li>
-        <li style="margin: 10px 0;">Create controllers with <code style="background: white; padding: 2px 8px; border-radius: 4px;">$this->loadModel()</code></li>
+        <li style="margin: 10px 0;">Install: <code
+                style="background: white; padding: 2px 8px; border-radius: 4px;">composer dump-autoload</code></li>
+        <li style="margin: 10px 0;">Configure PostgreSQL in <code
+                style="background: white; padding: 2px 8px; border-radius: 4px;">config/app.php</code></li>
+        <li style="margin: 10px 0;">Define routes in <code
+                style="background: white; padding: 2px 8px; border-radius: 4px;">routes/web.php</code></li>
+        <li style="margin: 10px 0;">Create controllers with <code
+                style="background: white; padding: 2px 8px; border-radius: 4px;">$this->loadModel()</code></li>
         <li style="margin: 10px 0;">Write plain SQL in your models!</li>
     </ol>
 </div>
@@ -46,22 +50,21 @@
 <div style="margin: 40px 0; padding: 20px; background: #e3f2fd; border-radius: 8px;">
     <h2 style="color: #667eea; margin-bottom: 15px;">Code Flow Example</h2>
     <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto; line-height: 1.6;"><code style="color: #333; font-size: 14px;">// 1. Route
-$router->get('/api/users', [HomeController::class, 'users']);
+$router->get('/', [HomeController::class, 'index']);
 
 // 2. Controller
-public function users() {
-    $userModel = $this->loadModel(User::class);
-    $users = $userModel->getAllUsers();
-    return $this->json(['users' => $users]);
+public function index(Request $request): Response {
+    return $this->view('home', [
+        'title' => 'Welcome',
+        'message' => 'Hello World'
+    ]);
 }
 
-// 3. Model
-public function getAllUsers() {
-    $sql = "SELECT * FROM users";
-    return $this->db->query($sql);
-}</code></pre>
+// 3. View
+&lt;h1&gt;&lt;?= htmlspecialchars($title) ?&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;?= htmlspecialchars($message) ?&gt;&lt;/p&gt;</code></pre>
     <p style="margin-top: 15px; color: #666;">
-        <strong>That's it!</strong> No ORM, no complex abstractions. Just simple, clear code flow.
+        <strong>That's it!</strong> Simple, clear code flow from routes to views.
     </p>
 </div>
 

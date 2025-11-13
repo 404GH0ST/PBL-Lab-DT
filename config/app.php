@@ -26,9 +26,9 @@ return [
         'driver' => 'pgsql',
         'host' => 'localhost',
         'port' => 5432,
-        'database' => 'mvc_framework',
-        'username' => 'postgres',
-        'password' => '',
+        'database' => 'pbl_dt',
+        'username' => 'jergal',
+        'password' => 'defalt',
         'charset' => 'utf8',
     ],
 ];

@@ -90,16 +90,6 @@ if (!function_exists('view')) {
     }
 }
 
-if (!function_exists('json')) {
-    /**
-     * Create a JSON response
-     */
-    function json($data, int $statusCode = 200): Response
-    {
-        return Response::json($data, $statusCode);
-    }
-}
-
 if (!function_exists('redirect')) {
     /**
      * Create a redirect response
@@ -149,7 +139,7 @@ if (!function_exists('session')) {
     /**
      * Get or set session value
      */
-    function session(string $key = null, $value = null)
+    function session(?string $key = null, $value = null)
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
