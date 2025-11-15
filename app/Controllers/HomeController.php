@@ -17,8 +17,8 @@ class HomeController extends Controller
     public function index(Request $request): Response
     {
         return $this->view('home', [
-            'title' => 'Welcome to PHP MVC Framework',
-            'message' => 'A simple, native PHP MVC framework with robust routing'
+            'title' => 'Welcome to Profile Lab DT',
+            'message' => 'Welcome to Profile Lab DT'
         ]);
     }
 
