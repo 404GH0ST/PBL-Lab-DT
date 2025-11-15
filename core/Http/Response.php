@@ -49,8 +49,21 @@ class Response
      */
     public static function view(string $view, array $data = [], int $statusCode = 200): self
     {
+        extract($data);
+
         $content = self::renderView($view, $data);
-        return new static($content, $statusCode);
+
+        $layoutPath = __DIR__ . '/../../app/Views/layouts/main.php';
+
+        if (!file_exists($layoutPath)) {
+            throw new \Exception("Layout [main] not found.");
+        }
+
+        ob_start();
+        include $layoutPath;
+        $finalContent = ob_get_clean();
+
+        return new static($finalContent, $statusCode);
     }
 
     /**
