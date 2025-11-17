@@ -1,10 +1,10 @@
-# PHP MVC Framework
+# PHP MVC
 
 A straightforward, beginner-friendly PHP MVC framework with clear code flow and robust routing.
 
 ## 📚 Documentation for Beginners
 
-**New to the framework?** Start here:
+**New to the MVC?** Start here:
 
 - 📖 [Complete Beginner's Guide](docs/README.md) - Start here if you're new!
 - 🚀 [Getting Started](docs/01-Getting-Started.md) - Your first steps
