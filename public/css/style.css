@@ -18,8 +18,7 @@ body {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  background: 
-    linear-gradient(90deg, #15995780, #155799),
+  background: linear-gradient(90deg, #15995780, #155799),
     url("/assets/images/hero.png") center/cover no-repeat;
   display: flex;
   align-items: center;
@@ -28,21 +27,27 @@ body {
 }
 
 .text-hero {
-    font-size: 58px;;
+  font-size: 58px;
 }
 .subtext-hero {
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.5);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .gradient-text-hero {
-  background: linear-gradient(to right, #1FA2FF, #12D8FA, #A6FFCB);
+  background: linear-gradient(to right, #f8f8f8, #6ed882);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .about-gradient-text {
-  background: linear-gradient(to right, #314755, #26A0DA);
+  background: linear-gradient(to right, #314755, #26a0da);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.text-vision-gradient {
+  background: linear-gradient(to right, #314755, #26a0da);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
