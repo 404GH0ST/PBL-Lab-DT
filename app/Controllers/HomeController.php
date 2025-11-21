@@ -32,6 +32,13 @@ class HomeController extends Controller
         ]);
     }
 
+    public function FacilityPage(Request $request): Response
+    {
+        return $this->view('facility', [
+            'title' => 'Facility - Profile Lab DT'
+        ]);
+    }
+
     public function galleryPage(Request $request): Response
     {
         return $this->view('gallery', [
@@ -45,7 +52,7 @@ class HomeController extends Controller
             'title' => 'Publication - Profile Lab DT'
         ]);
     }
-    
+
     public function loginPage(Request $request): Response
     {
         return $this->view('login', [
