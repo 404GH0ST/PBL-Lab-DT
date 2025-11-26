@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use App\Models\VisiMisi;
 
 
 /**
@@ -33,6 +34,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $visiMisiModel = $this->loadModel(VisiMisi::class);
+        $visi = $visiMisiModel->getVisi();
+        $misi = $visiMisiModel->getMisi();
         $recentPublications = $this->publicationModel->getApprovedPublications();
         // Limit to 4 for the home page
         $recentPublications = array_slice($recentPublications, 0, 4);
@@ -40,6 +44,8 @@ class HomeController extends Controller
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
+            'visi' => $visi,
+            'misi' => $misi
             'recentPublications' => $recentPublications
         ]);
     }
