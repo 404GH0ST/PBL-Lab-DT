@@ -4,11 +4,12 @@ namespace App\Controllers;
 
 use App\Models\Member;
 use Core\Controller;
-use Core\Http\Request;
+
 
 class AuthController extends Controller
 {
     protected $memberModel;
+    protected $errors = [];
 
     public function __construct()
     {
@@ -23,23 +24,27 @@ class AuthController extends Controller
         ]);
     }
 
-    public function authenticate(Request $request)
+    public function authenticate()
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
+        $username = $_POST['username'] ?? null;
+        $password = $_POST['password'] ?? null;
 
-        $user = $this->memberModel->authenticate($username, $password);
-
-        if ($user) {
-            $_SESSION['user'] = $user;
-            return $this->redirect('/admin/dashboard');
+        if (empty($username) || empty($password)) {
+            $this->errors['login'] = 'Username and password are required';
         } else {
-            return $this->view('auth/login', [
-                'title' => 'Login - Lab Informatika',
-                'layout' => 'layouts/auth',
-                'error' => 'Invalid username or password'
-            ]);
+            $user = $this->memberModel->authenticate($username, $password);
+            if ($user) {
+                $_SESSION['user'] = $user;
+                return $this->redirect('/admin/dashboard');
+            }
+            $this->errors['login'] = 'Invalid username or password';
         }
+
+        return $this->view('auth/login', [
+            'title' => 'Login - Lab Informatika',
+            'layout' => 'layouts/auth',
+            'errors' => $this->errors
+        ]);
     }
 
     public function logout()

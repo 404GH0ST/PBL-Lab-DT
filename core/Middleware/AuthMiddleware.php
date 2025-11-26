@@ -2,8 +2,7 @@
 
 namespace Core\Middleware;
 
-use Core\Http\Request;
-use Core\Http\Response;
+
 use Closure;
 
 /**
@@ -11,12 +10,15 @@ use Closure;
  */
 class AuthMiddleware implements MiddlewareInterface
 {
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         if (!isset($_SESSION['user'])) {
-            return Response::redirect('/login');
+            header('Location: /login');
+            exit;
         }
 
         return $next($request);

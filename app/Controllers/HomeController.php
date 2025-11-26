@@ -3,8 +3,7 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use Core\Http\Request;
-use Core\Http\Response;
+
 
 /**
  * Home Controller
@@ -14,7 +13,7 @@ class HomeController extends Controller
     /**
      * Display the home page
      */
-    public function index(Request $request): Response
+    public function index()
     {
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
@@ -25,35 +24,35 @@ class HomeController extends Controller
     /**
      * Display about page
      */
-    public function aboutPage(Request $request): Response
+    public function aboutPage()
     {
         return $this->view('about', [
             'title' => 'About Us - Profile Lab DT'
         ]);
     }
 
-    public function FacilityPage(Request $request): Response
+    public function FacilityPage()
     {
         return $this->view('facility', [
             'title' => 'Facility - Profile Lab DT'
         ]);
     }
 
-    public function galleryPage(Request $request): Response
+    public function galleryPage()
     {
         return $this->view('gallery', [
             'title' => 'Gallery - Profile Lab DT'
         ]);
     }
-    
-    public function publicationPage(Request $request): Response
+
+    public function publicationPage()
     {
         return $this->view('publications', [
             'title' => 'Publication - Profile Lab DT'
         ]);
     }
 
-    public function loginPage(Request $request): Response
+    public function loginPage()
     {
         return $this->view('login', [
             'title' => 'Login - Profile Lab DT'
