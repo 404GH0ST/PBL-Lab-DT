@@ -2,9 +2,9 @@
     <div class="text-center mb-4">
         <h1 class="auth-title">Welcome Back</h1>
         <p class="auth-subtitle">Please sign in to your account</p>
-        <?php if (isset($error)): ?>
+        <?php if (isset($errors['login'])): ?>
             <div class="alert alert-danger">
-                <?php echo $error; ?>
+                <?php echo $errors['login']; ?>
             </div>
         <?php endif; ?>
     </div>
