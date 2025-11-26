@@ -284,10 +284,6 @@
                 <i class="bi bi-speedometer2"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="/admin/users" class="nav-link <?= strpos($uri, '/admin/users') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-people"></i>
-                <span>Users</span>
-            </a>
             <a href="/admin/members" class="nav-link <?= strpos($uri, '/admin/members') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-person-badge"></i>
                 <span>Members</span>

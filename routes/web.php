@@ -1,15 +1,12 @@
 <?php
-
-/**
- * Web Routes
- * Define your application routes here
- */
-
 use App\Controllers\HomeController;
 use Core\Middleware\AuthMiddleware;
-use Core\Middleware\CsrfMiddleware;
+use App\Controllers\AuthController;
+use App\Controllers\DashboardController;
+use App\Controllers\Admin\MemberController;
 
 $router = $app->router();
+
 
 // ============================================
 // Basic Routes
@@ -21,6 +18,25 @@ $router->get('/facility', [HomeController::class, 'FacilityPage']);
 $router->get('/gallery', [HomeController::class, 'galleryPage']);
 $router->get('/publications', [HomeController::class, 'publicationPage']);
 $router->get('/login', [HomeController::class, 'loginPage']);
+
+// ============================================
+// Auth Routes
+// ============================================
+$router->get('/login', [AuthController::class, 'login']);
+$router->post('/login', [AuthController::class, 'authenticate']);
+$router->get('/logout', [AuthController::class, 'logout']);
+
+// ============================================
+// Admin Routes
+// ============================================
+$router->get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(AuthMiddleware::class);
+
+// Members Routes
+$app->router()->get('/admin/members', [MemberController::class, 'index']);
+$app->router()->post('/admin/members', [MemberController::class, 'store']);
+$app->router()->put('/admin/members/{id}', [MemberController::class, 'update']);
+$app->router()->delete('/admin/members/{id}', [MemberController::class, 'destroy']);
+
 
 // ============================================
 // Example Routes (Commented for Reference)
