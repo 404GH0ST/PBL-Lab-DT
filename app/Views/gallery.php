@@ -19,36 +19,21 @@
         </ul>
 
         <div class="row justify-content-center align-items-center g-4 mt-2">
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
-            <div class="col-6 col-lg-4">
-                <img src="/assets/images/dummy-image.png" alt="Gallery Image"
-                    class="img-fluid rounded-3 border gallery-img" style="width: 344px; height: auto; cursor: pointer;"
-                    data-bs-toggle="modal" data-bs-target="#imageModal" data-image="/assets/images/dummy-image.png">
-            </div>
+            <?php if (empty($photos)): ?>
+                <div class="col-12 text-center">
+                    <p class="text-muted">Belum ada foto di galeri.</p>
+                </div>
+            <?php else: ?>
+                <?php foreach ($photos as $photo): ?>
+                    <div class="col-6 col-lg-4 d-flex flex-column align-items-center">
+                        <img src="/<?= htmlspecialchars($photo['file_path']) ?>"
+                            alt="<?= htmlspecialchars($photo['judul_foto']) ?>" class="img-fluid rounded-3 border gallery-img"
+                            style="width: 344px; height: 250px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#imageModal" data-image="/<?= htmlspecialchars($photo['file_path']) ?>">
+                        <p class="text-center mt-2 fw-semibold"><?= htmlspecialchars($photo['judul_foto']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
 
         <!-- Pagination -->

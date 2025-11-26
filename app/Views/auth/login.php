@@ -19,16 +19,11 @@
             <label for="password" class="form-label text-sm fw-medium text-gray-700">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
         </div>
-
+        <!-- TODO: Contemplate if forgot password is needed -->
+        <!-- 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                <label class="form-check-label text-sm text-gray-600" for="remember">
-                    Remember me
-                </label>
-            </div>
             <a href="#" class="text-sm text-decoration-none" style="color: #4f46e5;">Forgot password?</a>
-        </div>
+        </div> -->
 
         <button type="submit" class="btn btn-primary">
             Sign in
