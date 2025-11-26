@@ -53,10 +53,23 @@ class Response
 
         $content = self::renderView($view, $data);
 
-        $layoutPath = __DIR__ . '/../../app/Views/layouts/main.php';
+        // Check if a specific layout is requested
+        $layoutName = $data['layout'] ?? 'layouts/main';
+
+        // Allow disabling layout by passing false or null
+        if ($layoutName === false || $layoutName === null) {
+            return new static($content, $statusCode);
+        }
+
+        $layoutPath = __DIR__ . '/../../app/Views/' . $layoutName . '.php';
 
         if (!file_exists($layoutPath)) {
-            throw new \Exception("Layout [main] not found.");
+            // Fallback to checking if it's just the name without directory
+            $layoutPath = __DIR__ . '/../../app/Views/layouts/' . $layoutName . '.php';
+
+            if (!file_exists($layoutPath)) {
+                throw new \Exception("Layout [{$layoutName}] not found.");
+            }
         }
 
         ob_start();
