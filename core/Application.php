@@ -66,6 +66,11 @@ class Application
 
         // Set timezone
         date_default_timezone_set($this->config['timezone'] ?? 'UTC');
+
+        // Start session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     /**
