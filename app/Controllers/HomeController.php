@@ -45,7 +45,7 @@ class HomeController extends Controller
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
             'visi' => $visi,
-            'misi' => $misi
+            'misi' => $misi,
             'recentPublications' => $recentPublications
         ]);
     }
