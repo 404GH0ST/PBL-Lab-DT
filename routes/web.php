@@ -4,6 +4,7 @@ use Core\Middleware\AuthMiddleware;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\Admin\MemberController;
+use App\Middlewares\AdminMIddleware;
 
 $router = $app->router();
 
@@ -32,10 +33,10 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(AuthMiddleware::class);
 
 // Members Routes
-$app->router()->get('/admin/members', [MemberController::class, 'index']);
-$app->router()->post('/admin/members', [MemberController::class, 'store']);
-$app->router()->put('/admin/members/{id}', [MemberController::class, 'update']);
-$app->router()->delete('/admin/members/{id}', [MemberController::class, 'destroy']);
+$app->router()->get('/admin/members', [MemberController::class, 'index'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
+$app->router()->post('/admin/members', [MemberController::class, 'store'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
+$app->router()->put('/admin/members/{id}', [MemberController::class, 'update'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
+$app->router()->delete('/admin/members/{id}', [MemberController::class, 'destroy'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
 
 
 // ============================================

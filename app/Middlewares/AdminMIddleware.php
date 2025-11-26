@@ -13,9 +13,8 @@ class AdminMIddleware implements MiddlewareInterface
             session_start();
         }
 
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-            // TODO: add alert message 
-            header('Location: /login');
+        if ($_SESSION['user']['role'] !== 'admin') {
+            header('Location: /admin/dashboard');
             exit;
         }
         return $next($request);

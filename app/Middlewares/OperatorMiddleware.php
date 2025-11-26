@@ -13,9 +13,8 @@ class OperatorMiddleware implements MiddlewareInterface
             session_start();
         }
 
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'operator') {
-            // TODO: add alert message 
-            header('Location: /login');
+        if ($_SESSION['user']['role'] !== 'operator') {
+            header('Location: /operator/dashboard');
             exit;
         }
         return $next($request);
