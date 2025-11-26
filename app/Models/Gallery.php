@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Models;
+
+use Core\Model;
+
+class Gallery extends Model
+{
+    protected $table = 'galeri';
+    protected $primaryKey = 'id_galeri';
+
+    public function getAllPhotos()
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                ORDER BY g.tanggal_upload DESC";
+        return $this->db->query($sql);
+    }
+
+    public function getApprovedPhotos()
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                WHERE g.status = 'approved'
+                ORDER BY g.tanggal_upload DESC";
+        return $this->db->query($sql);
+    }
+
+    public function getPhotoById($id)
+    {
+        $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_galeri = :id", ['id' => $id]);
+        return $result[0] ?? null;
+    }
+
+    public function createPhoto($data)
+    {
+        $sql = "INSERT INTO {$this->table} (judul_foto, deskripsi, file_path, id_uploader, status) 
+                VALUES (:judul_foto, :deskripsi, :file_path, :id_uploader, :status)";
+
+        return $this->db->execute($sql, [
+            'judul_foto' => $data['judul_foto'],
+            'deskripsi' => $data['deskripsi'] ?? null,
+            'file_path' => $data['file_path'],
+            'id_uploader' => $data['id_uploader'],
+            'status' => $data['status'] ?? 'pending'
+        ]);
+    }
+
+    public function updatePhoto($id, $data)
+    {
+        $fields = [];
+        $params = ['id' => $id];
+
+        if (isset($data['judul_foto'])) {
+            $fields[] = "judul_foto = :judul_foto";
+            $params['judul_foto'] = $data['judul_foto'];
+        }
+        if (isset($data['deskripsi'])) {
+            $fields[] = "deskripsi = :deskripsi";
+            $params['deskripsi'] = $data['deskripsi'];
+        }
+        if (isset($data['status'])) {
+            $fields[] = "status = :status";
+            $params['status'] = $data['status'];
+        }
+
+        $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id_galeri = :id";
+        return $this->db->execute($sql, $params);
+    }
+
+    public function deletePhoto($id)
+    {
+        return $this->db->execute("DELETE FROM {$this->table} WHERE id_galeri = :id", ['id' => $id]);
+    }
+}

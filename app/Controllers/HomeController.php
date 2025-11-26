@@ -9,8 +9,26 @@ use App\Models\VisiMisi;
 /**
  * Home Controller
  */
+use App\Models\News;
+use App\Models\Gallery;
+use App\Models\Publication;
+
+/**
+ * Home Controller
+ */
 class HomeController extends Controller
 {
+    protected $newsModel;
+    protected $galleryModel;
+    protected $publicationModel;
+
+    public function __construct()
+    {
+        $this->newsModel = $this->loadModel(News::class);
+        $this->galleryModel = $this->loadModel(Gallery::class);
+        $this->publicationModel = $this->loadModel(Publication::class);
+    }
+
     /**
      * Display the home page
      */
@@ -19,12 +37,16 @@ class HomeController extends Controller
         $visiMisiModel = $this->loadModel(VisiMisi::class);
         $visi = $visiMisiModel->getVisi();
         $misi = $visiMisiModel->getMisi();
+        $recentPublications = $this->publicationModel->getApprovedPublications();
+        // Limit to 4 for the home page
+        $recentPublications = array_slice($recentPublications, 0, 4);
 
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
             'visi' => $visi,
             'misi' => $misi
+            'recentPublications' => $recentPublications
         ]);
     }
 
@@ -47,15 +69,21 @@ class HomeController extends Controller
 
     public function galleryPage()
     {
+        $photos = $this->galleryModel->getApprovedPhotos();
+
         return $this->view('gallery', [
-            'title' => 'Gallery - Profile Lab DT'
+            'title' => 'Gallery - Profile Lab DT',
+            'photos' => $photos
         ]);
     }
 
     public function publicationPage()
     {
+        $publications = $this->publicationModel->getApprovedPublications();
+
         return $this->view('publications', [
-            'title' => 'Publication - Profile Lab DT'
+            'title' => 'Publication - Profile Lab DT',
+            'publications' => $publications
         ]);
     }
 

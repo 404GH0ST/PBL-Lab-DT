@@ -57,7 +57,7 @@
         <h2 class="all-text-gradient" style="font-size: 16px; font-weight: 600;">About Us</h2>
         <h2 class="all-text-gradient" style="font-size: 36px; font-weight: bold;">Anggota Tim</h2>
 
-         <!-- Team Members -->
+        <!-- Team Members -->
         <div class="row justify-content-center mt-5 g-4">
             <div class="col-6 col-lg-3">
                 <img src="/assets/images/kepala-lab.png" class="rounded-circle"
@@ -204,66 +204,32 @@
             </div>
 
             <div class="row">
-                <div class="col-6 col-lg-3">
-                    <div class="card shadow rounded-3 p-3" style="min-height: 392px;">
-                        <p class="p-2 rounded-pill" style="background: #7ABC5233; color: #314755; font-size: 10px;">Most
-                            Citised</p>
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold lh-large" style="color: #314755; font-size: 18px;">Sistem
-                                Prediksi
-                                Penjualan Frozen Food dengan Metode Monte
-                                Carlo (Studi Kasus: Supermama Frozen Food)</h5>
-                            <p class="card-text" style="color: #575757BF; font-size: 12px;">2022</p>
-                        </div>
-                        <button class="btn border-2 p-3 fw-bold"
-                            style="border-color: #314755 !important; color: #314755;">Baca</button>
+                <?php if (empty($recentPublications)): ?>
+                    <div class="col-12 text-center">
+                        <p class="text-muted">Belum ada publikasi.</p>
                     </div>
-                </div>
-                <div class="col-6 col-lg-3">
-                    <div class="card shadow rounded-3 p-3" style="min-height: 392px;">
-                        <p class="p-2 rounded-pill" style="background: #7ABC5233; color: #314755; font-size: 10px;">Most
-                            Citised</p>
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold lh-large" style="color: #314755; font-size: 18px;">Sistem
-                                Prediksi
-                                Penjualan Frozen Food dengan Metode Monte
-                                Carlo (Studi Kasus: Supermama Frozen Food)</h5>
-                            <p class="card-text" style="color: #575757BF; font-size: 12px;">2022</p>
+                <?php else: ?>
+                    <?php foreach ($recentPublications as $pub): ?>
+                        <div class="col-6 col-lg-3">
+                            <div class="card shadow rounded-3 p-3" style="min-height: 392px;">
+                                <p class="p-2 rounded-pill" style="background: #7ABC5233; color: #314755; font-size: 10px;">
+                                    <?= htmlspecialchars($pub['jenis_publikasi']) ?>
+                                </p>
+                                <div class="card-body">
+                                    <h5 class="card-title fw-semibold lh-large" style="color: #314755; font-size: 18px;">
+                                        <?= htmlspecialchars($pub['judul_publikasi']) ?>
+                                    </h5>
+                                    <p class="card-text" style="color: #575757BF; font-size: 12px;">
+                                        <?= htmlspecialchars($pub['tahun_terbit']) ?>
+                                    </p>
+                                </div>
+                                <a href="<?= htmlspecialchars($pub['link_publikasi'] ?? '#') ?>" target="_blank"
+                                    class="btn border-2 p-3 fw-bold"
+                                    style="border-color: #314755 !important; color: #314755;">Baca</a>
+                            </div>
                         </div>
-                        <button class="btn border-2 p-3 fw-bold"
-                            style="border-color: #314755 !important; color: #314755;">Baca</button>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3">
-                    <div class="card shadow rounded-3 p-3" style="min-height: 392px;">
-                        <p class="p-2 rounded-pill" style="background: #7ABC5233; color: #314755; font-size: 10px;">Most
-                            Citised</p>
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold lh-large" style="color: #314755; font-size: 18px;">Sistem
-                                Prediksi
-                                Penjualan Frozen Food dengan Metode Monte
-                                Carlo (Studi Kasus: Supermama Frozen Food)</h5>
-                            <p class="card-text" style="color: #575757BF; font-size: 12px;">2022</p>
-                        </div>
-                        <button class="btn border-2 p-3 fw-bold"
-                            style="border-color: #314755 !important; color: #314755;">Baca</button>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3">
-                    <div class="card shadow rounded-3 p-3" style="min-height: 392px;">
-                        <p class="p-2 rounded-pill" style="background: #7ABC5233; color: #314755; font-size: 10px;">Most
-                            Citised</p>
-                        <div class="card-body">
-                            <h5 class="card-title fw-semibold lh-large" style="color: #314755; font-size: 18px;">Sistem
-                                Prediksi
-                                Penjualan Frozen Food dengan Metode Monte
-                                Carlo (Studi Kasus: Supermama Frozen Food)</h5>
-                            <p class="card-text" style="color: #575757BF; font-size: 12px;">2022</p>
-                        </div>
-                        <button class="btn border-2 p-3 fw-bold"
-                            style="border-color: #314755 !important; color: #314755;">Baca</button>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

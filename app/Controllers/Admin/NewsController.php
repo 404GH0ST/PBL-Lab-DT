@@ -1,0 +1,97 @@
+<?php
+
+namespace App\Controllers\Admin;
+
+use Core\Controller;
+use App\Models\News;
+use App\Models\Member;
+
+
+class NewsController extends Controller
+{
+    protected $newsModel;
+    protected $memberModel;
+
+    public function __construct()
+    {
+        $this->newsModel = $this->loadModel(News::class);
+        $this->memberModel = $this->loadModel(Member::class);
+    }
+
+    public function index()
+    {
+        $news = $this->newsModel->getAllNews();
+        $members = $this->memberModel->getAllMembers();
+
+        return $this->view('admin/news/index', [
+            'news' => $news,
+            'members' => $members,
+            'pageTitle' => 'News Management',
+            'layout' => 'layouts/admin'
+        ]);
+    }
+
+    public function store()
+    {
+        $data = $_POST;
+
+        // Handle File Upload
+        if (isset($_FILES['gambar_utama']) && $_FILES['gambar_utama']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../../public/uploads/news/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $fileName = time() . '_' . basename($_FILES['gambar_utama']['name']);
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['gambar_utama']['tmp_name'], $targetPath)) {
+                $data['gambar_utama'] = 'uploads/news/' . $fileName;
+            }
+        }
+
+        $this->newsModel->createNews($data);
+        $this->redirect('/admin/news');
+    }
+
+    public function update($id)
+    {
+        $data = $_POST;
+
+        // Handle File Upload (if new image provided)
+        if (isset($_FILES['gambar_utama']) && $_FILES['gambar_utama']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../../public/uploads/news/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $fileName = time() . '_' . basename($_FILES['gambar_utama']['name']);
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['gambar_utama']['tmp_name'], $targetPath)) {
+                $data['gambar_utama'] = 'uploads/news/' . $fileName;
+
+                // Delete old image
+                $oldNews = $this->newsModel->getNewsById($id);
+                if ($oldNews && !empty($oldNews['gambar_utama']) && file_exists(__DIR__ . '/../../../public/' . $oldNews['gambar_utama'])) {
+                    unlink(__DIR__ . '/../../../public/' . $oldNews['gambar_utama']);
+                }
+            }
+        }
+
+        $this->newsModel->updateNews($id, $data);
+        $this->redirect('/admin/news');
+    }
+
+    public function destroy($id)
+    {
+        // Get news to delete image
+        $news = $this->newsModel->getNewsById($id);
+        if ($news && !empty($news['gambar_utama']) && file_exists(__DIR__ . '/../../../public/' . $news['gambar_utama'])) {
+            unlink(__DIR__ . '/../../../public/' . $news['gambar_utama']);
+        }
+
+        $this->newsModel->deleteNews($id);
+        $this->redirect('/admin/news');
+    }
+}
