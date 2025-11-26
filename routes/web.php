@@ -4,6 +4,7 @@ use Core\Middleware\AuthMiddleware;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\Admin\MemberController;
+use App\Controllers\Admin\VisiMisiController;
 
 $router = $app->router();
 
@@ -34,8 +35,14 @@ $router->get('/admin/dashboard', [DashboardController::class, 'index'])->middlew
 // Members Routes
 $app->router()->get('/admin/members', [MemberController::class, 'index']);
 $app->router()->post('/admin/members', [MemberController::class, 'store']);
-$app->router()->put('/admin/members/{id}', [MemberController::class, 'update']);
-$app->router()->delete('/admin/members/{id}', [MemberController::class, 'destroy']);
+$app->router()->post('/admin/members/{id}/update', [MemberController::class, 'update']);
+$app->router()->post('/admin/members/{id}/delete', [MemberController::class, 'destroy']);
+
+// Vision & Mission Routes
+$app->router()->get('/admin/visimisi', [VisiMisiController::class, 'index']);
+$app->router()->post('/admin/visimisi', [VisiMisiController::class, 'store']);
+$app->router()->post('/admin/visimisi/{id}/update', [VisiMisiController::class, 'update']);
+$app->router()->post('/admin/visimisi/{id}/delete', [VisiMisiController::class, 'destroy']);
 
 
 // ============================================

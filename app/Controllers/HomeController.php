@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use App\Models\VisiMisi;
 
 
 /**
@@ -15,9 +16,15 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $visiMisiModel = $this->loadModel(VisiMisi::class);
+        $visi = $visiMisiModel->getVisi();
+        $misi = $visiMisiModel->getMisi();
+
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
-            'message' => 'Welcome to Profile Lab DT'
+            'message' => 'Welcome to Profile Lab DT',
+            'visi' => $visi,
+            'misi' => $misi
         ]);
     }
 

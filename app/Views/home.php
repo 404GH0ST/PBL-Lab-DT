@@ -119,9 +119,7 @@
                         <div>
                             <h3 class="fw-bold mt-4" style="font-size: 24px;">Vision</h3>
                             <p class="mb-0" style="font-size: 16px; line-height: 1.6;">
-                                Menjadi organisasi riset terkemuka dalam penelitian maupun pengembangan untuk
-                                mendorong inovasi teknologi serta keilmuan di bidang penyimpanan,
-                                pengolahan, dan rekayasa sistem data yang berkelanjutan
+                                <?= $visi ? htmlspecialchars($visi['isi_konten']) : 'Menjadi organisasi riset terkemuka dalam penelitian maupun pengembangan untuk mendorong inovasi teknologi serta keilmuan di bidang penyimpanan, pengolahan, dan rekayasa sistem data yang berkelanjutan' ?>
                             </p>
                         </div>
 
@@ -141,9 +139,7 @@
                         <div>
                             <h3 class="fw-bold mt-3" style="font-size: 24px;">Mission</h3>
                             <p class="mb-0" style="font-size: 16px; line-height: 1.6;">
-                                Menjadi organisasi riset terkemuka dalam penelitian maupun pengembangan untuk
-                                mendorong inovasi teknologi serta keilmuan di bidang penyimpanan,
-                                pengolahan, dan rekayasa sistem data yang berkelanjutan
+                                <?= $misi ? htmlspecialchars($misi['isi_konten']) : 'Menjadi organisasi riset terkemuka dalam penelitian maupun pengembangan untuk mendorong inovasi teknologi serta keilmuan di bidang penyimpanan, pengolahan, dan rekayasa sistem data yang berkelanjutan' ?>
                             </p>
                         </div>
 
