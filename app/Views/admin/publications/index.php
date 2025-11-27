@@ -41,16 +41,18 @@
                                     <div class="d-flex flex-column">
                                         <span class="fw-bold text-dark text-truncate"
                                             style="max-width: 200px;"><?= htmlspecialchars($pub['judul_publikasi']) ?></span>
-                                        <?php if (!empty($pub['link_publikasi'])): ?>
-                                            <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
-                                                class="text-xs text-primary text-decoration-none">
-                                                <i class="bi bi-link-45deg"></i> View Link
-                                            </a>
-                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark border"><?= ucfirst($pub['jenis_publikasi']) ?></span>
+                                    <?php
+                                    $typeClass = match ($pub['jenis_publikasi']) {
+                                        'jurnal' => 'bg-info-subtle text-info',
+                                        'prosiding' => 'bg-primary-subtle text-primary',
+                                        'buku' => 'bg-success-subtle text-success',
+                                        default => 'bg-secondary-subtle text-secondary'
+                                    };
+                                    ?>
+                                    <span class="badge <?= $typeClass ?> border"><?= ucfirst($pub['jenis_publikasi']) ?></span>
                                 </td>
                                 <td>
                                     <span class="text-secondary text-sm"><?= $pub['tahun_terbit'] ?></span>
@@ -63,19 +65,31 @@
                                         <span class="badge bg-success-subtle text-success">Approved</span>
                                     <?php elseif ($pub['status'] === 'rejected'): ?>
                                         <span class="badge bg-danger-subtle text-danger">Rejected</span>
+                                        <?php if (!empty($pub['catatan_admin'])): ?>
+                                            <div class="mt-1 text-xs text-danger">
+                                                <i class="bi bi-exclamation-circle me-1"></i>
+                                                <?= htmlspecialchars($pub['catatan_admin']) ?>
+                                            </div>
+                                        <?php endif; ?>
                                     <?php else: ?>
                                         <span class="badge bg-warning-subtle text-warning">Pending</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <div class="btn-group">
+                                    <div class="d-flex align-items-center gap-1 justify-content-end">
+                                        <?php if (!empty($pub['link_publikasi'])): ?>
+                                            <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
+                                                class="btn btn-sm btn-light text-info" title="View Link">
+                                                <i class="bi bi-link-45deg"></i>
+                                            </a>
+                                        <?php endif; ?>
                                         <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editPublication(<?= $pub['id_publikasi'] ?>, '<?= htmlspecialchars($pub['judul_publikasi']) ?>', '<?= $pub['jenis_publikasi'] ?>', <?= $pub['tahun_terbit'] ?>, '<?= htmlspecialchars($pub['link_publikasi'] ?? '') ?>', '<?= htmlspecialchars($pub['deskripsi'] ?? '') ?>', <?= $pub['id_anggota'] ?>, '<?= $pub['status'] ?>')"
+                                            onclick="editPublication(<?= $pub['id_publikasi'] ?>, '<?= htmlspecialchars($pub['judul_publikasi']) ?>', '<?= $pub['jenis_publikasi'] ?>', <?= $pub['tahun_terbit'] ?>, '<?= htmlspecialchars($pub['link_publikasi'] ?? '') ?>', '<?= htmlspecialchars($pub['deskripsi'] ?? '') ?>', <?= $pub['id_anggota'] ?>, '<?= $pub['status'] ?>', '<?= htmlspecialchars($pub['catatan_admin'] ?? '') ?>')"
                                             data-bs-toggle="modal" data-bs-target="#editPublicationModal"
                                             title="Edit Publication">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-light text-danger ms-1"
+                                        <button type="button" class="btn btn-sm btn-light text-danger"
                                             onclick="confirmDelete(<?= $pub['id_publikasi'] ?>)" title="Delete Publication">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -133,14 +147,16 @@
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="status" class="form-label">Status</label>
-                            <select class="form-select" id="status" name="status">
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                            <div class="col-md-6 mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
                         <div class="col-md-12 mb-3">
                             <label for="link_publikasi" class="form-label">Link (Optional)</label>
                             <input type="url" class="form-control" id="link_publikasi" name="link_publikasi"
@@ -202,14 +218,16 @@
                             </select>
                             <div class="form-text">Author cannot be changed.</div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="edit_status" class="form-label">Status</label>
-                            <select class="form-select" id="edit_status" name="status">
-                                <option value="pending">Pending</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                        </div>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_status" class="form-label">Status</label>
+                                <select class="form-select" id="edit_status" name="status">
+                                    <option value="pending">Pending</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                        <?php endif; ?>
                         <div class="col-md-12 mb-3">
                             <label for="edit_link_publikasi" class="form-label">Link (Optional)</label>
                             <input type="url" class="form-control" id="edit_link_publikasi" name="link_publikasi">
@@ -217,6 +235,11 @@
                         <div class="col-md-12 mb-3">
                             <label for="edit_deskripsi" class="form-label">Description (Optional)</label>
                             <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-12 mb-3" id="pub_rejection_note_container" style="display: none;">
+                            <label class="form-label text-danger">Rejection Note</label>
+                            <div class="alert alert-danger bg-danger-subtle border-danger text-danger p-2 mb-0 text-sm"
+                                id="pub_rejection_note"></div>
                         </div>
                     </div>
                 </div>
@@ -254,7 +277,7 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
         // Edit Publication
-        window.editPublication = function (id, judul, jenis, tahun, link, deskripsi, id_anggota, status) {
+        window.editPublication = function (id, judul, jenis, tahun, link, deskripsi, id_anggota, status, catatan) {
             $('#editPublicationForm').attr('action', '/admin/publications/' + id + '/update');
             $('#edit_judul_publikasi').val(judul);
             $('#edit_jenis_publikasi').val(jenis);
@@ -263,6 +286,14 @@
             $('#edit_deskripsi').val(deskripsi);
             $('#edit_id_anggota').val(id_anggota);
             $('#edit_status').val(status);
+
+            // Handle rejection note
+            if (status === 'rejected' && catatan) {
+                $('#pub_rejection_note').text(catatan);
+                $('#pub_rejection_note_container').show();
+            } else {
+                $('#pub_rejection_note_container').hide();
+            }
         };
 
         // Delete Confirmation

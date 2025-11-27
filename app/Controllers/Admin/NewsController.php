@@ -50,6 +50,11 @@ class NewsController extends Controller
             }
         }
 
+        // Restrict operators from setting status
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         $this->newsModel->createNews($data);
         $this->redirect('/admin/news');
     }
@@ -57,6 +62,11 @@ class NewsController extends Controller
     public function update($id)
     {
         $data = $_POST;
+
+        // Restrict operators from changing status, and reset to pending on edit
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
 
         // Handle File Upload (if new image provided)
         if (isset($_FILES['gambar_utama']) && $_FILES['gambar_utama']['error'] === UPLOAD_ERR_OK) {

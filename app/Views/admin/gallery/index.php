@@ -27,13 +27,20 @@
                                     style="height: 200px; object-fit: cover;">
                                 <div class="position-absolute top-0 end-0 p-2">
                                     <?php if ($photo['status'] === 'approved'): ?>
-                                        <span class="badge bg-success">Approved</span>
+                                        <span class="badge bg-success-subtle text-success">Approved</span>
                                     <?php elseif ($photo['status'] === 'rejected'): ?>
-                                        <span class="badge bg-danger">Rejected</span>
+                                        <span class="badge bg-danger-subtle text-danger">Rejected</span>
                                     <?php else: ?>
-                                        <span class="badge bg-warning text-dark">Pending</span>
+                                        <span class="badge bg-warning-subtle text-warning">Pending</span>
                                     <?php endif; ?>
                                 </div>
+                                <?php if ($photo['status'] === 'rejected' && !empty($photo['catatan_admin'])): ?>
+                                    <div
+                                        class="position-absolute bottom-0 start-0 w-100 p-2 bg-danger bg-opacity-75 text-white text-xs">
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                        <?= htmlspecialchars($photo['catatan_admin']) ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($photo['judul_foto']) ?></h6>
@@ -47,7 +54,7 @@
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
                                 <button class="btn btn-sm btn-light text-primary"
-                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['judul_foto']) ?>', '<?= htmlspecialchars($photo['deskripsi'] ?? '') ?>', '<?= $photo['status'] ?>')"
+                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['judul_foto']) ?>', '<?= htmlspecialchars($photo['deskripsi'] ?? '') ?>', '<?= $photo['status'] ?>', '<?= htmlspecialchars($photo['catatan_admin'] ?? '') ?>', '<?= htmlspecialchars($photo['file_path']) ?>')"
                                     data-bs-toggle="modal" data-bs-target="#editPhotoModal" title="Edit Details">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
@@ -100,14 +107,16 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status</label>
-                        <select class="form-select" id="status" name="status">
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
-                    </div>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
@@ -126,8 +135,16 @@
                 <h5 class="modal-title fw-bold">Edit Photo Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editPhotoForm" action="" method="POST">
+            <form id="editPhotoForm" action="" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="edit_file_path" class="form-label">Replace Photo (Optional)</label>
+                        <input type="file" class="form-control" id="edit_file_path" name="file_path" accept="image/*">
+                        <div class="mt-2" id="current_photo_container">
+                            <small class="text-muted d-block mb-1">Current Photo:</small>
+                            <img src="" id="current_photo" class="img-fluid rounded border" style="max-height: 100px;">
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <label for="edit_judul_foto" class="form-label">Title</label>
                         <input type="text" class="form-control" id="edit_judul_foto" name="judul_foto" required>
@@ -136,13 +153,20 @@
                         <label for="edit_deskripsi" class="form-label">Description (Optional)</label>
                         <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_status" class="form-label">Status</label>
-                        <select class="form-select" id="edit_status" name="status">
-                            <option value="pending">Pending</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <div class="mb-3">
+                            <label for="edit_status" class="form-label">Status</label>
+                            <select class="form-select" id="edit_status" name="status">
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
+                    <div class="mb-3" id="gallery_rejection_note_container" style="display: none;">
+                        <label class="form-label text-danger">Rejection Note</label>
+                        <div class="alert alert-danger bg-danger-subtle border-danger text-danger p-2 mb-0 text-sm"
+                            id="gallery_rejection_note"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -179,11 +203,27 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
         // Edit Photo
-        window.editPhoto = function (id, judul, deskripsi, status) {
+        window.editPhoto = function (id, judul, deskripsi, status, catatan, filePath) {
             $('#editPhotoForm').attr('action', '/admin/gallery/' + id + '/update');
             $('#edit_judul_foto').val(judul);
             $('#edit_deskripsi').val(deskripsi);
             $('#edit_status').val(status);
+
+            // Handle photo preview
+            if (filePath) {
+                $('#current_photo').attr('src', '/' + filePath);
+                $('#current_photo_container').show();
+            } else {
+                $('#current_photo_container').hide();
+            }
+
+            // Handle rejection note
+            if (status === 'rejected' && catatan) {
+                $('#gallery_rejection_note').text(catatan);
+                $('#gallery_rejection_note_container').show();
+            } else {
+                $('#gallery_rejection_note_container').hide();
+            }
         };
 
         // Delete Confirmation

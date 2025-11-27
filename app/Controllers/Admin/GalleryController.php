@@ -50,6 +50,11 @@ class GalleryController extends Controller
             }
         }
 
+        // Restrict operators from setting status
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         $this->galleryModel->createPhoto($data);
         $this->redirect('/admin/gallery');
     }
@@ -57,6 +62,32 @@ class GalleryController extends Controller
     public function update($id)
     {
         $data = $_POST;
+
+        // Handle File Upload
+        if (isset($_FILES['file_path']) && $_FILES['file_path']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../../public/uploads/gallery/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $fileName = time() . '_' . basename($_FILES['file_path']['name']);
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($_FILES['file_path']['tmp_name'], $targetPath)) {
+                // Delete old file if exists
+                $oldPhoto = $this->galleryModel->getPhotoById($id);
+                if ($oldPhoto && !empty($oldPhoto['file_path']) && file_exists(__DIR__ . '/../../../public/' . $oldPhoto['file_path'])) {
+                    unlink(__DIR__ . '/../../../public/' . $oldPhoto['file_path']);
+                }
+                $data['file_path'] = 'uploads/gallery/' . $fileName;
+            }
+        }
+
+        // Restrict operators from changing status, and reset to pending on edit
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         $this->galleryModel->updatePhoto($id, $data);
         $this->redirect('/admin/gallery');
     }

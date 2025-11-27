@@ -98,17 +98,21 @@
                                         style="height: 200px; object-fit: cover;" alt="Gallery Image">
                                     <div class="card-body">
                                         <h6 class="card-title fw-bold text-truncate">
-                                            <?= htmlspecialchars($item['judul_foto']) ?></h6>
+                                            <?= htmlspecialchars($item['judul_foto']) ?>
+                                        </h6>
                                         <p class="card-text small text-muted mb-2">By <?= htmlspecialchars($item['uploader']) ?>
                                         </p>
-                                        <div class="d-flex justify-content-between mt-3">
+                                        <div class="d-flex justify-content-end gap-2 mt-3">
                                             <form action="/admin/approvals/gallery/<?= $item['id_galeri'] ?>/approve"
-                                                method="POST" class="w-50 me-1">
-                                                <button type="submit"
-                                                    class="btn btn-sm btn-success w-100 text-white">Approve</button>
+                                                method="POST">
+                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Approve">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
                                             </form>
-                                            <button type="button" class="btn btn-sm btn-danger w-50 ms-1 text-white"
-                                                onclick="openRejectModal('gallery', <?= $item['id_galeri'] ?>)">Reject</button>
+                                            <button type="button" class="btn btn-sm btn-danger text-white"
+                                                onclick="openRejectModal('gallery', <?= $item['id_galeri'] ?>)" title="Reject">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

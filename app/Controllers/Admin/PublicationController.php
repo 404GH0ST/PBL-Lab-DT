@@ -38,6 +38,11 @@ class PublicationController extends Controller
         // In a real app, id_anggota might come from session if not admin
         // For admin, we allow selecting the author
 
+        // Restrict operators from setting status
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         $this->publicationModel->createPublication($data);
         $this->redirect('/admin/publications');
     }
@@ -45,6 +50,12 @@ class PublicationController extends Controller
     public function update($id)
     {
         $data = $_POST;
+
+        // Restrict operators from changing status, and reset to pending on edit
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         $this->publicationModel->updatePublication($id, $data);
         $this->redirect('/admin/publications');
     }

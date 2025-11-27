@@ -74,6 +74,14 @@ class News extends Model
             $fields[] = "status = :status";
             $params['status'] = $data['status'];
         }
+        if (isset($data['id_admin_penilai'])) {
+            $fields[] = "id_admin_penilai = :id_admin_penilai";
+            $params['id_admin_penilai'] = $data['id_admin_penilai'];
+        }
+        if (isset($data['catatan_admin'])) {
+            $fields[] = "catatan_admin = :catatan_admin";
+            $params['catatan_admin'] = $data['catatan_admin'];
+        }
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id_berita = :id";
         return $this->db->execute($sql, $params);

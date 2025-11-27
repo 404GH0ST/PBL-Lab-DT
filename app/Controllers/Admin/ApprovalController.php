@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use Core\Controller;
 use App\Models\News;
 use App\Models\Gallery;
-use App\Models\Publication; // Assuming you have a Publication model
+use App\Models\Publication;
 
 
 class ApprovalController extends Controller
@@ -16,6 +16,12 @@ class ApprovalController extends Controller
 
     public function __construct()
     {
+        // Restrict access to admins only
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $this->redirect('/admin/dashboard');
+            exit;
+        }
+
         $this->newsModel = $this->loadModel(News::class);
         $this->galleryModel = $this->loadModel(Gallery::class);
         $this->publicationModel = $this->loadModel(Publication::class);
@@ -23,10 +29,6 @@ class ApprovalController extends Controller
 
     public function index()
     {
-        // Fetch pending items
-        // Note: We need to ensure models have methods to filter by status or we filter the results here
-        // For efficiency, adding getPending* methods to models would be better, but for now we can filter if needed.
-        // Assuming models return arrays.
 
         // News
         $allNews = $this->newsModel->getAllNews();
@@ -41,7 +43,6 @@ class ApprovalController extends Controller
         });
 
         // Publications
-        // Assuming Publication model has getAllPublications
         $allPublications = $this->publicationModel->getAllPublications();
         $pendingPublications = array_filter($allPublications, function ($item) {
             return $item['status'] === 'pending';
@@ -58,7 +59,7 @@ class ApprovalController extends Controller
 
     public function approve($type, $id)
     {
-        $adminId = $_SESSION['user']['id_anggota'] ?? null; // Assuming session stores user info
+        $adminId = $_SESSION['user']['id_anggota'] ?? null;
 
         switch ($type) {
             case 'news':

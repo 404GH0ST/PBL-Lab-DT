@@ -66,16 +66,18 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <div class="btn-group">
+                                    <div class="d-flex align-items-center gap-1 justify-content-end">
                                         <button class="btn btn-sm btn-light text-primary"
                                             onclick="editMember('<?= $member['id_anggota'] ?>', '<?= htmlspecialchars($member['nama_lengkap']) ?>', '<?= htmlspecialchars($member['username']) ?>', '<?= htmlspecialchars($member['nip_nim'] ?? '') ?>', '<?= $member['role'] ?>', <?= $member['status_aktif'] ? 'true' : 'false' ?>)"
                                             data-bs-toggle="modal" data-bs-target="#editMemberModal" title="Edit Member">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-light text-danger ms-1"
-                                            onclick="confirmDelete('<?= $member['id_anggota'] ?>')" title="Delete Member">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                                            <button type="button" class="btn btn-sm btn-light text-danger"
+                                                onclick="confirmDelete('<?= $member['id_anggota'] ?>')" title="Delete Member">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        <?php endif; ?>
                                     </div>
                                     <form id="deleteForm-<?= $member['id_anggota'] ?>"
                                         action="/admin/members/<?= $member['id_anggota'] ?>/delete" method="POST"
@@ -190,20 +192,22 @@
                                 name="nip_nim">
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="edit_role" class="form-label">Role</label>
-                        <select class="form-select" id="edit_role" name="role">
-                            <option value="operator">Operator</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_status_aktif" class="form-label">Status</label>
-                        <select class="form-select" id="edit_status_aktif" name="status_aktif">
-                            <option value="1">Active</option>
-                            <option value="0">Inactive</option>
-                        </select>
-                    </div>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <div class="mb-3">
+                            <label for="edit_role" class="form-label">Role</label>
+                            <select class="form-select" id="edit_role" name="role">
+                                <option value="operator">Operator</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit_status_aktif" class="form-label">Status</label>
+                            <select class="form-select" id="edit_status_aktif" name="status_aktif">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label for="edit_password" class="form-label">Password (Kosongkan jika tidak ingin
                             mengubah)</label>
