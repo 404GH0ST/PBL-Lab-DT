@@ -5,7 +5,7 @@ namespace App\Middlewares;
 use Core\Middleware\MiddlewareInterface;
 
 
-class AdminMIddleware implements MiddlewareInterface
+class AdminMiddleware implements MiddlewareInterface
 {
     public function handle($request, \Closure $next)
     {

@@ -7,7 +7,7 @@ use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\Admin\MemberController;
 use App\Controllers\Admin\VisiMisiController;
-use App\Middlewares\AdminMIddleware;
+use App\Middlewares\AdminMiddleware;
 use App\Controllers\Admin\NewsController;
 use App\Controllers\Admin\ApprovalController;
 
@@ -38,21 +38,21 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(AuthMiddleware::class);
 
 // Members Routes
-$app->router()->get('/admin/members', [MemberController::class, 'index']);
-$app->router()->post('/admin/members', [MemberController::class, 'store']);
-$app->router()->post('/admin/members/{id}/update', [MemberController::class, 'update']);
-$app->router()->post('/admin/members/{id}/delete', [MemberController::class, 'destroy']);
+$app->router()->get('/admin/members', [MemberController::class, 'index'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->post('/admin/members', [MemberController::class, 'store'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->post('/admin/members/{id}/update', [MemberController::class, 'update'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->post('/admin/members/{id}/delete', [MemberController::class, 'destroy'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
 
 // Vision & Mission Routes
-$app->router()->get('/admin/visimisi', [VisiMisiController::class, 'index']);
-$app->router()->post('/admin/visimisi', [VisiMisiController::class, 'store']);
-$app->router()->post('/admin/visimisi/{id}/update', [VisiMisiController::class, 'update']);
-$app->router()->post('/admin/visimisi/{id}/delete', [VisiMisiController::class, 'destroy']);
+$app->router()->get('/admin/visimisi', [VisiMisiController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/visimisi', [VisiMisiController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/visimisi/{id}/update', [VisiMisiController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/visimisi/{id}/delete', [VisiMisiController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
 // Approval Routes
-$app->router()->get('/admin/approvals', [ApprovalController::class, 'index'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
-$app->router()->post('/admin/approvals/{type}/{id}/approve', [ApprovalController::class, 'approve'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
-$app->router()->post('/admin/approvals/{type}/{id}/reject', [ApprovalController::class, 'reject'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
+$app->router()->get('/admin/approvals', [ApprovalController::class, 'index'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->post('/admin/approvals/{type}/{id}/approve', [ApprovalController::class, 'approve'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->post('/admin/approvals/{type}/{id}/reject', [ApprovalController::class, 'reject'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
 
 // Gallery Routes
 $app->router()->get('/admin/gallery', [GalleryController::class, 'index'])->middleware([AuthMiddleware::class]);
