@@ -1,4 +1,6 @@
 <?php
+use App\Controllers\Admin\GalleryController;
+use App\Controllers\Admin\PublicationController;
 use App\Controllers\HomeController;
 use Core\Middleware\AuthMiddleware;
 use App\Controllers\AuthController;
@@ -6,6 +8,8 @@ use App\Controllers\DashboardController;
 use App\Controllers\Admin\MemberController;
 use App\Controllers\Admin\VisiMisiController;
 use App\Middlewares\AdminMIddleware;
+use App\Controllers\Admin\NewsController;
+use App\Controllers\Admin\ApprovalController;
 
 $router = $app->router();
 
@@ -46,27 +50,23 @@ $app->router()->post('/admin/visimisi/{id}/update', [VisiMisiController::class, 
 $app->router()->post('/admin/visimisi/{id}/delete', [VisiMisiController::class, 'destroy']);
 
 // Approval Routes
-use App\Controllers\Admin\ApprovalController;
 $app->router()->get('/admin/approvals', [ApprovalController::class, 'index'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
 $app->router()->post('/admin/approvals/{type}/{id}/approve', [ApprovalController::class, 'approve'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
 $app->router()->post('/admin/approvals/{type}/{id}/reject', [ApprovalController::class, 'reject'])->middleware([AuthMiddleware::class, AdminMIddleware::class]);
 
 // Gallery Routes
-use App\Controllers\Admin\GalleryController;
 $app->router()->get('/admin/gallery', [GalleryController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/gallery', [GalleryController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/gallery/{id}/update', [GalleryController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/gallery/{id}/delete', [GalleryController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
 // Publication Routes
-use App\Controllers\Admin\PublicationController;
 $app->router()->get('/admin/publications', [PublicationController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/publications', [PublicationController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/publications/{id}/update', [PublicationController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/publications/{id}/delete', [PublicationController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
 // News Routes
-use App\Controllers\Admin\NewsController;
 $app->router()->get('/admin/news', [NewsController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news', [NewsController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news/{id}/update', [NewsController::class, 'update'])->middleware([AuthMiddleware::class]);
