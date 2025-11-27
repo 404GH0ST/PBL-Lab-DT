@@ -52,6 +52,14 @@ class HomeController extends Controller
         ]);
     }
 
+     public function NewsPage()
+    {
+        return $this->view('news', [
+            'title' => 'News - Profile Lab DT'
+        ]);
+    }
+
+
     public function loginPage()
     {
         return $this->view('login', [

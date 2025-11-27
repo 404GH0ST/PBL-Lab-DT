@@ -150,6 +150,16 @@ body {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+.card-news {
+    transition: 0.3s ease;
+}
+.card-news:hover {
+    transform: translateY(-5px);
+}
+.all-text-gradient {
+    color: #213A5C;
+}
+
 @media (max-width: 768px) {
   .card-facility {
     width: 100%;
