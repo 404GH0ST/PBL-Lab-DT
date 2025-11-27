@@ -18,6 +18,23 @@ class News extends Model
         return $this->db->query($sql);
     }
 
+    public function getPaginatedNews($limit, $offset)
+    {
+        $sql = "SELECT b.*, a.nama_lengkap as penulis 
+                FROM {$this->table} b
+                JOIN anggota a ON b.id_penulis = a.id_anggota
+                ORDER BY b.tanggal_posting DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countAllNews()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
     public function getApprovedNews()
     {
         $sql = "SELECT b.*, a.nama_lengkap as penulis 

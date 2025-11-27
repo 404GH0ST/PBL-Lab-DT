@@ -3,9 +3,9 @@
 namespace App\Controllers\Admin;
 
 use Core\Controller;
+use Core\Pagination;
 use App\Models\Gallery;
 use App\Models\Member;
-
 
 class GalleryController extends Controller
 {
@@ -20,12 +20,19 @@ class GalleryController extends Controller
 
     public function index()
     {
-        $photos = $this->galleryModel->getAllPhotos();
+        $page = $_GET['page'] ?? 1;
+        $limit = 8;
+        $total = $this->galleryModel->countAllPhotos();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $photos = $this->galleryModel->getPaginatedPhotos($limit, $pagination->getOffset());
         $members = $this->memberModel->getAllMembers();
 
         return $this->view('admin/gallery/index', [
             'photos' => $photos,
             'members' => $members,
+            'pagination' => $pagination,
+            'baseUrl' => '/admin/gallery',
             'pageTitle' => 'Gallery Management',
             'layout' => 'layouts/admin'
         ]);

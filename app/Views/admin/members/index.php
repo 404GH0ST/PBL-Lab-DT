@@ -90,6 +90,8 @@
                 </tbody>
             </table>
         </div>
+        <!-- Pagination -->
+        <?php include __DIR__ . '/../../partials/pagination.php'; ?>
     </div>
 </div>
 

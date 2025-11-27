@@ -14,6 +14,19 @@ class Member extends Model
         return $this->db->query("SELECT * FROM {$this->table} ORDER BY created_at DESC");
     }
 
+    public function getPaginatedMembers($limit, $offset)
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countAllMembers()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
     public function getMemberById($id)
     {
         $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_anggota = :id", ['id' => $id]);

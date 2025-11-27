@@ -18,6 +18,41 @@ class Gallery extends Model
         return $this->db->query($sql);
     }
 
+    public function getPaginatedPhotos($limit, $offset)
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                ORDER BY g.tanggal_upload DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countAllPhotos()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedApprovedPhotos($limit, $offset)
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                WHERE g.status = 'approved'
+                ORDER BY g.tanggal_upload DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countApprovedPhotos()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved'";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
     public function getApprovedPhotos()
     {
         $sql = "SELECT g.*, a.nama_lengkap as uploader 

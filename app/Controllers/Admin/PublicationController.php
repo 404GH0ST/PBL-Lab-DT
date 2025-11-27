@@ -3,9 +3,9 @@
 namespace App\Controllers\Admin;
 
 use Core\Controller;
+use Core\Pagination;
 use App\Models\Publication;
 use App\Models\Member;
-
 
 class PublicationController extends Controller
 {
@@ -20,12 +20,19 @@ class PublicationController extends Controller
 
     public function index()
     {
-        $publications = $this->publicationModel->getAllPublications();
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+        $total = $this->publicationModel->countAllPublications();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $publications = $this->publicationModel->getPaginatedPublications($limit, $pagination->getOffset());
         $members = $this->memberModel->getAllMembers(); // For the "Author" dropdown in modal
 
         return $this->view('admin/publications/index', [
             'publications' => $publications,
             'members' => $members,
+            'pagination' => $pagination,
+            'baseUrl' => '/admin/publications',
             'pageTitle' => 'Publications Management',
             'layout' => 'layouts/admin'
         ]);

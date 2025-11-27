@@ -3,12 +3,8 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use Core\Pagination;
 use App\Models\VisiMisi;
-
-
-/**
- * Home Controller
- */
 use App\Models\News;
 use App\Models\Gallery;
 use App\Models\Publication;
@@ -69,21 +65,35 @@ class HomeController extends Controller
 
     public function galleryPage()
     {
-        $photos = $this->galleryModel->getApprovedPhotos();
+        $page = $_GET['page'] ?? 1;
+        $limit = 9;
+        $total = $this->galleryModel->countApprovedPhotos();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $photos = $this->galleryModel->getPaginatedApprovedPhotos($limit, $pagination->getOffset());
 
         return $this->view('gallery', [
             'title' => 'Gallery - Profile Lab DT',
-            'photos' => $photos
+            'photos' => $photos,
+            'pagination' => $pagination,
+            'baseUrl' => '/gallery'
         ]);
     }
 
     public function publicationPage()
     {
-        $publications = $this->publicationModel->getApprovedPublications();
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+        $total = $this->publicationModel->countApprovedPublications();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $publications = $this->publicationModel->getPaginatedApprovedPublications($limit, $pagination->getOffset());
 
         return $this->view('publications', [
             'title' => 'Publication - Profile Lab DT',
-            'publications' => $publications
+            'publications' => $publications,
+            'pagination' => $pagination,
+            'baseUrl' => '/publications'
         ]);
     }
 

@@ -37,23 +37,9 @@
         </div>
 
         <!-- Pagination -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center align-items-center mx-auto mt-4 p-2 rounded-3 custom-pagination"
-                style="width: fit-content; background-color: #F0F0F0;">
-                <li class="page-item">
-                    <a class="page-link arrow" href="#"><i class="bi bi-chevron-left"></i></a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">....</a></li>
-                <li class="page-item"><a class="page-link" href="#">10</a></li>
-                <li class="page-item">
-                    <a class="page-link arrow" href="#"><i class="bi bi-chevron-right"></i></a>
-                </li>
-            </ul>
-        </nav>
+        <div class="mt-4">
+            <?= $pagination->renderPublic($baseUrl) ?>
+        </div>
 
     </div>
 </section>

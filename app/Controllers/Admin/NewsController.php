@@ -3,9 +3,9 @@
 namespace App\Controllers\Admin;
 
 use Core\Controller;
+use Core\Pagination;
 use App\Models\News;
 use App\Models\Member;
-
 
 class NewsController extends Controller
 {
@@ -20,12 +20,19 @@ class NewsController extends Controller
 
     public function index()
     {
-        $news = $this->newsModel->getAllNews();
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+        $total = $this->newsModel->countAllNews();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $news = $this->newsModel->getPaginatedNews($limit, $pagination->getOffset());
         $members = $this->memberModel->getAllMembers();
 
         return $this->view('admin/news/index', [
             'news' => $news,
             'members' => $members,
+            'pagination' => $pagination,
+            'baseUrl' => '/admin/news',
             'pageTitle' => 'News Management',
             'layout' => 'layouts/admin'
         ]);

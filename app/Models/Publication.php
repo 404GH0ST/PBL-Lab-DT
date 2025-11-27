@@ -14,8 +14,43 @@ class Publication extends Model
         $sql = "SELECT p.*, a.nama_lengkap as nama_penulis 
                 FROM {$this->table} p
                 JOIN anggota a ON p.id_anggota = a.id_anggota
-                ORDER BY p.tahun_terbit DESC, p.id_publikasi DESC";
+                ORDER BY p.tahun_terbit DESC";
         return $this->db->query($sql);
+    }
+
+    public function getPaginatedPublications($limit, $offset)
+    {
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                ORDER BY p.tahun_terbit DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countAllPublications()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedApprovedPublications($limit, $offset)
+    {
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE p.status = 'approved'
+                ORDER BY p.tahun_terbit DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
+    public function countApprovedPublications()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved'";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
     }
 
     public function getApprovedPublications()

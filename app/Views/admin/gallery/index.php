@@ -72,6 +72,8 @@
             </div>
         <?php endif; ?>
     </div>
+    <!-- Pagination -->
+    <?php include __DIR__ . '/../../partials/pagination.php'; ?>
 </div>
 
 <!-- Add Photo Modal -->
