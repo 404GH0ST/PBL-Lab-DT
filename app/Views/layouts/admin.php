@@ -297,9 +297,9 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Publications</span>
             </a>
-            <a href="/admin/profile" class="nav-link <?= strpos($uri, '/admin/profile') === 0 ? 'active' : '' ?>">
+            <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-building"></i>
-                <span>Profil Lab</span>
+                <span>Visi Misi</span>
             </a>
             <a href="/admin/gallery" class="nav-link <?= strpos($uri, '/admin/gallery') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-images"></i>
