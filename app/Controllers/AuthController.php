@@ -34,7 +34,16 @@ class AuthController extends Controller
         } else {
             $user = $this->memberModel->authenticate($username, $password);
             if ($user) {
-                $_SESSION['user'] = $user;
+
+                $_SESSION['user'] = [
+                    'id' => $user['id_anggota'],
+                    'username' => $user['username'],
+                    'role' => $user['role'],
+                    'nama_lengkap' => $user['nama_lengkap'],
+                    'nip_nim' => $user['nip_nim'],
+                    'foto_profil' => $user['foto_profil'],
+                    'status_aktif' => $user['status_aktif']
+                ];
                 return $this->redirect('/admin/dashboard');
             }
             $this->errors['login'] = 'Invalid username or password';
