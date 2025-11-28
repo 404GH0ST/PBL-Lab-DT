@@ -142,4 +142,10 @@ class Publication extends Model
                 LIMIT :limit";
         return $this->db->query($sql, ['limit' => $limit]);
     }
+
+    public function getSortedPublications($limit = 4)
+    {
+        $sql = "SELECT * FROM get_sorted_publications(:limit)";
+        return $this->db->query($sql, ['limit' => $limit]);
+    }
 }

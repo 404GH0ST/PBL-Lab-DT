@@ -33,9 +33,9 @@ class HomeController extends Controller
         $visiMisiModel = $this->loadModel(VisiMisi::class);
         $visi = $visiMisiModel->getVisi();
         $misi = $visiMisiModel->getMisi();
-        $recentPublications = $this->publicationModel->getApprovedPublications();
-        // Limit to 4 for the home page
-        $recentPublications = array_slice($recentPublications, 0, 4);
+
+        // Use stored procedure to get sorted publications
+        $recentPublications = $this->publicationModel->getSortedPublications(4);
         $mostCitedPublications = $this->publicationModel->getMostCitedPublications(3);
         $gallery = $this->galleryModel->getApprovedPhotos();
         $gallery = array_slice($gallery, 0, 6);
@@ -102,7 +102,7 @@ class HomeController extends Controller
         ]);
     }
 
-     public function NewsPage()
+    public function NewsPage()
     {
         return $this->view('news', [
             'title' => 'News - Profile Lab DT'

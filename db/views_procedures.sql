@@ -64,3 +64,41 @@ BEGIN
     REFRESH MATERIALIZED VIEW mv_dashboard_stats;
 END;
 $$;
+
+-- 4. Function to Get Sorted Publications
+-- Returns approved publications sorted by citation count and year
+CREATE OR REPLACE FUNCTION get_sorted_publications(limit_val INT)
+RETURNS TABLE (
+    id_publikasi INT,
+    judul_publikasi VARCHAR,
+    tahun_terbit INT,
+    link_publikasi VARCHAR,
+    deskripsi TEXT,
+    id_anggota INT,
+    status status_approval_enum,
+    citation_count INT,
+    nama_penulis VARCHAR
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        p.id_publikasi,
+        p.judul_publikasi,
+        p.tahun_terbit,
+        p.link_publikasi,
+        p.deskripsi,
+        p.id_anggota,
+        p.status,
+        p.citation_count,
+        a.nama_lengkap AS nama_penulis
+    FROM publikasi p
+    JOIN anggota a ON p.id_anggota = a.id_anggota
+    WHERE p.status = 'approved'
+    ORDER BY 
+        COALESCE(p.citation_count, 0) DESC, 
+        p.tahun_terbit DESC
+    LIMIT limit_val;
+END;
+$$;
