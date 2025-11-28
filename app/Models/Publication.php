@@ -71,17 +71,17 @@ class Publication extends Model
 
     public function createPublication($data)
     {
-        $sql = "INSERT INTO {$this->table} (judul_publikasi, jenis_publikasi, tahun_terbit, link_publikasi, deskripsi, id_anggota, status) 
-                VALUES (:judul_publikasi, :jenis_publikasi, :tahun_terbit, :link_publikasi, :deskripsi, :id_anggota, :status)";
+        $sql = "INSERT INTO {$this->table} (judul_publikasi, tahun_terbit, link_publikasi, deskripsi, id_anggota, status, citation_count) 
+                VALUES (:judul_publikasi, :tahun_terbit, :link_publikasi, :deskripsi, :id_anggota, :status, :citation_count)";
 
         return $this->db->execute($sql, [
             'judul_publikasi' => $data['judul_publikasi'],
-            'jenis_publikasi' => $data['jenis_publikasi'],
             'tahun_terbit' => $data['tahun_terbit'],
             'link_publikasi' => $data['link_publikasi'] ?? null,
             'deskripsi' => $data['deskripsi'] ?? null,
-            'id_anggota' => $data['id_anggota'], // Assuming this comes from session or form
-            'status' => $data['status'] ?? 'pending'
+            'id_anggota' => $data['id_anggota'],
+            'status' => $data['status'] ?? 'pending',
+            'citation_count' => $data['citation_count'] ?? 0
         ]);
     }
 
@@ -93,10 +93,6 @@ class Publication extends Model
         if (isset($data['judul_publikasi'])) {
             $fields[] = "judul_publikasi = :judul_publikasi";
             $params['judul_publikasi'] = $data['judul_publikasi'];
-        }
-        if (isset($data['jenis_publikasi'])) {
-            $fields[] = "jenis_publikasi = :jenis_publikasi";
-            $params['jenis_publikasi'] = $data['jenis_publikasi'];
         }
         if (isset($data['tahun_terbit'])) {
             $fields[] = "tahun_terbit = :tahun_terbit";
@@ -122,6 +118,10 @@ class Publication extends Model
             $fields[] = "catatan_admin = :catatan_admin";
             $params['catatan_admin'] = $data['catatan_admin'];
         }
+        if (isset($data['citation_count'])) {
+            $fields[] = "citation_count = :citation_count";
+            $params['citation_count'] = $data['citation_count'];
+        }
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id_publikasi = :id";
         return $this->db->execute($sql, $params);
@@ -130,5 +130,16 @@ class Publication extends Model
     public function deletePublication($id)
     {
         return $this->db->execute("DELETE FROM {$this->table} WHERE id_publikasi = :id", ['id' => $id]);
+    }
+
+    public function getMostCitedPublications($limit = 3)
+    {
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE p.status = 'approved'
+                ORDER BY p.citation_count DESC
+                LIMIT :limit";
+        return $this->db->query($sql, ['limit' => $limit]);
     }
 }

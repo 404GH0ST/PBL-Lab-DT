@@ -36,13 +36,18 @@ class HomeController extends Controller
         $recentPublications = $this->publicationModel->getApprovedPublications();
         // Limit to 4 for the home page
         $recentPublications = array_slice($recentPublications, 0, 4);
+        $mostCitedPublications = $this->publicationModel->getMostCitedPublications(3);
+        $gallery = $this->galleryModel->getApprovedPhotos();
+        $gallery = array_slice($gallery, 0, 6);
 
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
             'visi' => $visi,
             'misi' => $misi,
-            'recentPublications' => $recentPublications
+            'recentPublications' => $recentPublications,
+            'mostCitedPublications' => $mostCitedPublications,
+            'gallery' => $gallery
         ]);
     }
 

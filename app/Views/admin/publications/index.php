@@ -16,7 +16,7 @@
                 <thead class="bg-light">
                     <tr>
                         <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Title</th>
-                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Type</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Citations</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Year</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Author</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
@@ -42,18 +42,10 @@
                                         <span class="fw-bold text-dark text-truncate"
                                             style="max-width: 200px;"><?= htmlspecialchars($pub['judul_publikasi']) ?></span>
                                     </div>
-                                </td>
                                 <td>
-                                    <?php
-                                    $typeClass = match ($pub['jenis_publikasi']) {
-                                        'jurnal' => 'bg-info-subtle text-info',
-                                        'prosiding' => 'bg-primary-subtle text-primary',
-                                        'buku' => 'bg-success-subtle text-success',
-                                        default => 'bg-secondary-subtle text-secondary'
-                                    };
-                                    ?>
-                                    <span class="badge <?= $typeClass ?> border"><?= ucfirst($pub['jenis_publikasi']) ?></span>
+                                    <span class="text-secondary text-sm"><?= $pub['citation_count'] ?? 0 ?></span>
                                 </td>
+
                                 <td>
                                     <span class="text-secondary text-sm"><?= $pub['tahun_terbit'] ?></span>
                                 </td>
@@ -84,7 +76,7 @@
                                             </a>
                                         <?php endif; ?>
                                         <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editPublication(<?= $pub['id_publikasi'] ?>, '<?= htmlspecialchars($pub['judul_publikasi']) ?>', '<?= $pub['jenis_publikasi'] ?>', <?= $pub['tahun_terbit'] ?>, '<?= htmlspecialchars($pub['link_publikasi'] ?? '') ?>', '<?= htmlspecialchars($pub['deskripsi'] ?? '') ?>', <?= $pub['id_anggota'] ?>, '<?= $pub['status'] ?>', '<?= htmlspecialchars($pub['catatan_admin'] ?? '') ?>')"
+                                            onclick="editPublication(<?= $pub['id_publikasi'] ?>, '<?= htmlspecialchars($pub['judul_publikasi']) ?>', <?= $pub['tahun_terbit'] ?>, '<?= htmlspecialchars($pub['link_publikasi'] ?? '') ?>', '<?= htmlspecialchars($pub['deskripsi'] ?? '') ?>', <?= $pub['id_anggota'] ?>, '<?= $pub['status'] ?>', '<?= htmlspecialchars($pub['catatan_admin'] ?? '') ?>', <?= $pub['citation_count'] ?? 0 ?>)"
                                             data-bs-toggle="modal" data-bs-target="#editPublicationModal"
                                             title="Edit Publication">
                                             <i class="bi bi-pencil"></i>
@@ -124,14 +116,11 @@
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="jenis_publikasi" class="form-label">Type</label>
-                            <select class="form-select" id="jenis_publikasi" name="jenis_publikasi" required>
-                                <option value="jurnal">Jurnal</option>
-                                <option value="prosiding">Prosiding</option>
-                                <option value="buku">Buku</option>
-                                <option value="lainnya">Lainnya</option>
-                            </select>
+                            <label for="citation_count" class="form-label">Citations</label>
+                            <input type="number" class="form-control" id="citation_count" name="citation_count"
+                                value="0" min="0">
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="tahun_terbit" class="form-label">Year</label>
                             <input type="number" class="form-control" id="tahun_terbit" name="tahun_terbit"
@@ -194,14 +183,11 @@
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="edit_jenis_publikasi" class="form-label">Type</label>
-                            <select class="form-select" id="edit_jenis_publikasi" name="jenis_publikasi" required>
-                                <option value="jurnal">Jurnal</option>
-                                <option value="prosiding">Prosiding</option>
-                                <option value="buku">Buku</option>
-                                <option value="lainnya">Lainnya</option>
-                            </select>
+                            <label for="edit_citation_count" class="form-label">Citations</label>
+                            <input type="number" class="form-control" id="edit_citation_count" name="citation_count"
+                                min="0">
                         </div>
+
                         <div class="col-md-6 mb-3">
                             <label for="edit_tahun_terbit" class="form-label">Year</label>
                             <input type="number" class="form-control" id="edit_tahun_terbit" name="tahun_terbit"
@@ -277,15 +263,15 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
         // Edit Publication
-        window.editPublication = function (id, judul, jenis, tahun, link, deskripsi, id_anggota, status, catatan) {
+        window.editPublication = function (id, judul, tahun, link, deskripsi, id_anggota, status, catatan, citations) {
             $('#editPublicationForm').attr('action', '/admin/publications/' + id + '/update');
             $('#edit_judul_publikasi').val(judul);
-            $('#edit_jenis_publikasi').val(jenis);
             $('#edit_tahun_terbit').val(tahun);
             $('#edit_link_publikasi').val(link);
             $('#edit_deskripsi').val(deskripsi);
             $('#edit_id_anggota').val(id_anggota);
             $('#edit_status').val(status);
+            $('#edit_citation_count').val(citations);
 
             // Handle rejection note
             if (status === 'rejected' && catatan) {

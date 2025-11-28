@@ -71,10 +71,6 @@
                             <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3">
                                 <div>
                                     <div class="d-flex align-items-center gap-2 fw-bold">
-                                        <h2 class="fw-bold m-0" style="font-size: 12px; color: #575757;">
-                                            <?= htmlspecialchars($pub['jenis_publikasi']) ?>
-                                        </h2>
-                                        <img src="/assets/images/dot-bold.png" alt="" style="width: 28px; height: auto;">
                                         <p class="m-0" style="font-size: 12px; color: #575757;">
                                             <?= htmlspecialchars($pub['tahun_terbit']) ?>
                                         </p>

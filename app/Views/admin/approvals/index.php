@@ -97,9 +97,6 @@
                                     <img src="/<?= htmlspecialchars($item['file_path']) ?>" class="card-img-top"
                                         style="height: 200px; object-fit: cover;" alt="Gallery Image">
                                     <div class="card-body">
-                                        <h6 class="card-title fw-bold text-truncate">
-                                            <?= htmlspecialchars($item['judul_foto']) ?>
-                                        </h6>
                                         <p class="card-text small text-muted mb-2">By <?= htmlspecialchars($item['uploader']) ?>
                                         </p>
                                         <div class="d-flex justify-content-end gap-2 mt-3">
@@ -135,7 +132,7 @@
                             <thead class="bg-light">
                                 <tr>
                                     <th class="ps-4">Title</th>
-                                    <th>Type</th>
+
                                     <th>Year</th>
                                     <th class="text-end pe-4">Actions</th>
                                 </tr>
@@ -153,9 +150,7 @@
                                                 <?php endif; ?>
                                             </div>
                                         </td>
-                                        <td><span
-                                                class="badge bg-light text-dark border"><?= htmlspecialchars($item['jenis_publikasi']) ?></span>
-                                        </td>
+
                                         <td><?= htmlspecialchars($item['tahun_terbit']) ?></td>
                                         <td class="text-end pe-4">
                                             <form action="/admin/approvals/publication/<?= $item['id_publikasi'] ?>/approve"

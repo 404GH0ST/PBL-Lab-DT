@@ -25,7 +25,7 @@ CREATE TYPE jenis_konten_enum AS ENUM ('visi', 'misi', 'sejarah', 'struktur_orga
 -- Enum untuk Kondisi Fasilitas
 CREATE TYPE kondisi_enum AS ENUM ('baik', 'rusak_ringan', 'rusak_berat');
 -- Enum untuk Jenis Publikasi
-CREATE TYPE jenis_publikasi_enum AS ENUM ('jurnal', 'prosiding', 'buku', 'lainnya');
+
 -- ==========================================
 -- 3. BUAT TABEL
 -- ==========================================
@@ -82,8 +82,7 @@ CREATE TABLE berita (
 -- E. Tabel Galeri
 CREATE TABLE galeri (
     id_galeri SERIAL PRIMARY KEY,
-    judul_foto VARCHAR(100),
-    deskripsi TEXT,
+    deskripsi TEXT NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     id_uploader INT NOT NULL,
     tanggal_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -101,7 +100,7 @@ CREATE TABLE galeri (
 CREATE TABLE publikasi (
     id_publikasi SERIAL PRIMARY KEY,
     judul_publikasi VARCHAR(255) NOT NULL,
-    jenis_publikasi jenis_publikasi_enum,
+
     tahun_terbit INT,
     link_publikasi VARCHAR(255),
     deskripsi TEXT,
@@ -110,6 +109,7 @@ CREATE TABLE publikasi (
     status status_approval_enum DEFAULT 'pending',
     id_admin_penilai INT NULL,
     catatan_admin TEXT NULL,
+    citation_count INT DEFAULT 0,
     -- Relasi
     CONSTRAINT fk_publikasi_anggota FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota) ON DELETE CASCADE,
     CONSTRAINT fk_publikasi_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE

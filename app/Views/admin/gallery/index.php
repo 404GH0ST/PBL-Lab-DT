@@ -23,7 +23,7 @@
                         <div class="card h-100 shadow-sm border-0">
                             <div class="position-relative">
                                 <img src="/<?= htmlspecialchars($photo['file_path']) ?>" class="card-img-top"
-                                    alt="<?= htmlspecialchars($photo['judul_foto']) ?>"
+                                    alt="<?= htmlspecialchars($photo['deskripsi']) ?>"
                                     style="height: 200px; object-fit: cover;">
                                 <div class="position-absolute top-0 end-0 p-2">
                                     <?php if ($photo['status'] === 'approved'): ?>
@@ -43,7 +43,7 @@
                                 <?php endif; ?>
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($photo['judul_foto']) ?></h6>
+                                <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($photo['deskripsi']) ?></h6>
                                 <p class="card-text small text-muted mb-2">
                                     <i class="bi bi-person me-1"></i> <?= htmlspecialchars($photo['uploader']) ?>
                                 </p>
@@ -54,7 +54,7 @@
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
                                 <button class="btn btn-sm btn-light text-primary"
-                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['judul_foto']) ?>', '<?= htmlspecialchars($photo['deskripsi'] ?? '') ?>', '<?= $photo['status'] ?>', '<?= htmlspecialchars($photo['catatan_admin'] ?? '') ?>', '<?= htmlspecialchars($photo['file_path']) ?>')"
+                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['deskripsi']) ?>', '<?= $photo['status'] ?>', '<?= htmlspecialchars($photo['catatan_admin'] ?? '') ?>', '<?= htmlspecialchars($photo['file_path']) ?>')"
                                     data-bs-toggle="modal" data-bs-target="#editPhotoModal" title="Edit Details">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
@@ -91,13 +91,10 @@
                         <input type="file" class="form-control" id="file_path" name="file_path" accept="image/*"
                             required>
                     </div>
+
                     <div class="mb-3">
-                        <label for="judul_foto" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="judul_foto" name="judul_foto" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="deskripsi" class="form-label">Description (Optional)</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                        <label for="deskripsi" class="form-label">Description</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="id_uploader" class="form-label">Uploader</label>
@@ -147,13 +144,11 @@
                             <img src="" id="current_photo" class="img-fluid rounded border" style="max-height: 100px;">
                         </div>
                     </div>
+
                     <div class="mb-3">
-                        <label for="edit_judul_foto" class="form-label">Title</label>
-                        <input type="text" class="form-control" id="edit_judul_foto" name="judul_foto" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_deskripsi" class="form-label">Description (Optional)</label>
-                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
+                        <label for="edit_deskripsi" class="form-label">Description</label>
+                        <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"
+                            required></textarea>
                     </div>
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                         <div class="mb-3">
@@ -205,9 +200,8 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
         // Edit Photo
-        window.editPhoto = function (id, judul, deskripsi, status, catatan, filePath) {
+        window.editPhoto = function (id, deskripsi, status, catatan, filePath) {
             $('#editPhotoForm').attr('action', '/admin/gallery/' + id + '/update');
-            $('#edit_judul_foto').val(judul);
             $('#edit_deskripsi').val(deskripsi);
             $('#edit_status').val(status);
 

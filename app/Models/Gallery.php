@@ -71,12 +71,11 @@ class Gallery extends Model
 
     public function createPhoto($data)
     {
-        $sql = "INSERT INTO {$this->table} (judul_foto, deskripsi, file_path, id_uploader, status) 
-                VALUES (:judul_foto, :deskripsi, :file_path, :id_uploader, :status)";
+        $sql = "INSERT INTO {$this->table} (deskripsi, file_path, id_uploader, status) 
+                VALUES (:deskripsi, :file_path, :id_uploader, :status)";
 
         return $this->db->execute($sql, [
-            'judul_foto' => $data['judul_foto'],
-            'deskripsi' => $data['deskripsi'] ?? null,
+            'deskripsi' => $data['deskripsi'],
             'file_path' => $data['file_path'],
             'id_uploader' => $data['id_uploader'],
             'status' => $data['status'] ?? 'pending'
@@ -88,10 +87,6 @@ class Gallery extends Model
         $fields = [];
         $params = ['id' => $id];
 
-        if (isset($data['judul_foto'])) {
-            $fields[] = "judul_foto = :judul_foto";
-            $params['judul_foto'] = $data['judul_foto'];
-        }
         if (isset($data['deskripsi'])) {
             $fields[] = "deskripsi = :deskripsi";
             $params['deskripsi'] = $data['deskripsi'];

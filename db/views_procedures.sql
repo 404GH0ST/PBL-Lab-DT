@@ -36,7 +36,7 @@ SELECT
     a.nama_lengkap AS user_name,
     'Uploaded Photo' AS action,
     'Gallery' AS module,
-    g.judul_foto AS title,
+    SUBSTRING(g.deskripsi, 1, 50) AS title,
     g.tanggal_upload AS activity_time,
     g.status
 FROM galeri g

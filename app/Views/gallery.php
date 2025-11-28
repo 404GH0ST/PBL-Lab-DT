@@ -25,12 +25,17 @@
                 </div>
             <?php else: ?>
                 <?php foreach ($photos as $photo): ?>
-                    <div class="col-6 col-lg-4 d-flex flex-column align-items-center">
-                        <img src="/<?= htmlspecialchars($photo['file_path']) ?>"
-                            alt="<?= htmlspecialchars($photo['judul_foto']) ?>" class="img-fluid rounded-3 border gallery-img"
-                            style="width: 344px; height: 250px; object-fit: cover; cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#imageModal" data-image="/<?= htmlspecialchars($photo['file_path']) ?>">
-                        <p class="text-center mt-2 fw-semibold"><?= htmlspecialchars($photo['judul_foto']) ?></p>
+                    <div class="col-6 col-lg-4">
+                        <div class="card-modern overflow-hidden p-0 gallery-item" style="height: 250px; cursor: pointer;"
+                            data-bs-toggle="modal" data-bs-target="#imageModal"
+                            data-image="/<?= htmlspecialchars($photo['file_path']) ?>">
+                            <img src="/<?= htmlspecialchars($photo['file_path']) ?>"
+                                alt="<?= htmlspecialchars($photo['deskripsi']) ?>" class="img-fluid w-100 h-100"
+                                style="object-fit: cover; transition: transform 0.5s ease;">
+                            <div class="gallery-overlay">
+                                <p class="mb-0 fw-semibold"><?= htmlspecialchars($photo['deskripsi'] ?? '') ?></p>
+                            </div>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -52,3 +57,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var imageModal = document.getElementById('imageModal');
+        imageModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var imageUrl = button.getAttribute('data-image');
+            var modalImage = imageModal.querySelector('#modalImage');
+            modalImage.src = imageUrl;
+        });
+    });
+</script>
