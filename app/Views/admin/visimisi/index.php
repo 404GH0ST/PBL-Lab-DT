@@ -45,118 +45,198 @@
     </form>
 </div>
 
+<div class="modal fade" id="confirmSaveModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-warning">Konfirmasi Perubahan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">Anda telah melakukan perubahan pada Visi dan/atau Misi. Apakah Anda yakin ingin menyimpan perubahan ini?</p>
+                <div class="alert alert-warning-subtle text-warning mt-3 small p-2">
+                    Pastikan konten sudah benar, karena perubahan akan langsung dipublikasikan.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-warning px-4" id="confirmSaveChangesBtn">
+                    <i class="bi bi-check2"></i> Simpan Sekarang
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
-    // Store original values untuk tracking perubahan
-    let originalVisiContent = document.getElementById('visi_textarea').value;
-    let originalMisiContent = document.getElementById('misi_textarea').value;
+    // Variabel Global untuk menyimpan data sebelum AJAX dieksekusi
+    let dataToSave = {
+        visi: null,
+        misi: null
+    };
 
-    // Track perubahan pada textarea
-    document.getElementById('visi_textarea').addEventListener('change', function() {
-        if (this.value !== originalVisiContent) {
-            showChangeIndicator();
-        }
-    });
+    // Variabel Global untuk mendeteksi perubahan
+    let originalVisi = '';
+    let originalMisi = '';
 
-    document.getElementById('misi_textarea').addEventListener('change', function() {
-        if (this.value !== originalMisiContent) {
-            showChangeIndicator();
-        }
-    });
-
-    function showChangeIndicator() {
-        const submitBtn = document.querySelector('#labProfileForm button[type="submit"]');
-        if (!submitBtn.classList.contains('btn-warning')) {
-            submitBtn.classList.remove('btn-primary');
-            submitBtn.classList.add('btn-warning');
-            submitBtn.innerHTML = '<i class="bi bi-exclamation-triangle me-1"></i> Ada Perubahan - Simpan Sekarang';
-        }
-    }
-
-    document.getElementById('labProfileForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const visiContent = document.getElementById('visi_textarea').value.trim();
-        const misiContent = document.getElementById('misi_textarea').value.trim();
-        
-        if (!visiContent || !misiContent) {
-            showAlert('warning', 'Validasi Gagal', 'Harap isi kedua field Visi dan Misi');
-            return;
-        }
-
-        // Check if there are actual changes
-        if (visiContent === originalVisiContent && misiContent === originalMisiContent) {
-            showAlert('info', 'Tidak Ada Perubahan', 'Tidak ada perubahan data untuk disimpan');
-            return;
-        }
-
-        // Show confirmation dialog
-        if (!confirm('Apakah Anda yakin ingin menyimpan perubahan ini?')) {
-            return;
-        }
-
-        // Show loading state
-        const submitBtn = document.querySelector('#labProfileForm button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i> Menyimpan...';
-        
-        // Submit form untuk Visi
-        const formDataVisi = new FormData();
-        formDataVisi.append('jenis_konten', 'visi');
-        formDataVisi.append('isi_konten', visiContent);
-        
-        // Submit form untuk Misi
-        const formDataMisi = new FormData();
-        formDataMisi.append('jenis_konten', 'misi');
-        formDataMisi.append('isi_konten', misiContent);
-        
-        try {
-            const responseVisi = await fetch('/admin/visimisi', {
-                method: 'POST',
-                body: formDataVisi
-            });
-            
-            const responseMisi = await fetch('/admin/visimisi', {
-                method: 'POST',
-                body: formDataMisi
-            });
-
-            if (responseVisi.ok && responseMisi.ok) {
-                showAlert('success', 'Berhasil', 'Data Visi dan Misi berhasil disimpan!', function() {
-                    window.location.reload();
-                });
-            } else {
-                showAlert('error', 'Gagal', 'Terjadi kesalahan saat menyimpan data');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+    $(document).ready(function () {
+        // --- 0. INISIALISASI SUMMERNOTE ---
+        $('#visi_editor').summernote({
+            placeholder: 'Masukkan Visi...',
+            tabsize: 2,
+            height: 200,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'hr']]
+            ],
+            // Event onchange diperlukan untuk memicu updateSubmitButtonState
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    updateSubmitButtonState();
+                }
             }
-        } catch (error) {
-            console.error('Error:', error);
-            showAlert('error', 'Error', 'Terjadi kesalahan: ' + error.message);
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
+        });
+        
+        $('#misi_editor').summernote({
+            placeholder: 'Masukkan Misi...',
+            tabsize: 2,
+            height: 200,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'hr']]
+            ],
+            // Event onchange diperlukan untuk memicu updateSubmitButtonState
+            callbacks: {
+                onChange: function(contents, $editable) {
+                    updateSubmitButtonState();
+                }
+            }
+        });
+        // --- END SUMMERNOTE INIT ---
+
+
+        // --- 1. INISIALISASI DATA AWAL ---
+        // PENTING: Gunakan .summernote('code') untuk mendapatkan konten HTML
+        originalVisi = $('#visi_editor').summernote('code'); 
+        originalMisi = $('#misi_editor').summernote('code');
+
+        updateSubmitButtonState();
+
+        // --- 2. FUNGSI HELPER VISUAL/VALIDASI ---
+
+        // Fungsi ini disederhanakan karena Summernote tidak lagi menggunakan .val()
+        function validateForm(form) {
+            let isValid = true;
+            // Summernote tidak perlu validasi required jika datanya diambil melalui code()
+            // Kita pastikan saja kontennya tidak kosong
+            const visiContent = $('#visi_editor').summernote('isEmpty') ? '' : $('#visi_editor').summernote('code');
+            const misiContent = $('#misi_editor').summernote('isEmpty') ? '' : $('#misi_editor').summernote('code');
+            
+            if ($.trim(visiContent) === '' || $.trim(misiContent) === '') {
+                isValid = false;
+                // Di Summernote, validasi visual lebih sulit, kita bisa menggunakan pesan error inline.
+                // Untuk saat ini, kita hanya mengembalikan status validasi.
+            }
+            return isValid;
+        }
+
+        function updateSubmitButtonState() {
+            // PENTING: Gunakan .summernote('code') untuk mendapatkan konten HTML saat ini
+            const currentVisi = $('#visi_editor').summernote('code');
+            const currentMisi = $('#misi_editor').summernote('code');
+            
+            const hasChanged = currentVisi !== originalVisi || currentMisi !== originalMisi;
+            const $btn = $('#saveBtn'); 
+
+            if (hasChanged) {
+                $btn.removeClass('btn-primary btn-danger').addClass('btn-warning');
+                $btn.html('<i class="bi bi-exclamation-triangle-fill"></i> Ada Perubahan - Simpan');
+                $btn.prop('disabled', false);
+            } else {
+                $btn.removeClass('btn-warning btn-danger').addClass('btn-primary');
+                $btn.html('<i class="bi bi-check2"></i> Save Changes');
+                $btn.prop('disabled', true); 
+            }
+        }
+
+        // --- 3. SUBMISSION FORM (Memicu Modal Konfirmasi) ---
+
+        $('#labProfileForm').on('submit', function (e) {
+            e.preventDefault();
+
+            // PENTING: Ambil konten dari Summernote
+            const currentVisi = $('#visi_editor').summernote('code');
+            const currentMisi = $('#misi_editor').summernote('code');
+
+            // 1. Validasi
+            if (!validateForm(this)) {
+                // Di sini Anda bisa menambahkan feedback visual jika diperlukan
+                return;
+            }
+
+            // 2. Cek Perubahan
+            if (currentVisi === originalVisi && currentMisi === originalMisi) {
+                return; // Tidak ada perubahan, hentikan
+            }
+            
+            // 3. Simpan data sementara & Tampilkan Modal
+            dataToSave.visi = currentVisi;
+            dataToSave.misi = currentMisi;
+
+            const saveModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('confirmSaveModal'));
+            saveModal.show();
+        });
+
+
+        // --- 4. EKSEKUSI PENYIMPANAN (Dipanggil oleh Tombol Modal) ---
+        
+        $('#confirmSaveChangesBtn').on('click', function() {
+            const saveModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('confirmSaveModal'));
+            saveModal.hide();
+            
+            executeSaveChanges(dataToSave.visi, dataToSave.misi);
+        });
+
+        // Fungsi Inti untuk melakukan AJAX (dengan perbaikan key & response)
+        function executeSaveChanges(visi, misi) {
+            const $btn = $('#saveBtn');
+            const originalHtml = $btn.html(); // Gunakan originalHtml untuk menyimpan HTML lengkap
+
+            // Set Loading State
+            $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...');
+
+            // Kirim 2 permintaan AJAX paralel
+            const visiRequest = $.post('/admin/visimisi', {
+                jenis_konten: 'visi', 
+                isi_konten: visi      
+            });
+            const misiRequest = $.post('/admin/visimisi', {
+                jenis_konten: 'misi', 
+                isi_konten: misi      
+            });
+
+            $.when(visiRequest, misiRequest)
+                .done(function (visiResponse, misiResponse) {
+                    // SUKSES: Langsung muat ulang halaman sebagai konfirmasi
+                    window.location.reload();
+                })
+                .fail(function (xhr, status, error) {
+                    // GAGAL: Tampilkan feedback visual di tombol selama 3 detik
+                    
+                    // Kembalikan tombol ke keadaan error
+                    $btn.removeClass('btn-warning').addClass('btn-danger').html('<i class="bi bi-x-circle-fill"></i> Gagal! Coba Lagi.');
+                    console.error('AJAX Save Failed:', xhr.status, status, error); 
+
+                    // Kembalikan tombol ke keadaan awal setelah jeda
+                    setTimeout(() => {
+                        updateSubmitButtonState(); 
+                    }, 3000);
+                });
         }
     });
-
-    // Function untuk menampilkan alert yang lebih baik
-    function showAlert(type, title, message, callback) {
-        // Cek apakah SweetAlert2 tersedia
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: type,
-                title: title,
-                text: message,
-                confirmButtonColor: '#6366f1',
-                allowOutsideClick: false
-            }).then((result) => {
-                if (callback) callback();
-            });
-        } else {
-            // Fallback ke alert bawaan
-            let alertMessage = `${title}\n\n${message}`;
-            alert(alertMessage);
-            if (callback) callback();
-        }
-    }
 </script>

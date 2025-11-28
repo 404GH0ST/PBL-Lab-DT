@@ -24,8 +24,22 @@ class VisiMisiController extends Controller
     {
         $data = $_POST;
 
-        $this->visiMisiModel->upsertVisiMisi($data['jenis_konten'], $data['isi_konten']);
-        $this->redirect('/admin/visimisi');
+        // Tambahkan pengecekan data untuk menghindari Notice PHP
+        if (isset($data['jenis_konten']) && isset($data['isi_konten'])) {
+            // Model sekarang menerima data yang benar
+            $this->visiMisiModel->upsertVisiMisi($data['jenis_konten'], $data['isi_konten']);
+
+            header('Content-Type: application/json');
+            http_response_code(200);
+            echo json_encode(['status' => 'success', 'message' => 'Data berhasil disimpan.']);
+            return; 
+        }
+
+        // Opsional: respons error jika data tidak lengkap
+        http_response_code(400); // Bad Request
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap.']);
+        return;
     }
 
     public function update($id)
