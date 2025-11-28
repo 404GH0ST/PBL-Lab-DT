@@ -5,7 +5,6 @@
     </div>
     <form action="/admin/visimisi" method="POST" id="labProfileForm">
         <div class="card-body">
-            <!-- Visi Section -->
             <div class="mb-4">
                 <h6 class="fw-bold mb-3">Visi</h6>
                 <?php 
@@ -17,11 +16,10 @@
                         }
                     }
                 ?>
-                <textarea class="form-control" name="visi" id="visi_textarea" rows="5" placeholder="Masukkan pernyataan visi laboratorium"><?= $visiData ? htmlspecialchars($visiData['isi_konten']) : '' ?></textarea>
+                <textarea class="form-control" name="visi" id="visi_editor" rows="5" placeholder="Masukkan pernyataan visi laboratorium"><?= $visiData ? htmlspecialchars($visiData['isi_konten']) : '' ?></textarea>
                 <small class="text-muted d-block mt-2">The main vision statement of the laboratory.</small>
             </div>
 
-            <!-- Misi Section -->
             <div class="mb-4">
                 <h6 class="fw-bold mb-3">Misi</h6>
                 <?php 
@@ -33,12 +31,12 @@
                         }
                     }
                 ?>
-                <textarea class="form-control" name="misi" id="misi_textarea" rows="5" placeholder="Masukkan pernyataan misi laboratorium"><?= $misiData ? htmlspecialchars($misiData['isi_konten']) : '' ?></textarea>
+                <textarea class="form-control" name="misi" id="misi_editor" rows="5" placeholder="Masukkan pernyataan misi laboratorium"><?= $misiData ? htmlspecialchars($misiData['isi_konten']) : '' ?></textarea>
                 <small class="text-muted d-block mt-2">Detailed mission points.</small>
             </div>
         </div>
         <div class="card-footer bg-light d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" id="saveBtn">
                 <i class="bi bi-check2 me-1"></i> Save Changes
             </button>
         </div>
