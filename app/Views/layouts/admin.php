@@ -115,8 +115,8 @@
             margin-bottom: 2rem;
             border-radius: 1rem;
             box-shadow: var(--card-shadow);
-            position: sticky;
-            top: 1rem;
+            /* position: sticky; */
+            /* top: 1rem; */
             z-index: 900;
         }
 
@@ -302,6 +302,22 @@
 
         .page-link:focus {
             box-shadow: 0 0 0 0.25rem rgba(122, 186, 84, 0.25);
+        }
+
+        /* Global Color Overrides */
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .border-primary {
+            border-color: var(--primary-color) !important;
+        }
+
+        .btn-primary:disabled,
+        .btn-primary.disabled {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            opacity: 0.65;
         }
     </style>
 </head>
