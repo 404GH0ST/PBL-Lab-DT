@@ -63,8 +63,12 @@ class HomeController extends Controller
 
     public function FacilityPage()
     {
+        $fasilitasModel = $this->loadModel(\App\Models\Fasilitas::class);
+        $facilities = $fasilitasModel->getAllFacilities();
+
         return $this->view('facility', [
-            'title' => 'Facility - Profile Lab DT'
+            'title' => 'Facility - Profile Lab DT',
+            'facilities' => $facilities
         ]);
     }
 

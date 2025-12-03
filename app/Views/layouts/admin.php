@@ -300,6 +300,10 @@
                 <i class="bi bi-journal-text"></i>
                 <span>Publications</span>
             </a>
+            <a href="/admin/fasilitas" class="nav-link <?= strpos($uri, '/admin/fasilitas') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-tools"></i>
+                <span>Fasilitas</span>
+            </a>
             <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-building"></i>
                 <span>Visi Misi</span>
