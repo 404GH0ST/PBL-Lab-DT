@@ -43,6 +43,13 @@ class HomeController extends Controller
         $gallery = $this->galleryModel->getApprovedPhotos();
         $gallery = array_slice($gallery, 0, 6);
 
+        // Fetch members for homepage
+        $headOfLab = $this->memberModel->getMembersByRole('admin');
+        $labMembers = $this->memberModel->getMembersByRole('operator');
+
+        // Limit members if needed, e.g., take top 3
+        $labMembers = array_slice($labMembers, 0, 3);
+
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
@@ -50,7 +57,9 @@ class HomeController extends Controller
             'misi' => $misi,
             'recentPublications' => $recentPublications,
             'mostCitedPublications' => $mostCitedPublications,
-            'gallery' => $gallery
+            'gallery' => $gallery,
+            'headOfLab' => $headOfLab,
+            'labMembers' => $labMembers
         ]);
     }
 

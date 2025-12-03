@@ -14,6 +14,11 @@ class Member extends Model
         return $this->db->query("SELECT * FROM {$this->table} ORDER BY created_at DESC");
     }
 
+    public function getMembersByRole($role)
+    {
+        return $this->db->query("SELECT * FROM {$this->table} WHERE role = :role ORDER BY created_at DESC", ['role' => $role]);
+    }
+
     public function getPaginatedMembers($limit, $offset)
     {
         $sql = "SELECT * FROM {$this->table} ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
