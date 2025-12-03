@@ -63,6 +63,16 @@ class Gallery extends Model
         return $this->db->query($sql);
     }
 
+    public function getApprovedPhotosByUploader($uploaderId)
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader, a.foto_profil, a.username 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                WHERE g.status = 'approved' AND g.id_uploader = :id
+                ORDER BY g.tanggal_upload DESC";
+        return $this->db->query($sql, ['id' => $uploaderId]);
+    }
+
     public function getPhotoById($id)
     {
         $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_galeri = :id", ['id' => $id]);

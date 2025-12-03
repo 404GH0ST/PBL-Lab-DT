@@ -29,6 +29,7 @@ $router->get('/news', [HomeController::class, 'NewsPage']);
 $router->get('/login', [HomeController::class, 'loginPage']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact/send', [ContactController::class, 'send']);
+$router->get('/member/{id}', [HomeController::class, 'memberDetail']);
 
 // ============================================
 // Auth Routes

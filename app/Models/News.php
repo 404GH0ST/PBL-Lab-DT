@@ -45,6 +45,16 @@ class News extends Model
         return $this->db->query($sql);
     }
 
+    public function getApprovedNewsByAuthor($authorId)
+    {
+        $sql = "SELECT b.*, a.nama_lengkap as penulis, a.foto_profil, a.username 
+                FROM {$this->table} b
+                JOIN anggota a ON b.id_penulis = a.id_anggota
+                WHERE b.status = 'approved' AND b.id_penulis = :id
+                ORDER BY b.tanggal_posting DESC";
+        return $this->db->query($sql, ['id' => $authorId]);
+    }
+
     public function getNewsById($id)
     {
         $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_berita = :id", ['id' => $id]);

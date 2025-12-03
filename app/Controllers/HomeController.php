@@ -8,6 +8,7 @@ use App\Models\VisiMisi;
 use App\Models\News;
 use App\Models\Gallery;
 use App\Models\Publication;
+use App\Models\Member;
 
 /**
  * Home Controller
@@ -17,12 +18,14 @@ class HomeController extends Controller
     protected $newsModel;
     protected $galleryModel;
     protected $publicationModel;
+    protected $memberModel;
 
     public function __construct()
     {
         $this->newsModel = $this->loadModel(News::class);
         $this->galleryModel = $this->loadModel(Gallery::class);
         $this->publicationModel = $this->loadModel(Publication::class);
+        $this->memberModel = $this->loadModel(Member::class);
     }
 
     /**
@@ -114,6 +117,39 @@ class HomeController extends Controller
     {
         return $this->view('login', [
             'title' => 'Login - Profile Lab DT'
+        ]);
+    }
+
+    public function memberDetail($id)
+    {
+        $member = $this->memberModel->getMemberById($id);
+
+        if (!$member) {
+            // Handle 404 or redirect
+            return $this->view('404', [
+                'title' => 'Page Not Found - Profile Lab DT',
+                'path' => "member/{$id}"
+            ]);
+        }
+
+        $news = $this->newsModel->getApprovedNewsByAuthor($id);
+        $publications = $this->publicationModel->getApprovedPublicationsByAuthor($id);
+        $gallery = $this->galleryModel->getApprovedPhotosByUploader($id);
+
+        return $this->view('member_detail', [
+            'title' => $member['nama_lengkap'] . ' - Profile Lab DT',
+            'member' => $member,
+            'news' => $news,
+            'publications' => $publications,
+            'gallery' => $gallery
+        ]);
+    }
+
+    public function notFound()
+    {
+        http_response_code(404);
+        return $this->view('404', [
+            'title' => 'Page Not Found - Profile Lab DT'
         ]);
     }
 }
