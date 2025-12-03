@@ -69,33 +69,33 @@
             <div class="border rounded-3 p-4 mb-4" style="background: #fff;">
                 
                 <!-- TOP: Journal & Tahun -->
-                <p class="mb-1" style="font-size:13px; color:#575757;">
+                <p class="mb-1" style="font-size:12px; color:#575757;">
                     Journal Of Machine learning research
                     <span class="mx-2">•</span>
                     <?= htmlspecialchars($pub['tahun_terbit']) ?>
                 </p>
 
                 <!-- Judul -->
-                <h3 class="fw-bold mb-1" style="font-size:17px;">
+                <h3 class="fw-bold mb-1" style="font-size:14px;">
                     <?= htmlspecialchars($pub['judul_publikasi']) ?>
                 </h3>
 
                 <!-- Authors -->
-                <p class="mb-3" style="font-size:13px; color:#575757;">
+                <p class="mb-3" style="font-size:12px; color:#575757;">
                     Authors: <?= htmlspecialchars($pub['nama_penulis']) ?>
                 </p>
 
                 <!-- Deskripsi -->
-                <p class="mb-3" style="font-size:13px; color:#575757;">
+                <p class="mb-3" style="font-size:12px; color:#575757;">
                     <?= htmlspecialchars($pub['deskripsi'] ?? 'Tidak ada deskripsi.') ?>
                 </p>
 
                 <!-- READ BUTTON (Full width like the image) -->
-                <div class="rounded-3 d-flex justify-content-center align-items-center mt-3"
-                     style="background:#F2F6F8; height:42px;">
+                <div class="rounded-1 d-flex justify-content-center align-items-center mt-3"
+                     style="background:#F0F0F0; height:37px;">
                     <?php if (!empty($pub['link_publikasi'])): ?>
                         <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
-                           class="fw-semibold text-dark text-decoration-none"
+                           class="fw-semibold text-vision-gradient text-decoration-none"
                            style="font-size:14px;">
                             Baca
                         </a>
