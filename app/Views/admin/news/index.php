@@ -57,10 +57,20 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="avatar" style="width: 24px; height: 24px; font-size: 10px;">
-                                            <?= strtoupper(substr($item['penulis'] ?? 'A', 0, 1)) ?>
+                                        <div class="avatar-sm bg-light rounded-circle overflow-hidden" style="width: 32px; height: 32px;">
+                                            <?php if (!empty($item['foto_profil'])): ?>
+                                                <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>" 
+                                                     alt="Profile" class="w-100 h-100 object-fit-cover">
+                                            <?php else: ?>
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold" style="font-size: 0.8rem;">
+                                                    <?= strtoupper(substr($item['penulis'] ?? 'A', 0, 1)) ?>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
-                                        <span class="text-sm"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-sm fw-medium text-dark"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
+                                            <span class="text-xs text-muted">@<?= htmlspecialchars($item['username'] ?? '') ?></span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -75,7 +85,7 @@
                                         default => 'bg-warning-subtle text-warning'
                                     };
                                     $statusLabel = match ($item['status']) {
-                                        'approved' => 'Diterbitkan',
+                                        'approved' => 'Disetujui',
                                         'rejected' => 'Ditolak',
                                         default => 'Tertunda'
                                     };

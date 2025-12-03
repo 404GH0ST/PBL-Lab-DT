@@ -38,7 +38,7 @@ class DashboardController extends Controller
         return $this->view('admin/dashboard', [
             'title' => 'Dashboard - Lab Admin',
             'layout' => 'layouts/admin',
-            'pageTitle' => 'Dashboard Overview',
+            'pageTitle' => 'Ringkasan Dashboard',
             'stats' => $viewStats,
             'recentActivity' => $recentActivity,
         ]);

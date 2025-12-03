@@ -6,15 +6,6 @@
                 <p class="text-muted small mb-0">Perbarui detail kontak dan tautan media sosial</p>
             </div>
             <div class="card-body">
-                <?php if (isset($_GET['success'])): ?>
-                    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-check-circle-fill"></i>
-                            <div>Informasi berhasil diperbarui!</div>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                <?php endif; ?>
 
                 <form action="/admin/contact/update" method="POST">
                     <div class="row">

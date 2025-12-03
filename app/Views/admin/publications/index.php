@@ -50,13 +50,32 @@
                                     <span class="text-secondary text-sm"><?= $pub['tahun_terbit'] ?></span>
                                 </td>
                                 <td>
-                                    <span class="text-secondary text-sm"><?= htmlspecialchars($pub['nama_penulis']) ?></span>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar-sm bg-light rounded-circle overflow-hidden"
+                                            style="width: 32px; height: 32px;">
+                                            <?php if (!empty($pub['foto_profil'])): ?>
+                                                <img src="/uploads/foto_profil/<?= htmlspecialchars($pub['foto_profil']) ?>"
+                                                    alt="Profile" class="w-100 h-100 object-fit-cover">
+                                            <?php else: ?>
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold"
+                                                    style="font-size: 0.8rem;">
+                                                    <?= strtoupper(substr($pub['nama_penulis'], 0, 1)) ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span
+                                                class="text-sm fw-medium text-dark"><?= htmlspecialchars($pub['nama_penulis']) ?></span>
+                                            <span
+                                                class="text-xs text-muted">@<?= htmlspecialchars($pub['username'] ?? '') ?></span>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
                                     <?php if ($pub['status'] === 'approved'): ?>
-                                        <span class="badge bg-success-subtle text-success">Approved</span>
+                                        <span class="badge bg-success-subtle text-success">Disetujui</span>
                                     <?php elseif ($pub['status'] === 'rejected'): ?>
-                                        <span class="badge bg-danger-subtle text-danger">Rejected</span>
+                                        <span class="badge bg-danger-subtle text-danger">Ditolak</span>
                                         <?php if (!empty($pub['catatan_admin'])): ?>
                                             <div class="mt-1 text-xs text-danger">
                                                 <i class="bi bi-exclamation-circle me-1"></i>
@@ -64,7 +83,7 @@
                                             </div>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <span class="badge bg-warning-subtle text-warning">Pending</span>
+                                        <span class="badge bg-warning-subtle text-warning">Tertunda</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-4">

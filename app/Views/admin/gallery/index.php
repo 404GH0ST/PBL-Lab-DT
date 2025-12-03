@@ -44,13 +44,26 @@
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($photo['deskripsi']) ?></h6>
-                                <p class="card-text small text-muted mb-2">
-                                    <i class="bi bi-person me-1"></i> <?= htmlspecialchars($photo['uploader']) ?>
-                                </p>
-                                <p class="card-text small text-muted">
-                                    <i class="bi bi-calendar me-1"></i>
-                                    <?= date('M d, Y', strtotime($photo['tanggal_upload'])) ?>
-                                </p>
+                                <div class="d-flex align-items-center gap-2 mt-3">
+                                    <div class="avatar-sm bg-light rounded-circle overflow-hidden"
+                                        style="width: 32px; height: 32px;">
+                                        <?php if (!empty($photo['foto_profil'])): ?>
+                                            <img src="/uploads/foto_profil/<?= htmlspecialchars($photo['foto_profil']) ?>"
+                                                alt="Profile" class="w-100 h-100 object-fit-cover">
+                                        <?php else: ?>
+                                            <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold"
+                                                style="font-size: 0.8rem;">
+                                                <?= strtoupper(substr($photo['uploader'], 0, 1)) ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span
+                                            class="text-sm fw-medium text-dark"><?= htmlspecialchars($photo['uploader']) ?></span>
+                                        <span
+                                            class="text-xs text-muted"><?= date('d M Y', strtotime($photo['tanggal_upload'])) ?></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
                                 <button class="btn btn-sm btn-light text-primary"

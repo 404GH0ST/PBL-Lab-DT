@@ -21,7 +21,7 @@ class ContactController extends Controller
 
         return $this->view('admin/contact/index', [
             'contact' => $contact,
-            'pageTitle' => 'Contact Information',
+            'pageTitle' => 'Informasi Kontak',
             'layout' => 'layouts/admin'
         ]);
     }
