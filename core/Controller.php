@@ -42,6 +42,11 @@ abstract class Controller
     {
         extract($data);
 
+        // Inject user data from session if available and not already provided
+        if (!isset($user) && isset($_SESSION['user'])) {
+            $user = $_SESSION['user'];
+        }
+
         $viewPath = __DIR__ . '/../app/Views/' . str_replace('.', '/', $view) . '.php';
 
         if (!file_exists($viewPath)) {

@@ -384,13 +384,23 @@
                 <i class="bi bi-list fs-4"></i>
             </button>
             <h4 class="m-0 fw-semibold"><?= $pageTitle ?? 'Dashboard' ?></h4>
-            <a href="/admin/my-profile" class="user-menu text-decoration-none text-dark">
+            <div class="user-menu text-decoration-none text-dark">
                 <div class="text-end d-none d-sm-block">
-                    <div class="fw-semibold"><?= $user['name'] ?? 'Admin User' ?></div>
+                    <div class="fw-semibold"><?= $user['nama_lengkap'] ?? 'Admin User' ?></div>
                     <small class="text-muted"><?= $user['email'] ?? 'admin@example.com' ?></small>
                 </div>
-                <div class="avatar"><?= strtoupper(substr($user['name'] ?? 'A', 0, 1)) ?></div>
-            </a>
+                <div class="avatar overflow-hidden rounded-circle d-flex align-items-center justify-content-center"
+                    style="width: 32px; height: 32px;">
+                    <?php if (!empty($user['foto_profil'])): ?>
+                        <img src="/uploads/foto_profil/<?= htmlspecialchars($user['foto_profil']) ?>" alt="Profile"
+                            class="w-100 h-100 object-fit-cover">
+                    <?php else: ?>
+                        <div class="bg-light text-primary w-100 h-100 d-flex align-items-center justify-content-center">
+                            <?= strtoupper(substr($user['nama_lengkap'], 0, 2)) ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
         </div>
 
         <?= $content ?? '' ?>

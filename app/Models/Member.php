@@ -35,12 +35,13 @@ class Member extends Model
 
     public function createMember($data)
     {
-        $sql = "INSERT INTO {$this->table} (username, password, nama_lengkap, nip_nim, role, foto_profil, status_aktif) 
-                VALUES (:username, :password, :nama_lengkap, :nip_nim, :role, :foto_profil, :status_aktif)";
+        $sql = "INSERT INTO {$this->table} (username, password, email, nama_lengkap, nip_nim, role, foto_profil, status_aktif) 
+                VALUES (:username, :password, :email, :nama_lengkap, :nip_nim, :role, :foto_profil, :status_aktif)";
 
         return $this->db->execute($sql, [
             'username' => $data['username'],
             'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'email' => $data['email'],
             'nama_lengkap' => $data['nama_lengkap'],
             'nip_nim' => $data['nip_nim'] ?? null,
             'role' => $data['role'] ?? 'operator',
@@ -61,6 +62,10 @@ class Member extends Model
         if (isset($data['password']) && !empty($data['password'])) {
             $fields[] = "password = :password";
             $params['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+        if (isset($data['email'])) {
+            $fields[] = "email = :email";
+            $params['email'] = $data['email'];
         }
         if (isset($data['nama_lengkap'])) {
             $fields[] = "nama_lengkap = :nama_lengkap";

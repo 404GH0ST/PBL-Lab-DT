@@ -2,11 +2,8 @@
 
 namespace App\Controllers;
 
-use Core\Controller;
 use App\Models\Member;
-use App\Models\News;
-use App\Models\Gallery;
-use App\Models\Publication;
+use Core\Controller;
 
 class DashboardController extends Controller
 {
@@ -43,7 +40,7 @@ class DashboardController extends Controller
             'layout' => 'layouts/admin',
             'pageTitle' => 'Dashboard Overview',
             'stats' => $viewStats,
-            'recentActivity' => $recentActivity
+            'recentActivity' => $recentActivity,
         ]);
     }
 }
