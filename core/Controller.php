@@ -47,6 +47,18 @@ abstract class Controller
             $user = $_SESSION['user'];
         }
 
+        // Inject info_lab data if not already provided
+        if (!isset($infoLab)) {
+            // Simple query to get info_lab, assuming single row
+            try {
+                $infoLabResult = $this->db()->query("SELECT * FROM info_lab LIMIT 1");
+                $infoLab = $infoLabResult[0] ?? null;
+            } catch (\Exception $e) {
+                // Ignore if table doesn't exist or other DB error, to prevent breaking all pages
+                $infoLab = null;
+            }
+        }
+
         $viewPath = __DIR__ . '/../app/Views/' . str_replace('.', '/', $view) . '.php';
 
         if (!file_exists($viewPath)) {

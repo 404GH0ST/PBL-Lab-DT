@@ -60,7 +60,11 @@ CREATE TABLE info_lab (
     telepon VARCHAR(20),
     link_maps TEXT,
     link_instagram VARCHAR(255),
-    link_youtube VARCHAR(255)
+    link_youtube VARCHAR(255),
+    link_linkedin VARCHAR(255),
+    link_facebook VARCHAR(255),
+    link_twitter VARCHAR(255),
+    deskripsi TEXT
 );
 -- D. Tabel Berita
 -- Mencakup kolom approval sesuai User Req B.1 (Alur Persetujuan)

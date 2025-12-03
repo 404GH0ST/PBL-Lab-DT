@@ -339,12 +339,12 @@
             </a>
             <a href="/admin/members" class="nav-link <?= strpos($uri, '/admin/members') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-person-badge"></i>
-                <span>Members</span>
+                <span>Anggota</span>
             </a>
             <a href="/admin/publications"
                 class="nav-link <?= strpos($uri, '/admin/publications') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-journal-text"></i>
-                <span>Publications</span>
+                <span>Publikasi</span>
             </a>
             <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-building"></i>
@@ -352,7 +352,7 @@
             </a>
             <a href="/admin/gallery" class="nav-link <?= strpos($uri, '/admin/gallery') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-images"></i>
-                <span>Gallery</span>
+                <span>Galeri</span>
             </a>
             <a href="/admin/contact" class="nav-link <?= strpos($uri, '/admin/contact') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-info-circle"></i>
@@ -360,18 +360,18 @@
             </a>
             <a href="/admin/news" class="nav-link <?= strpos($uri, '/admin/news') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-newspaper"></i>
-                <span>News</span>
+                <span>Berita</span>
             </a>
             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                 <a href="/admin/approvals" class="nav-link <?= strpos($uri, '/admin/approvals') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-check-circle"></i>
-                    <span>Approvals</span>
+                    <span>Persetujuan</span>
                 </a>
             <?php endif; ?>
             <div class="mt-auto border-top pt-2">
                 <a href="/logout" class="nav-link text-danger">
                     <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
+                    <span>Keluar</span>
                 </a>
             </div>
         </nav>

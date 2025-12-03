@@ -20,7 +20,7 @@
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tanggal</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
                         <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                            Actions</th>
+                            Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,8 +74,13 @@
                                         'rejected' => 'bg-danger-subtle text-danger',
                                         default => 'bg-warning-subtle text-warning'
                                     };
+                                    $statusLabel = match ($item['status']) {
+                                        'approved' => 'Diterbitkan',
+                                        'rejected' => 'Ditolak',
+                                        default => 'Tertunda'
+                                    };
                                     ?>
-                                    <span class="badge <?= $statusClass ?> border"><?= ucfirst($item['status']) ?></span>
+                                    <span class="badge <?= $statusClass ?> border"><?= $statusLabel ?></span>
                                     <?php if ($item['status'] === 'rejected' && !empty($item['catatan_admin'])): ?>
                                         <div class="mt-1 text-xs text-danger">
                                             <i class="bi bi-exclamation-circle me-1"></i>
@@ -91,12 +96,13 @@
                                             data-penulis="<?= $item['id_penulis'] ?>" data-status="<?= $item['status'] ?>"
                                             data-gambar="<?= htmlspecialchars($item['gambar_utama'] ?? '') ?>"
                                             data-catatan="<?= htmlspecialchars($item['catatan_admin'] ?? '') ?>"
+                                            data-catatan="<?= htmlspecialchars($item['catatan_admin'] ?? '') ?>"
                                             onclick="editNews(this)" data-bs-toggle="modal" data-bs-target="#editNewsModal"
-                                            title="Edit News">
+                                            title="Edit Berita">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-light text-danger"
-                                            onclick="confirmDelete('<?= $item['id_berita'] ?>')" title="Delete News">
+                                            onclick="confirmDelete('<?= $item['id_berita'] ?>')" title="Hapus Berita">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
@@ -153,9 +159,9 @@
                                 <div class="mb-3">
                                     <label for="status" class="form-label">Status</label>
                                     <select class="form-select" id="status" name="status">
-                                        <option value="pending">Pending</option>
-                                        <option value="approved">Published</option>
-                                        <option value="rejected">Rejected</option>
+                                        <option value="pending">Tertunda</option>
+                                        <option value="approved">Diterbitkan</option>
+                                        <option value="rejected">Ditolak</option>
                                     </select>
                                 </div>
                             <?php endif; ?>
@@ -169,7 +175,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary px-4">Simpan Berita</button>
                 </div>
             </form>
@@ -215,9 +221,9 @@
                                 <div class="mb-3">
                                     <label for="edit_status" class="form-label">Status</label>
                                     <select class="form-select" id="edit_status" name="status">
-                                        <option value="pending">Pending</option>
-                                        <option value="approved">Published</option>
-                                        <option value="rejected">Rejected</option>
+                                        <option value="pending">Tertunda</option>
+                                        <option value="approved">Diterbitkan</option>
+                                        <option value="rejected">Ditolak</option>
                                     </select>
                                 </div>
                             <?php endif; ?>

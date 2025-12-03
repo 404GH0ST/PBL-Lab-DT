@@ -1,27 +1,26 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title mb-0 fw-bold text-dark">Pending Approvals</h5>
-        <p class="text-muted small mb-0">Review and approve pending submissions</p>
+        <h5 class="card-title mb-0 fw-bold text-dark">Persetujuan Tertunda</h5>
+        <p class="text-muted small mb-0">Tinjau dan setujui kiriman yang tertunda</p>
     </div>
     <div class="card-body">
         <ul class="nav nav-tabs mb-4" id="approvalTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="news-tab" data-bs-toggle="tab" data-bs-target="#news" type="button"
                     role="tab" aria-controls="news" aria-selected="true">
-                    News <span class="badge bg-danger rounded-pill ms-2"><?= count($pendingNews) ?></span>
+                    Berita <span class="badge bg-danger rounded-pill ms-2"><?= count($pendingNews) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" type="button"
                     role="tab" aria-controls="gallery" aria-selected="false">
-                    Gallery <span class="badge bg-danger rounded-pill ms-2"><?= count($pendingGallery) ?></span>
+                    Galeri <span class="badge bg-danger rounded-pill ms-2"><?= count($pendingGallery) ?></span>
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="publications-tab" data-bs-toggle="tab" data-bs-target="#publications"
                     type="button" role="tab" aria-controls="publications" aria-selected="false">
-                    Publications <span
-                        class="badge bg-danger rounded-pill ms-2"><?= count($pendingPublications) ?></span>
+                    Publikasi <span class="badge bg-danger rounded-pill ms-2"><?= count($pendingPublications) ?></span>
                 </button>
             </li>
         </ul>
@@ -32,17 +31,17 @@
                 <?php if (empty($pendingNews)): ?>
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-check-circle display-4 mb-3 opacity-50"></i>
-                        <p class="mb-0">No pending news articles</p>
+                        <p class="mb-0">Tidak ada berita tertunda</p>
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="ps-4">Article</th>
-                                    <th>Author</th>
-                                    <th>Date</th>
-                                    <th class="text-end pe-4">Actions</th>
+                                    <th class="ps-4">Artikel</th>
+                                    <th>Penulis</th>
+                                    <th>Tanggal</th>
+                                    <th class="text-end pe-4">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,12 +64,12 @@
                                         <td class="text-end pe-4">
                                             <form action="/admin/approvals/news/<?= $item['id_berita'] ?>/approve" method="POST"
                                                 class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Approve">
+                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Setujui">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             </form>
                                             <button type="button" class="btn btn-sm btn-danger text-white ms-1"
-                                                onclick="openRejectModal('news', <?= $item['id_berita'] ?>)" title="Reject">
+                                                onclick="openRejectModal('news', <?= $item['id_berita'] ?>)" title="Tolak">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         </td>
@@ -87,7 +86,7 @@
                 <?php if (empty($pendingGallery)): ?>
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-check-circle display-4 mb-3 opacity-50"></i>
-                        <p class="mb-0">No pending photos</p>
+                        <p class="mb-0">Tidak ada foto tertunda</p>
                     </div>
                 <?php else: ?>
                     <div class="row g-4">
@@ -97,17 +96,18 @@
                                     <img src="/<?= htmlspecialchars($item['file_path']) ?>" class="card-img-top"
                                         style="height: 200px; object-fit: cover;" alt="Gallery Image">
                                     <div class="card-body">
-                                        <p class="card-text small text-muted mb-2">By <?= htmlspecialchars($item['uploader']) ?>
+                                        <p class="card-text small text-muted mb-2">Oleh
+                                            <?= htmlspecialchars($item['uploader']) ?>
                                         </p>
                                         <div class="d-flex justify-content-end gap-2 mt-3">
                                             <form action="/admin/approvals/gallery/<?= $item['id_galeri'] ?>/approve"
                                                 method="POST">
-                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Approve">
+                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Setujui">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             </form>
                                             <button type="button" class="btn btn-sm btn-danger text-white"
-                                                onclick="openRejectModal('gallery', <?= $item['id_galeri'] ?>)" title="Reject">
+                                                onclick="openRejectModal('gallery', <?= $item['id_galeri'] ?>)" title="Tolak">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         </div>
@@ -124,17 +124,17 @@
                 <?php if (empty($pendingPublications)): ?>
                     <div class="text-center py-5 text-muted">
                         <i class="bi bi-check-circle display-4 mb-3 opacity-50"></i>
-                        <p class="mb-0">No pending publications</p>
+                        <p class="mb-0">Tidak ada publikasi tertunda</p>
                     </div>
                 <?php else: ?>
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="ps-4">Title</th>
+                                    <th class="ps-4">Judul</th>
 
-                                    <th>Year</th>
-                                    <th class="text-end pe-4">Actions</th>
+                                    <th>Tahun</th>
+                                    <th class="text-end pe-4">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -146,7 +146,7 @@
                                                     class="fw-bold text-dark"><?= htmlspecialchars($item['judul_publikasi']) ?></span>
                                                 <?php if (!empty($item['link_publikasi'])): ?>
                                                     <a href="<?= htmlspecialchars($item['link_publikasi']) ?>" target="_blank"
-                                                        class="text-xs text-primary">View Link</a>
+                                                        class="text-xs text-primary">Lihat Tautan</a>
                                                 <?php endif; ?>
                                             </div>
                                         </td>
@@ -155,13 +155,13 @@
                                         <td class="text-end pe-4">
                                             <form action="/admin/approvals/publication/<?= $item['id_publikasi'] ?>/approve"
                                                 method="POST" class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Approve">
+                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Setujui">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             </form>
                                             <button type="button" class="btn btn-sm btn-danger text-white ms-1"
                                                 onclick="openRejectModal('publication', <?= $item['id_publikasi'] ?>)"
-                                                title="Reject">
+                                                title="Tolak">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
                                         </td>
@@ -181,20 +181,20 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">Reject Submission</h5>
+                <h5 class="modal-title fw-bold">Tolak Kiriman</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="rejectForm" action="" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="catatan_admin" class="form-label">Reason for Rejection</label>
+                        <label for="catatan_admin" class="form-label">Alasan Penolakan</label>
                         <textarea class="form-control" id="catatan_admin" name="catatan_admin" rows="3" required
-                            placeholder="Please provide a reason..."></textarea>
+                            placeholder="Silakan berikan alasan..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger px-4">Reject</button>
+                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger px-4">Tolak</button>
                 </div>
             </form>
         </div>

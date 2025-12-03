@@ -147,13 +147,13 @@
                             </div>
                         <?php endif; ?>
                         <div class="col-md-12 mb-3">
-                            <label for="link_publikasi" class="form-label">Link (Optional)</label>
+                            <label for="link_publikasi" class="form-label">Tautan</label>
                             <input type="url" class="form-control" id="link_publikasi" name="link_publikasi"
-                                placeholder="https://...">
+                                placeholder="https://..." required>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="deskripsi" class="form-label">Description (Optional)</label>
-                            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
                         </div>
                     </div>
                 </div>
@@ -210,20 +210,24 @@
                                 <select class="form-select" id="edit_status" name="status">
                                     <option value="pending">Pending</option>
                                     <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
+                                    <option value="pending">Tertunda</option>
+                                    <option value="approved">Disetujui</option>
+                                    <option value="rejected">Ditolak</option>
                                 </select>
                             </div>
                         <?php endif; ?>
                         <div class="col-md-12 mb-3">
-                            <label for="edit_link_publikasi" class="form-label">Link (Optional)</label>
-                            <input type="url" class="form-control" id="edit_link_publikasi" name="link_publikasi">
+                            <label for="edit_link_publikasi" class="form-label">Tautan</label>
+                            <input type="url" class="form-control" id="edit_link_publikasi" name="link_publikasi"
+                                required>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="edit_deskripsi" class="form-label">Description (Optional)</label>
-                            <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"></textarea>
+                            <label for="edit_deskripsi" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"
+                                required></textarea>
                         </div>
                         <div class="col-md-12 mb-3" id="pub_rejection_note_container" style="display: none;">
-                            <label class="form-label text-danger">Rejection Note</label>
+                            <label class="form-label text-danger">Catatan Penolakan</label>
                             <div class="alert alert-danger bg-danger-subtle border-danger text-danger p-2 mb-0 text-sm"
                                 id="pub_rejection_note"></div>
                         </div>

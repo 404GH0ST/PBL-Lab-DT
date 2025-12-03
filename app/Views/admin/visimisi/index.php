@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title mb-1 fw-bold">Lab Profile Management</h5>
-        <p class="text-muted small mb-0">Update Visi, Misi</p>
+        <h5 class="card-title mb-1 fw-bold">Manajemen Profil Lab</h5>
+        <p class="text-muted small mb-0">Perbarui Visi dan Misi</p>
     </div>
     <form action="/admin/visimisi" method="POST" id="labProfileForm">
         <div class="card-body">
@@ -18,7 +18,7 @@
                 ?>
                 <textarea class="form-control" name="visi" id="visi_editor" rows="5"
                     placeholder="Masukkan pernyataan visi laboratorium"><?= $visiData ? htmlspecialchars($visiData['isi_konten']) : '' ?></textarea>
-                <small class="text-muted d-block mt-2">The main vision statement of the laboratory.</small>
+                <small class="text-muted d-block mt-2">Pernyataan visi utama laboratorium.</small>
             </div>
 
             <div class="mb-4">
@@ -34,12 +34,12 @@
                 ?>
                 <textarea class="form-control" name="misi" id="misi_editor" rows="5"
                     placeholder="Masukkan pernyataan misi laboratorium"><?= $misiData ? htmlspecialchars($misiData['isi_konten']) : '' ?></textarea>
-                <small class="text-muted d-block mt-2">Detailed mission points.</small>
+                <small class="text-muted d-block mt-2">Poin-poin misi terperinci.</small>
             </div>
         </div>
         <div class="card-footer bg-light d-flex justify-content-end">
             <button type="submit" class="btn btn-primary" id="saveBtn">
-                <i class="bi bi-check2 me-1"></i> Save Changes
+                <i class="bi bi-check2 me-1"></i> Simpan Perubahan
             </button>
         </div>
     </form>
