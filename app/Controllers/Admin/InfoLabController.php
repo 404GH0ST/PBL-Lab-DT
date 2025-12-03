@@ -6,7 +6,7 @@ use Core\Controller;
 use App\Models\Contact;
 
 
-class ContactController extends Controller
+class InfoLabController extends Controller
 {
     protected $contactModel;
 
@@ -19,7 +19,7 @@ class ContactController extends Controller
     {
         $contact = $this->contactModel->getContactInfo();
 
-        return $this->view('admin/contact/index', [
+        return $this->view('admin/info-lab/index', [
             'contact' => $contact,
             'pageTitle' => 'Informasi Kontak',
             'layout' => 'layouts/admin'
@@ -30,6 +30,6 @@ class ContactController extends Controller
     {
         $data = $_POST;
         $this->contactModel->updateContactInfo($data);
-        $this->redirect('/admin/contact?success=updated');
+        $this->redirect('/admin/info-lab?success=updated');
     }
 }

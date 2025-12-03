@@ -11,7 +11,7 @@ use App\Controllers\Admin\VisiMisiController;
 use App\Middlewares\AdminMiddleware;
 use App\Controllers\Admin\NewsController;
 use App\Controllers\Admin\ApprovalController;
-use App\Controllers\Admin\ContactController as AdminContactController;
+use App\Controllers\Admin\InfoLabController;
 
 $router = $app->router();
 
@@ -60,8 +60,8 @@ $app->router()->post('/admin/approvals/{type}/{id}/approve', [ApprovalController
 $app->router()->post('/admin/approvals/{type}/{id}/reject', [ApprovalController::class, 'reject'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
 
 // Lab Info Routes
-$app->router()->get('/admin/contact', [AdminContactController::class, 'index'])->middleware([AuthMiddleware::class]);
-$app->router()->post('/admin/contact/update', [AdminContactController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->get('/admin/info-lab', [InfoLabController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/info-lab/update', [InfoLabController::class, 'update'])->middleware([AuthMiddleware::class]);
 
 // Gallery Routes
 $app->router()->get('/admin/gallery', [GalleryController::class, 'index'])->middleware([AuthMiddleware::class]);

@@ -354,7 +354,7 @@
                 <i class="bi bi-images"></i>
                 <span>Galeri</span>
             </a>
-            <a href="/admin/contact" class="nav-link <?= strpos($uri, '/admin/contact') === 0 ? 'active' : '' ?>">
+            <a href="/admin/info-lab" class="nav-link <?= strpos($uri, '/admin/info-lab') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-info-circle"></i>
                 <span>Info Lab</span>
             </a>
