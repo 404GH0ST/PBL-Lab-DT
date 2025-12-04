@@ -61,6 +61,17 @@ class News extends Model
         return $result[0] ?? null;
     }
 
+    public function getNewsBySlug($slug)
+    {
+        $sql = "SELECT b.*, a.nama_lengkap as penulis, a.foto_profil, a.username 
+                FROM {$this->table} b
+                JOIN anggota a ON b.id_penulis = a.id_anggota
+                WHERE b.slug = :slug AND b.status = 'approved' LIMIT 1";
+
+        $result = $this->db->query($sql, ['slug' => $slug]);
+        return $result[0] ?? null;
+    }
+
     public function createNews($data)
     {
         $sql = "INSERT INTO {$this->table} (judul, slug, isi_berita, gambar_utama, id_penulis, status) 

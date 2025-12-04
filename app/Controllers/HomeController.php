@@ -122,8 +122,42 @@ class HomeController extends Controller
 
     public function NewsPage()
     {
+        $page = $_GET['page'] ?? 1;
+        $limit = 9;
+
+        // Use approved news for public listing
+        $allNews = $this->newsModel->getApprovedNews();
+
+        // Simple pagination slice (model does not provide paginated approved method)
+        $total = count($allNews);
+        $offset = max(0, ($page - 1) * $limit);
+        $news = array_slice($allNews, $offset, $limit);
+
+        // Basic pagination object if available
+        $pagination = null;
+        if (class_exists('\Core\Pagination')) {
+            $pagination = new Pagination($total, $limit, $page);
+        }
+
         return $this->view('news', [
-            'title' => 'News - Profile Lab DT'
+            'title' => 'News - Profile Lab DT',
+            'news' => $news,
+            'pagination' => $pagination,
+            'baseUrl' => '/news'
+        ]);
+    }
+
+    public function newsDetail($slug)
+    {
+        $article = $this->newsModel->getNewsBySlug($slug);
+
+        if (!$article) {
+            return $this->notFound();
+        }
+
+        return $this->view('news_detail', [
+            'title' => $article['judul'] . ' - Profile Lab DT',
+            'article' => $article
         ]);
     }
 

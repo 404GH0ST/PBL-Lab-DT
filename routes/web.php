@@ -26,6 +26,7 @@ $router->get('/facility', [HomeController::class, 'FacilityPage']);
 $router->get('/gallery', [HomeController::class, 'galleryPage']);
 $router->get('/publications', [HomeController::class, 'publicationPage']);
 $router->get('/news', [HomeController::class, 'NewsPage']);
+$router->get('/news/{slug}', [HomeController::class, 'newsDetail']);
 $router->get('/login', [HomeController::class, 'loginPage']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact/send', [ContactController::class, 'send']);
