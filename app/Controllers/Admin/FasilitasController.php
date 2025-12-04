@@ -44,7 +44,13 @@ class FasilitasController extends Controller
             }
         }
 
-        $this->fasilitasModel->createFacility($data);
+        $created = $this->fasilitasModel->createFacility($data);
+        if ($created) {
+            $_SESSION['flash_success'] = 'Fasilitas berhasil ditambahkan.';
+        } else {
+            $_SESSION['flash_error'] = 'Gagal menambahkan fasilitas.';
+        }
+
         $this->redirect('/admin/fasilitas');
     }
 
@@ -73,7 +79,13 @@ class FasilitasController extends Controller
             }
         }
 
-        $this->fasilitasModel->updateFacility($id, $data);
+        $updated = $this->fasilitasModel->updateFacility($id, $data);
+        if ($updated) {
+            $_SESSION['flash_success'] = 'Fasilitas berhasil diperbarui.';
+        } else {
+            $_SESSION['flash_error'] = 'Gagal memperbarui fasilitas.';
+        }
+
         $this->redirect('/admin/fasilitas');
     }
 
@@ -84,7 +96,13 @@ class FasilitasController extends Controller
             @unlink(__DIR__ . '/../../../public/' . $item['foto_fasilitas']);
         }
 
-        $this->fasilitasModel->deleteFacility($id);
+        $deleted = $this->fasilitasModel->deleteFacility($id);
+        if ($deleted) {
+            $_SESSION['flash_success'] = 'Fasilitas berhasil dihapus.';
+        } else {
+            $_SESSION['flash_error'] = 'Gagal menghapus fasilitas.';
+        }
+
         $this->redirect('/admin/fasilitas');
     }
 }
