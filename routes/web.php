@@ -82,6 +82,13 @@ $app->router()->post('/admin/news', [NewsController::class, 'store'])->middlewar
 $app->router()->post('/admin/news/{id}/update', [NewsController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news/{id}/delete', [NewsController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
+// Fasilitas Routes (Admin)
+use App\Controllers\Admin\FasilitasController;
+$app->router()->get('/admin/fasilitas', [FasilitasController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas', [FasilitasController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas/{id}/update', [FasilitasController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas/{id}/delete', [FasilitasController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
 // Lab I
 // ============================================
 // Example Routes (Commented for Reference)

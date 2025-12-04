@@ -9,6 +9,7 @@ use App\Models\News;
 use App\Models\Gallery;
 use App\Models\Publication;
 use App\Models\Member;
+use App\Models\Fasilitas;
 
 /**
  * Home Controller
@@ -19,6 +20,7 @@ class HomeController extends Controller
     protected $galleryModel;
     protected $publicationModel;
     protected $memberModel;
+    protected $fasilitasModel;
 
     public function __construct()
     {
@@ -26,6 +28,7 @@ class HomeController extends Controller
         $this->galleryModel = $this->loadModel(Gallery::class);
         $this->publicationModel = $this->loadModel(Publication::class);
         $this->memberModel = $this->loadModel(Member::class);
+        $this->fasilitasModel = $this->loadModel(Fasilitas::class);
     }
 
     /**
@@ -75,8 +78,11 @@ class HomeController extends Controller
 
     public function FacilityPage()
     {
+        $facilities = $this->fasilitasModel->getAllFacilities();
+
         return $this->view('facility', [
-            'title' => 'Facility - Profile Lab DT'
+            'title' => 'Facility - Profile Lab DT',
+            'facilities' => $facilities
         ]);
     }
 
