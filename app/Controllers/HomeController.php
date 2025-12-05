@@ -10,6 +10,7 @@ use App\Models\Gallery;
 use App\Models\Publication;
 use App\Models\Member;
 use App\Models\Fasilitas;
+use App\Models\FokusRiset;
 
 /**
  * Home Controller
@@ -21,6 +22,7 @@ class HomeController extends Controller
     protected $publicationModel;
     protected $memberModel;
     protected $fasilitasModel;
+    protected $fokusModel;
 
     public function __construct()
     {
@@ -29,6 +31,7 @@ class HomeController extends Controller
         $this->publicationModel = $this->loadModel(Publication::class);
         $this->memberModel = $this->loadModel(Member::class);
         $this->fasilitasModel = $this->loadModel(Fasilitas::class);
+        $this->fokusModel = $this->loadModel(FokusRiset::class);
     }
 
     /**
@@ -53,6 +56,14 @@ class HomeController extends Controller
         // Limit members if needed, e.g., take top 3
         $labMembers = array_slice($labMembers, 0, 3);
 
+        // Fokus riset
+        $focusList = [];
+        try {
+            $focusList = $this->fokusModel->getAllFocus();
+        } catch (\Exception $e) {
+            $focusList = [];
+        }
+
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
             'message' => 'Welcome to Profile Lab DT',
@@ -63,6 +74,7 @@ class HomeController extends Controller
             'gallery' => $gallery,
             'headOfLab' => $headOfLab,
             'labMembers' => $labMembers
+            , 'focusList' => $focusList
         ]);
     }
 

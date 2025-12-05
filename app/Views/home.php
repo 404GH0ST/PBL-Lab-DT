@@ -219,17 +219,31 @@
             <p class="fw-bold text-uppercase text-white-50" style="letter-spacing: 1px;">Riset Kami</p>
             <h2 class="fw-bold display-5 text-white">Fokus Riset</h2>
         </div>
-
         <div class="row justify-content-center g-4">
-            <!-- Item -->
-            <?php for ($i = 0; $i < 5; $i++): ?>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="card-modern h-100 d-flex align-items-center justify-content-center p-3"
-                        style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
-                        <h3 class="fw-semibold text-white mb-0" style="font-size: 1.1rem;">Analisis Data</h3>
+            <?php if (!empty($focusList)): ?>
+                <?php foreach ($focusList as $f): ?>
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="card-modern h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center"
+                            style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.08);">
+                            <?php if (!empty($f['ikon'])): ?>
+                                <img src="/<?= htmlspecialchars($f['ikon']) ?>" alt="<?= htmlspecialchars($f['judul']) ?>" class="mb-3" style="width:64px; height:64px; object-fit:cover;">
+                            <?php else: ?>
+                                <div class="rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width:64px; height:64px; background: rgba(255,255,255,0.12);">
+                                    <i class="bi bi-lightbulb fs-4 text-white"></i>
+                                </div>
+                            <?php endif; ?>
+                            <h5 class="fw-semibold text-white mb-0" style="font-size: 1rem;"><?= htmlspecialchars($f['judul']) ?></h5>
+                            <?php if (!empty($f['deskripsi'])): ?>
+                                <p class="text-white-50 small mt-2 mb-0" style="font-size:0.9rem;"><?= htmlspecialchars($f['deskripsi']) ?></p>
+                            <?php endif; ?>
+                        </div>
                     </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12">
+                    <p class="text-white-50">Belum ada fokus riset yang dipublikasikan.</p>
                 </div>
-            <?php endfor; ?>
+            <?php endif; ?>
         </div>
     </div>
 </section>

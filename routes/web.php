@@ -90,6 +90,13 @@ $app->router()->post('/admin/fasilitas', [FasilitasController::class, 'store'])-
 $app->router()->post('/admin/fasilitas/{id}/update', [FasilitasController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fasilitas/{id}/delete', [FasilitasController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
+// Fokus Riset Routes (Admin)
+use App\Controllers\Admin\FokusRisetController;
+$app->router()->get('/admin/fokus', [FokusRisetController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus', [FokusRisetController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus/{id}/update', [FokusRisetController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus/{id}/delete', [FokusRisetController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
 // Lab I
 // ============================================
 // Example Routes (Commented for Reference)
