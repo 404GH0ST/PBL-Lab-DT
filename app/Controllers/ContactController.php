@@ -50,7 +50,7 @@ class ContactController
             $mail->Port = 587;
 
             // Sender
-            $mail->setFrom('pbl.labdt@gmail.com', 'Your Website');
+            $mail->setFrom('pbl.labdt@gmail.com', 'PBL Lab DT');
 
             // Receiver
             $mail->addAddress($to);
