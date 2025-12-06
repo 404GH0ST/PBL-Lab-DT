@@ -116,8 +116,18 @@ class HomeController extends Controller
 
     public function NewsPage()
     {
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+        $total = $this->newsModel->countAllNews();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $news = $this->newsModel->getApprovedNews($limit, $pagination->getOffset());
+
         return $this->view('news', [
-            'title' => 'News - Profile Lab DT'
+            'title' => 'News - Profile Lab DT',
+            'news' => $news,
+            'pagination' => $pagination,
+            'baseUrl' => '/news'
         ]);
     }
 
