@@ -136,16 +136,29 @@ class HomeController extends Controller
     {
         $page = $_GET['page'] ?? 1;
         $limit = 10;
-        $total = $this->newsModel->countAllNews();
+        $keyword = $_GET['search'] ?? null;
+
+        if ($keyword) {
+            // Count result search
+            $total = $this->newsModel->countSearchNews($keyword);
+        } else {
+            $total = $this->newsModel->countAllNews();
+        }
+
         $pagination = new Pagination($total, $limit, $page);
 
-        $news = $this->newsModel->getApprovedNews($limit, $pagination->getOffset());
+        if ($keyword) {
+            $news = $this->newsModel->searchNews($keyword, $limit, $pagination->getOffset());
+        } else {
+            $news = $this->newsModel->getApprovedNews($limit, $pagination->getOffset());
+        }
 
         return $this->view('news', [
             'title' => 'News - Profile Lab DT',
             'news' => $news,
             'pagination' => $pagination,
-            'baseUrl' => '/news'
+            'baseUrl' => '/news',
+            'keyword' => $keyword
         ]);
     }
 
