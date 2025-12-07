@@ -47,6 +47,16 @@
                     <a class="nav-link <?= str_contains($current_page, '/news') ? 'active-link' : '' ?>"
                         href="/news">Berita</a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?= str_contains($current_page, '/contact') ? 'active-link' : '' ?>"
+                        href="/contact">Kontak</a>
+                </li>
+
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-sm btn-primary-custom px-4 rounded-3" href="/login"
+                        style="text-decoration: none;">Login</a>
+                </li>
             </ul>
         </div>
     </div>

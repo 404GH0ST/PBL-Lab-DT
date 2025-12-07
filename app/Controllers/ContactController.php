@@ -5,9 +5,26 @@ namespace App\Controllers;
 use Core\Controller;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\Contact;
 
-class ContactController
+class ContactController extends Controller
 {
+    private $contactModel;
+
+    public function __construct()
+    {
+        $this->contactModel = $this->loadModel(Contact::class);
+    }
+
+    public function index()
+    {
+        return $this->view('contact', [
+            'title' => 'Contact Us - Lab Data Technology',
+            'layout' => 'layouts/main',
+            'pageTitle' => 'Hubungi Kami'
+        ]);
+    }
+
     public function send()
     {
         $name = $_POST['name'];
@@ -31,7 +48,7 @@ class ContactController
 
         // Redirect atau return response
         $_SESSION['flash_success'] = 'Message sent successfully!';
-        header("Location: /");
+        header("Location: /contact"); // Redirect back to contact page
         exit();
     }
 
