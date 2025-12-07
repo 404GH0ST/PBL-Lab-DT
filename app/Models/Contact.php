@@ -15,6 +15,12 @@ class Contact extends Model
         return $result[0] ?? null;
     }
 
+    public function getApprovedContactInfo()
+    {
+        $result = $this->db->query("SELECT * FROM {$this->table} WHERE status = 'approved' LIMIT 1");
+        return $result[0] ?? null;
+    }
+
     public function updateContactInfo($data)
     {
         $info = $this->getContactInfo();
@@ -67,12 +73,28 @@ class Contact extends Model
                 $fields[] = "deskripsi = :deskripsi";
                 $params['deskripsi'] = $data['deskripsi'];
             }
+            if (isset($data['status'])) {
+                $fields[] = "status = :status";
+                $params['status'] = $data['status'];
+            }
+            if (isset($data['id_admin_penilai'])) {
+                $fields[] = "id_admin_penilai = :id_admin_penilai";
+                $params['id_admin_penilai'] = $data['id_admin_penilai'];
+            }
+            if (isset($data['catatan_admin'])) {
+                $fields[] = "catatan_admin = :catatan_admin";
+                $params['catatan_admin'] = $data['catatan_admin'];
+            }
+            if (isset($data['id_editor'])) {
+                $fields[] = "id_editor = :id_editor";
+                $params['id_editor'] = $data['id_editor'];
+            }
 
             $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id = :id";
             return $this->db->execute($sql, $params);
         } else {
-            $sql = "INSERT INTO {$this->table} (nama_lab, alamat, email, telepon, link_maps, link_instagram, link_youtube, link_linkedin, link_facebook, link_twitter, deskripsi) 
-                    VALUES (:nama_lab, :alamat, :email, :telepon, :link_maps, :link_instagram, :link_youtube, :link_linkedin, :link_facebook, :link_twitter, :deskripsi)";
+            $sql = "INSERT INTO {$this->table} (nama_lab, alamat, email, telepon, link_maps, link_instagram, link_youtube, link_linkedin, link_facebook, link_twitter, deskripsi, id_editor, status, updated_at) 
+                    VALUES (:nama_lab, :alamat, :email, :telepon, :link_maps, :link_instagram, :link_youtube, :link_linkedin, :link_facebook, :link_twitter, :deskripsi, :id_editor, :status, CURRENT_TIMESTAMP)";
 
             return $this->db->execute($sql, [
                 'nama_lab' => $data['nama_lab'] ?? 'Lab DT',
@@ -85,7 +107,9 @@ class Contact extends Model
                 'link_linkedin' => $data['link_linkedin'] ?? '',
                 'link_facebook' => $data['link_facebook'] ?? '',
                 'link_twitter' => $data['link_twitter'] ?? '',
-                'deskripsi' => $data['deskripsi'] ?? ''
+                'deskripsi' => $data['deskripsi'] ?? '',
+                'id_editor' => $data['id_editor'] ?? null,
+                'status' => $data['status'] ?? 'pending'
             ]);
         }
     }

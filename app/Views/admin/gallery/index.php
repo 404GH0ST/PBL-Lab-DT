@@ -67,7 +67,7 @@
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
                                 <button class="btn btn-sm btn-light text-primary"
-                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['deskripsi']) ?>', '<?= $photo['status'] ?>', '<?= htmlspecialchars($photo['catatan_admin'] ?? '') ?>', '<?= htmlspecialchars($photo['file_path']) ?>')"
+                                    onclick="editPhoto(<?= $photo['id_galeri'] ?>, '<?= htmlspecialchars($photo['deskripsi']) ?>', '<?= $photo['status'] ?>', '<?= htmlspecialchars($photo['catatan_admin'] ?? '') ?>', '<?= htmlspecialchars($photo['file_path']) ?>', '<?= htmlspecialchars($photo['kategori'] ?? 'Lainnya') ?>')"
                                     data-bs-toggle="modal" data-bs-target="#editPhotoModal" title="Edit Detail">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
@@ -110,14 +110,29 @@
                         <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3" required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="id_uploader" class="form-label">Pengunggah</label>
-                        <select class="form-select" id="id_uploader" name="id_uploader" required>
-                            <?php foreach ($members as $member): ?>
-                                <option value="<?= $member['id_anggota'] ?>">
-                                    <?= htmlspecialchars($member['nama_lengkap']) ?>
-                                </option>
-                            <?php endforeach; ?>
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select class="form-select" id="kategori" name="kategori" required>
+                            <option value="Kegiatan">Kegiatan</option>
+                            <option value="Ruang Lab">Ruang Lab</option>
+                            <option value="Acara">Acara</option>
+                            <option value="Lainnya">Lainnya</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_uploader" class="form-label">Pengunggah</label>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                            <input type="hidden" name="id_uploader" value="<?= $_SESSION['user']['id'] ?>">
+                        <?php else: ?>
+                            <select class="form-select" id="id_uploader" name="id_uploader" required>
+                                <?php foreach ($members as $member): ?>
+                                    <option value="<?= $member['id_anggota'] ?>">
+                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
                     </div>
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                         <div class="mb-3">
@@ -162,6 +177,15 @@
                         <label for="edit_deskripsi" class="form-label">Deskripsi</label>
                         <textarea class="form-control" id="edit_deskripsi" name="deskripsi" rows="3"
                             required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_kategori" class="form-label">Kategori</label>
+                        <select class="form-select" id="edit_kategori" name="kategori" required>
+                            <option value="Kegiatan">Kegiatan</option>
+                            <option value="Ruang Lab">Ruang Lab</option>
+                            <option value="Acara">Acara</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
                     </div>
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                         <div class="mb-3">
@@ -213,10 +237,11 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
         // Edit Photo
-        window.editPhoto = function (id, deskripsi, status, catatan, filePath) {
+        window.editPhoto = function (id, deskripsi, status, catatan, filePath, kategori) {
             $('#editPhotoForm').attr('action', '/admin/gallery/' + id + '/update');
             $('#edit_deskripsi').val(deskripsi);
             $('#edit_status').val(status);
+            $('#edit_kategori').val(kategori || 'Lainnya');
 
             // Handle photo preview
             if (filePath) {

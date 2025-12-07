@@ -333,52 +333,61 @@
         </div>
         <nav class="mt-4">
             <?php $uri = $_SERVER['REQUEST_URI'] ?? '/'; ?>
-            <a href="/admin/dashboard" class="nav-link <?= strpos($uri, '/admin/dashboard') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
+            <?php $role = $_SESSION['user']['role'] ?? ''; ?>
+
+            <?php if ($role === 'operator'): ?>
+                <a href="/admin/dashboard" class="nav-link <?= strpos($uri, '/admin/dashboard') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            <?php endif; ?>
+
             <a href="/admin/members" class="nav-link <?= strpos($uri, '/admin/members') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-person-badge"></i>
                 <span>Anggota</span>
             </a>
-            <a href="/admin/publications"
-                class="nav-link <?= strpos($uri, '/admin/publications') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-journal-text"></i>
-                <span>Publikasi</span>
-            </a>
-            <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-building"></i>
-                <span>Visi Misi</span>
-            </a>
-            <a href="/admin/gallery" class="nav-link <?= strpos($uri, '/admin/gallery') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-images"></i>
-                <span>Galeri</span>
-            </a>
-            <a href="/admin/info-lab" class="nav-link <?= strpos($uri, '/admin/info-lab') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-info-circle"></i>
-                <span>Info Lab</span>
-            </a>
-            <a href="/admin/fasilitas" class="nav-link <?= strpos($uri, '/admin/fasilitas') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-tools"></i>
-                <span>Fasilitas</span>
-            </a>
-            <a href="/admin/fokus" class="nav-link <?= strpos($uri, '/admin/fokus') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-lightbulb"></i>
-                <span>Fokus Riset</span>
-            </a>
-            <a href="/admin/news" class="nav-link <?= strpos($uri, '/admin/news') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-newspaper"></i>
-                <span>Berita</span>
-            </a>
-            <a href="/admin/activities" class="nav-link <?= strpos($uri, '/admin/activities') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-calendar-event"></i>
-                <span>Kegiatan</span>
-            </a>
-            <a href="/admin/courses" class="nav-link <?= strpos($uri, '/admin/courses') === 0 ? 'active' : '' ?>">
-                <i class="bi bi-book"></i>
-                <span>Perkuliahan</span>
-            </a>
-            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+
+            <?php if ($role === 'operator'): ?>
+                <a href="/admin/publications"
+                    class="nav-link <?= strpos($uri, '/admin/publications') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Publikasi</span>
+                </a>
+                <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-building"></i>
+                    <span>Visi Misi</span>
+                </a>
+                <a href="/admin/gallery" class="nav-link <?= strpos($uri, '/admin/gallery') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-images"></i>
+                    <span>Galeri</span>
+                </a>
+                <a href="/admin/info-lab" class="nav-link <?= strpos($uri, '/admin/info-lab') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Info Lab</span>
+                </a>
+                <a href="/admin/fasilitas" class="nav-link <?= strpos($uri, '/admin/fasilitas') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-tools"></i>
+                    <span>Fasilitas</span>
+                </a>
+                <a href="/admin/fokus" class="nav-link <?= strpos($uri, '/admin/fokus') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-lightbulb"></i>
+                    <span>Fokus Riset</span>
+                </a>
+                <a href="/admin/news" class="nav-link <?= strpos($uri, '/admin/news') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-newspaper"></i>
+                    <span>Berita</span>
+                </a>
+                <a href="/admin/activities" class="nav-link <?= strpos($uri, '/admin/activities') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-calendar-event"></i>
+                    <span>Kegiatan</span>
+                </a>
+                <a href="/admin/courses" class="nav-link <?= strpos($uri, '/admin/courses') === 0 ? 'active' : '' ?>">
+                    <i class="bi bi-book"></i>
+                    <span>Perkuliahan</span>
+                </a>
+            <?php endif; ?>
+
+            <?php if ($role === 'admin'): ?>
                 <a href="/admin/approvals" class="nav-link <?= strpos($uri, '/admin/approvals') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-check-circle"></i>
                     <span>Persetujuan</span>

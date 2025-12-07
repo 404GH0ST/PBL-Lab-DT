@@ -4,22 +4,27 @@ namespace App\Controllers\Admin;
 
 use Core\Controller;
 use App\Models\Activity;
+use App\Models\Member;
 
 class ActivityController extends Controller
 {
     private $activityModel;
+    private $memberModel;
 
     public function __construct()
     {
         $this->activityModel = $this->loadModel(Activity::class);
+        $this->memberModel = $this->loadModel(Member::class);
     }
 
     public function index()
     {
         $activities = $this->activityModel->getAllActivities();
+        $members = $this->memberModel->getAllMembers();
         return $this->view('admin/activities/index', [
             'title' => 'Manajemen Kegiatan',
             'activities' => $activities,
+            'members' => $members,
             'layout' => 'layouts/admin'
         ]);
     }
@@ -29,7 +34,8 @@ class ActivityController extends Controller
         $data = [
             'judul_kegiatan' => $_POST['judul_kegiatan'],
             'deskripsi' => $_POST['deskripsi'],
-            'gambar' => $_POST['gambar'] ?? 'bi bi-activity' // Default icon if not provided
+            'gambar' => $_POST['gambar'] ?? 'bi bi-activity',
+            'id_penulis' => $_POST['id_penulis'] ?? $_SESSION['user']['id']
         ];
 
         if ($this->activityModel->createActivity($data)) {
@@ -44,7 +50,8 @@ class ActivityController extends Controller
         $data = [
             'judul_kegiatan' => $_POST['judul_kegiatan'],
             'deskripsi' => $_POST['deskripsi'],
-            'gambar' => $_POST['gambar']
+            'gambar' => $_POST['gambar'],
+            'id_penulis' => $_POST['id_penulis'] ?? $_SESSION['user']['id']
         ];
 
         if ($this->activityModel->updateActivity($id, $data)) {

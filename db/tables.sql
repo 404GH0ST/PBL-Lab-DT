@@ -1,6 +1,8 @@
 -- ==========================================
 -- 1. BERSIHKAN DATABASE (Opsional)
 -- ==========================================
+DROP TABLE IF EXISTS kegiatan CASCADE;
+DROP TABLE IF EXISTS perkuliahan CASCADE;
 DROP TABLE IF EXISTS fasilitas CASCADE;
 DROP TABLE IF EXISTS publikasi CASCADE;
 DROP TABLE IF EXISTS galeri CASCADE;
@@ -51,6 +53,15 @@ CREATE TABLE profil_lab (
     id SERIAL PRIMARY KEY,
     jenis_konten jenis_konten_enum NOT NULL,
     isi_konten TEXT NOT NULL,
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    id_editor INT NULL,
+    -- Relasi
+    CONSTRAINT fk_profil_lab_editor FOREIGN KEY (id_editor) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_profil_lab_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -68,6 +79,15 @@ CREATE TABLE info_lab (
     link_facebook VARCHAR(255),
     link_twitter VARCHAR(255),
     deskripsi TEXT,
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    id_editor INT NULL,
+    -- Relasi
+    CONSTRAINT fk_info_lab_editor FOREIGN KEY (id_editor) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_info_lab_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -95,6 +115,7 @@ CREATE TABLE berita (
 CREATE TABLE galeri (
     id_galeri SERIAL PRIMARY KEY,
     deskripsi TEXT NOT NULL,
+    kategori VARCHAR(100) DEFAULT 'Lainnya',
     file_path VARCHAR(255) NOT NULL,
     id_uploader INT NOT NULL,
     tanggal_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -139,6 +160,13 @@ CREATE TABLE fasilitas (
     foto_fasilitas VARCHAR(255),
     jumlah_unit INT DEFAULT 1,
     kondisi kondisi_enum DEFAULT 'baik',
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    -- Relasi
+    CONSTRAINT fk_fasilitas_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -147,6 +175,68 @@ CREATE TABLE fasilitas (
 CREATE TABLE IF NOT EXISTS fokus_riset (
     id_fokus SERIAL PRIMARY KEY,
     bidang VARCHAR(150) NOT NULL,
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    id_penulis INT,
+    id_editor INT NULL,
+    -- Relasi
+    CONSTRAINT fk_fokus_riset_editor FOREIGN KEY (id_editor) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_fokus_riset_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_fokus_riset_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- I. Tabel Kegiatan
+CREATE TABLE kegiatan (
+    id_kegiatan SERIAL PRIMARY KEY,
+    judul_kegiatan VARCHAR(255) NOT NULL,
+    deskripsi TEXT,
+    gambar VARCHAR(255),
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    id_penulis INT,
+    -- Relasi
+    CONSTRAINT fk_kegiatan_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_kegiatan_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- J. Tabel Perkuliahan
+CREATE TABLE perkuliahan (
+    id_perkuliahan SERIAL PRIMARY KEY,
+    judul_perkuliahan VARCHAR(255) NOT NULL,
+    deskripsi TEXT,
+    gambar VARCHAR(255),
+    -- Kolom Approval
+    status status_approval_enum DEFAULT 'pending',
+    id_admin_penilai INT NULL,
+    catatan_admin TEXT NULL,
+    tanggal_validasi TIMESTAMP NULL,
+    id_penulis INT,
+    -- Relasi
+    CONSTRAINT fk_perkuliahan_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    CONSTRAINT fk_perkuliahan_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- K. Tabel Activity Logs
+CREATE TABLE activity_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INT, -- Nullable if system action
+    action_type VARCHAR(50) NOT NULL, -- 'create', 'update', 'delete', 'approve', 'reject'
+    module VARCHAR(50) NOT NULL, -- 'Berita', 'Galeri', etc.
+    resource_id INT NULL,
+    resource_name VARCHAR(255),
+    meta_data JSONB DEFAULT '{}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_activity_user FOREIGN KEY (user_id) REFERENCES anggota(id_anggota) ON DELETE SET NULL
 );

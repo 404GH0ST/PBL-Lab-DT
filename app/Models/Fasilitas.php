@@ -28,6 +28,19 @@ class Fasilitas extends Model
         return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 
+    public function countApprovedFacilities()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved'";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedApprovedFacilities($limit, $offset)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE status = 'approved' ORDER BY id_fasilitas DESC LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
     public function getFacilityById($id)
     {
         $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_fasilitas = :id", ['id' => $id]);
@@ -72,6 +85,18 @@ class Fasilitas extends Model
         if (isset($data['kondisi'])) {
             $fields[] = 'kondisi = :kondisi';
             $params['kondisi'] = $data['kondisi'];
+        }
+        if (isset($data['status'])) {
+            $fields[] = 'status = :status';
+            $params['status'] = $data['status'];
+        }
+        if (isset($data['id_admin_penilai'])) {
+            $fields[] = 'id_admin_penilai = :id_admin_penilai';
+            $params['id_admin_penilai'] = $data['id_admin_penilai'];
+        }
+        if (isset($data['catatan_admin'])) {
+            $fields[] = 'catatan_admin = :catatan_admin';
+            $params['catatan_admin'] = $data['catatan_admin'];
         }
 
         if (empty($fields)) {

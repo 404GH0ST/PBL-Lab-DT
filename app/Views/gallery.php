@@ -1,20 +1,51 @@
 <section class="bg-white" style="min-height: 100vh;">
     <div class="container py-5">
-        <h2 class="text-vision-gradient" style="font-size: 40px; font-weight: bold;">Galeri Foto Laboratorium
-        </h2>
+        <h2 class="text-vision-gradient" style="font-size: 40px; font-weight: bold;">Galeri Foto Laboratorium</h2>
 
-        <ul class="nav nav-tabs mt-5 gallery-tabs justify-content-start">
+        <style>
+            .nav-pills .nav-link {
+                color: #575757;
+                font-weight: 600;
+                background-color: #fff;
+                border: 1px solid #e0e0e0;
+                margin-right: 10px;
+                border-radius: 8px;
+                padding: 8px 20px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-pills .nav-link:hover {
+                background-color: #f8f9fa;
+                border-color: #d0d0d0;
+            }
+
+            .nav-pills .nav-link.active {
+                background-color: #7ABA54;
+                color: #fff;
+                border-color: #7ABA54;
+            }
+        </style>
+
+        <!-- Filter Tabs -->
+        <ul class="nav nav-pills gallery-tabs justify-content-start mt-5 mb-4" id="gallery-tabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Semua</a>
+                <a class="nav-link <?= $currentCategory === 'Semua' ? 'active' : '' ?>" href="/gallery">Semua</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Kegiatan</a>
+                <a class="nav-link <?= $currentCategory === 'Kegiatan' ? 'active' : '' ?>"
+                    href="/gallery?category=Kegiatan">Kegiatan</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Ruang Lab</a>
+                <a class="nav-link <?= $currentCategory === 'Ruang Lab' ? 'active' : '' ?>"
+                    href="/gallery?category=Ruang Lab">Ruang Lab</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Acara</a>
+                <a class="nav-link <?= $currentCategory === 'Acara' ? 'active' : '' ?>"
+                    href="/gallery?category=Acara">Acara</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $currentCategory === 'Lainnya' ? 'active' : '' ?>"
+                    href="/gallery?category=Lainnya">Lainnya</a>
             </li>
         </ul>
 

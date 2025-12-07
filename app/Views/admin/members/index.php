@@ -22,8 +22,10 @@
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">NIP/NIM</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Role</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
-                        <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                            Actions</th>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                            <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                Actions</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,25 +76,25 @@
                                         <span class="badge bg-danger-subtle text-danger">Tidak Aktif</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-end pe-4">
-                                    <div class="d-flex align-items-center gap-1 justify-content-end">
-                                        <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editMember('<?= $member['id_anggota'] ?>', '<?= htmlspecialchars($member['nama_lengkap']) ?>', '<?= htmlspecialchars($member['username']) ?>', '<?= htmlspecialchars($member['email']) ?>', '<?= htmlspecialchars($member['nip_nim'] ?? '') ?>', '<?= htmlspecialchars($member['bio'] ?? '') ?>', '<?= $member['role'] ?>', <?= $member['status_aktif'] ? 'true' : 'false' ?>)"
-                                            data-bs-toggle="modal" data-bs-target="#editMemberModal" title="Edit Member">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                                    <td class="text-end pe-4">
+                                        <div class="d-flex align-items-center gap-1 justify-content-end">
+                                            <button class="btn btn-sm btn-light text-primary"
+                                                onclick="editMember('<?= $member['id_anggota'] ?>', '<?= htmlspecialchars($member['nama_lengkap']) ?>', '<?= htmlspecialchars($member['username']) ?>', '<?= htmlspecialchars($member['email']) ?>', '<?= htmlspecialchars($member['nip_nim'] ?? '') ?>', '<?= htmlspecialchars($member['bio'] ?? '') ?>', '<?= $member['role'] ?>', <?= $member['status_aktif'] ? 'true' : 'false' ?>)"
+                                                data-bs-toggle="modal" data-bs-target="#editMemberModal" title="Edit Member">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
                                             <button type="button" class="btn btn-sm btn-light text-danger"
                                                 onclick="confirmDelete('<?= $member['id_anggota'] ?>')" title="Delete Member">
                                                 <i class="bi bi-trash"></i>
                                             </button>
-                                        <?php endif; ?>
-                                    </div>
-                                    <form id="deleteForm-<?= $member['id_anggota'] ?>"
-                                        action="/admin/members/<?= $member['id_anggota'] ?>/delete" method="POST"
-                                        class="d-none">
-                                    </form>
-                                </td>
+                                        </div>
+                                        <form id="deleteForm-<?= $member['id_anggota'] ?>"
+                                            action="/admin/members/<?= $member['id_anggota'] ?>/delete" method="POST"
+                                            class="d-none">
+                                        </form>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>

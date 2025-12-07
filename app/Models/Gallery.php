@@ -81,14 +81,15 @@ class Gallery extends Model
 
     public function createPhoto($data)
     {
-        $sql = "INSERT INTO {$this->table} (deskripsi, file_path, id_uploader, status) 
-                VALUES (:deskripsi, :file_path, :id_uploader, :status)";
+        $sql = "INSERT INTO {$this->table} (deskripsi, file_path, id_uploader, status, kategori) 
+                VALUES (:deskripsi, :file_path, :id_uploader, :status, :kategori)";
 
         return $this->db->execute($sql, [
             'deskripsi' => $data['deskripsi'],
             'file_path' => $data['file_path'],
             'id_uploader' => $data['id_uploader'],
-            'status' => $data['status'] ?? 'pending'
+            'status' => $data['status'] ?? 'pending',
+            'kategori' => $data['kategori'] ?? 'Lainnya'
         ]);
     }
 
@@ -105,6 +106,10 @@ class Gallery extends Model
             $fields[] = "status = :status";
             $params['status'] = $data['status'];
         }
+        if (isset($data['kategori'])) {
+            $fields[] = "kategori = :kategori";
+            $params['kategori'] = $data['kategori'];
+        }
         if (isset($data['id_admin_penilai'])) {
             $fields[] = "id_admin_penilai = :id_admin_penilai";
             $params['id_admin_penilai'] = $data['id_admin_penilai'];
@@ -116,6 +121,24 @@ class Gallery extends Model
 
         $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id_galeri = :id";
         return $this->db->execute($sql, $params);
+    }
+
+    public function getPaginatedApprovedPhotosByCategory($limit, $offset, $category)
+    {
+        $sql = "SELECT g.*, a.nama_lengkap as uploader, a.foto_profil, a.username 
+                FROM {$this->table} g
+                JOIN anggota a ON g.id_uploader = a.id_anggota
+                WHERE g.status = 'approved' AND g.kategori = :category
+                ORDER BY g.tanggal_upload DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset, 'category' => $category]);
+    }
+
+    public function countApprovedPhotosByCategory($category)
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved' AND kategori = :category";
+        $result = $this->db->query($sql, ['category' => $category]);
+        return $result[0]['total'] ?? 0;
     }
 
     public function deletePhoto($id)

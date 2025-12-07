@@ -160,14 +160,20 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="id_penulis" class="form-label">Penulis</label>
-                                <select class="form-select" id="id_penulis" name="id_penulis" required>
-                                    <option value="">Pilih Penulis</option>
-                                    <?php foreach ($members as $member): ?>
-                                        <option value="<?= $member['id_anggota'] ?>" <?= (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == $member['id_anggota']) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($member['nama_lengkap']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                                    <input type="text" class="form-control"
+                                        value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                                    <input type="hidden" name="id_penulis" value="<?= $_SESSION['user']['id'] ?>">
+                                <?php else: ?>
+                                    <select class="form-select" id="id_penulis" name="id_penulis" required>
+                                        <option value="">Pilih Penulis</option>
+                                        <?php foreach ($members as $member): ?>
+                                            <option value="<?= $member['id_anggota'] ?>" <?= (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == $member['id_anggota']) ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php endif; ?>
                             </div>
                             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                                 <div class="mb-3">
@@ -222,14 +228,20 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="edit_id_penulis" class="form-label">Penulis</label>
-                                <select class="form-select" id="edit_id_penulis" name="id_penulis" required>
-                                    <option value="">Pilih Penulis</option>
-                                    <?php foreach ($members as $member): ?>
-                                        <option value="<?= $member['id_anggota'] ?>">
-                                            <?= htmlspecialchars($member['nama_lengkap']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                                    <input type="hidden" id="edit_id_penulis" name="id_penulis">
+                                    <input type="text" class="form-control"
+                                        value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                                <?php else: ?>
+                                    <select class="form-select" id="edit_id_penulis" name="id_penulis" required>
+                                        <option value="">Pilih Penulis</option>
+                                        <?php foreach ($members as $member): ?>
+                                            <option value="<?= $member['id_anggota'] ?>">
+                                                <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                <?php endif; ?>
                             </div>
                             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                                 <div class="mb-3">

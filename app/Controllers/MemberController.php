@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Publication;
 use App\Models\Gallery;
 use App\Models\News;
+use App\Models\Contact;
 
 class MemberController extends Controller
 {
@@ -14,6 +15,7 @@ class MemberController extends Controller
     protected $publicationModel;
     protected $galleryModel;
     protected $newsModel;
+    protected $contactModel;
 
     public function __construct()
     {
@@ -21,6 +23,7 @@ class MemberController extends Controller
         $this->publicationModel = $this->loadModel(Publication::class);
         $this->galleryModel = $this->loadModel(Gallery::class);
         $this->newsModel = $this->loadModel(News::class);
+        $this->contactModel = $this->loadModel(Contact::class);
     }
 
     public function show($id)
@@ -36,8 +39,10 @@ class MemberController extends Controller
         $publications = $this->publicationModel->getApprovedPublicationsByAuthor($id);
         $news = $this->newsModel->getApprovedNewsByAuthor($id);
         $gallery = $this->galleryModel->getApprovedPhotosByUploader($id);
+        $infoLab = $this->contactModel->getApprovedContactInfo();
 
         return $this->view('member_detail', [
+            'infoLab' => $infoLab,
             'member' => $member,
             'publications' => $publications,
             'news' => $news,

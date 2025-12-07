@@ -4,22 +4,27 @@ namespace App\Controllers\Admin;
 
 use Core\Controller;
 use App\Models\Course;
+use App\Models\Member;
 
 class CourseController extends Controller
 {
     private $courseModel;
+    private $memberModel;
 
     public function __construct()
     {
         $this->courseModel = $this->loadModel(Course::class);
+        $this->memberModel = $this->loadModel(Member::class);
     }
 
     public function index()
     {
         $courses = $this->courseModel->getAllCourses();
+        $members = $this->memberModel->getAllMembers();
         return $this->view('admin/courses/index', [
             'title' => 'Manajemen Perkuliahan',
             'courses' => $courses,
+            'members' => $members,
             'layout' => 'layouts/admin'
         ]);
     }
@@ -29,7 +34,8 @@ class CourseController extends Controller
         $data = [
             'judul_perkuliahan' => $_POST['judul_perkuliahan'],
             'deskripsi' => $_POST['deskripsi'],
-            'gambar' => $_POST['gambar'] ?? 'bi bi-book' // Default icon if not provided
+            'gambar' => $_POST['gambar'] ?? 'bi bi-book',
+            'id_penulis' => $_POST['id_penulis'] ?? $_SESSION['user']['id']
         ];
 
         if ($this->courseModel->createCourse($data)) {
@@ -44,7 +50,8 @@ class CourseController extends Controller
         $data = [
             'judul_perkuliahan' => $_POST['judul_perkuliahan'],
             'deskripsi' => $_POST['deskripsi'],
-            'gambar' => $_POST['gambar']
+            'gambar' => $_POST['gambar'],
+            'id_penulis' => $_POST['id_penulis'] ?? $_SESSION['user']['id']
         ];
 
         if ($this->courseModel->updateCourse($id, $data)) {

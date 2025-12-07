@@ -46,7 +46,7 @@ $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/admin/dashboard', [DashboardController::class, 'index'])->middleware(AuthMiddleware::class);
 
 // Members Routes
-$app->router()->get('/admin/members', [MemberController::class, 'index'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
+$app->router()->get('/admin/members', [MemberController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/members', [MemberController::class, 'store'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
 $app->router()->post('/admin/members/{id}/update', [MemberController::class, 'update'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);
 $app->router()->post('/admin/members/{id}/delete', [MemberController::class, 'destroy'])->middleware([AuthMiddleware::class, AdminMiddleware::class]);

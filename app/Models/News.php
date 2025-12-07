@@ -35,6 +35,13 @@ class News extends Model
         return $result[0]['total'] ?? 0;
     }
 
+    public function countApprovedNews()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved'";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
     public function getApprovedNews()
     {
         $sql = "SELECT b.*, a.nama_lengkap as penulis, a.foto_profil, a.username 

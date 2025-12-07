@@ -1,44 +1,61 @@
+<?php $role = session('user')['role'] ?? 'operator'; ?>
+<!-- Stats Cards -->
 <div class="row g-4 mb-4">
-    <!-- Stats Cards -->
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="text-muted mb-0">Total Pengguna</h6>
+                    <h6 class="text-muted mb-0"><?= $role === 'admin' ? 'Total Pengguna' : 'Kontribusi Saya' ?></h6>
                     <div class="p-2 bg-primary bg-opacity-10 rounded-circle">
-                        <i class="bi bi-people text-primary"></i>
+                        <i class="bi bi-<?= $role === 'admin' ? 'people' : 'trophy' ?> text-primary"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-1"><?= $stats['users'] ?? 0 ?></h3>
                 <small class="text-muted fw-medium">
-                    Anggota terdaftar
+                    <?= $role === 'admin' ? 'Anggota terdaftar' : 'Total item disetujui' ?>
                 </small>
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="text-muted mb-0">Total Publikasi</h6>
+                    <h6 class="text-muted mb-0">Akademik & Kegiatan</h6>
                     <div class="p-2 bg-success bg-opacity-10 rounded-circle">
-                        <i class="bi bi-journal-text text-success"></i>
+                        <i class="bi bi-calendar-event text-success"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-1"><?= $stats['publications'] ?? 0 ?></h3>
+                <h3 class="fw-bold mb-1"><?= ($stats['activities'] ?? 0) + ($stats['courses'] ?? 0) ?></h3>
                 <small class="text-muted fw-medium">
-                    Item penelitian
+                    Kegiatan & Perkuliahan
                 </small>
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 col-lg-3">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="text-muted mb-0">Total Konten</h6>
+                    <h6 class="text-muted mb-0">Riset & Publikasi</h6>
                     <div class="p-2 bg-info bg-opacity-10 rounded-circle">
-                        <i class="bi bi-collection text-info"></i>
+                        <i class="bi bi-journal-text text-info"></i>
+                    </div>
+                </div>
+                <h3 class="fw-bold mb-1"><?= ($stats['research'] ?? 0) + ($stats['publications'] ?? 0) ?></h3>
+                <small class="text-muted fw-medium">
+                    Fokus Riset & Publikasi
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="text-muted mb-0">Konten Kreatif</h6>
+                    <div class="p-2 bg-warning bg-opacity-10 rounded-circle">
+                        <i class="bi bi-collection text-warning"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold mb-1"><?= ($stats['news'] ?? 0) + ($stats['gallery'] ?? 0) ?></h3>
@@ -48,19 +65,21 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h6 class="text-muted mb-0">Menunggu Persetujuan</h6>
-                    <div class="p-2 bg-warning bg-opacity-10 rounded-circle">
-                        <i class="bi bi-hourglass-split text-warning"></i>
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted mb-0"><?= $role === 'admin' ? 'Menunggu Persetujuan' : 'Submisi Pending' ?>
+                    </h6>
+                    <small
+                        class="text-danger fw-medium"><?= $role === 'admin' ? 'Perlu perhatian admin' : 'Menunggu review admin' ?></small>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <h3 class="fw-bold mb-0 text-danger"><?= $stats['pending_approvals'] ?? 0 ?></h3>
+                    <div class="p-2 bg-danger bg-opacity-10 rounded-circle">
+                        <i class="bi bi-hourglass-split text-danger"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold mb-1"><?= $stats['pending_approvals'] ?? 0 ?></h3>
-                <small class="text-danger fw-medium">
-                    Perlu perhatian
-                </small>
             </div>
         </div>
     </div>
@@ -131,14 +150,10 @@
                                         </td>
                                         <td>
                                             <?php
-                                            $moduleClass = match ($activity['module']) {
-                                                'News' => 'bg-info-subtle text-info',
-                                                'Gallery' => 'bg-primary-subtle text-primary',
-                                                'Publications' => 'bg-success-subtle text-success',
-                                                default => 'bg-secondary-subtle text-secondary'
-                                            };
+                                            $moduleClass = 'bg-primary bg-opacity-10 text-primary';
                                             ?>
-                                            <span class="badge <?= $moduleClass ?> border"><?= $activity['module'] ?></span>
+                                            <span
+                                                class="badge <?= $moduleClass ?> border border-opacity-10"><?= htmlspecialchars($activity['module']) ?></span>
                                         </td>
                                         <td class="text-secondary text-sm">
                                             <?php
@@ -146,20 +161,27 @@
                                             if (strlen($activity['activity_time']) == 4) {
                                                 echo $activity['activity_time']; // Year only
                                             } else {
-                                                echo date('M d, H:i', strtotime($activity['activity_time']));
+                                                echo date('d M Y, H:i', strtotime($activity['activity_time']));
                                             }
                                             ?>
                                         </td>
                                         <td class="text-end pe-4">
                                             <?php
+                                            $statusLabel = match ($activity['status']) {
+                                                'approved' => 'Disetujui',
+                                                'rejected' => 'Ditolak',
+                                                'pending' => 'Pending',
+                                                default => 'Pending'
+                                            };
                                             $statusClass = match ($activity['status']) {
-                                                'approved' => 'bg-success-subtle text-success',
-                                                'rejected' => 'bg-danger-subtle text-danger',
-                                                default => 'bg-warning-subtle text-warning'
+                                                'approved' => 'bg-success bg-opacity-10 text-success',
+                                                'rejected' => 'bg-danger bg-opacity-10 text-danger',
+                                                'pending' => 'bg-warning bg-opacity-10 text-warning',
+                                                default => 'bg-warning bg-opacity-10 text-warning'
                                             };
                                             ?>
                                             <span
-                                                class="badge <?= $statusClass ?> border"><?= ucfirst($activity['status']) ?></span>
+                                                class="badge <?= $statusClass ?> border border-opacity-10"><?= $statusLabel ?></span>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

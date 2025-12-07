@@ -21,6 +21,7 @@
                         <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
                             style="width: 50px;">No</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Bidang Riset</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Penulis</th>
                         <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
                             style="width: 150px;">Actions</th>
                     </tr>
@@ -44,10 +45,14 @@
                                 <td>
                                     <span class="fw-bold text-dark"><?= htmlspecialchars($f['bidang']) ?></span>
                                 </td>
+                                <td>
+                                    <span
+                                        class="text-sm text-dark fw-medium"><?= htmlspecialchars($f['penulis'] ?? 'System') ?></span>
+                                </td>
                                 <td class="text-end pe-4">
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
                                         <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editFocus(<?= $f['id_fokus'] ?>, '<?= htmlspecialchars(addslashes($f['bidang'])) ?>')"
+                                            onclick="editFocus(<?= $f['id_fokus'] ?>, '<?= htmlspecialchars(addslashes($f['bidang'])) ?>', '<?= $f['id_penulis'] ?? '' ?>')"
                                             data-bs-toggle="modal" data-bs-target="#editFocusModal" title="Edit">
                                             <i class="bi bi-pencil"></i>
                                         </button>
@@ -85,6 +90,23 @@
                         <input type="text" name="bidang" class="form-control" required
                             placeholder="Contoh: Machine Learning">
                     </div>
+                    <div class="mb-3">
+                        <label for="id_penulis" class="form-label">Penulis</label>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                            <input type="hidden" name="id_penulis" value="<?= $_SESSION['user']['id'] ?>">
+                        <?php else: ?>
+                            <select class="form-select" id="id_penulis" name="id_penulis" required>
+                                <option value="">Pilih Penulis</option>
+                                <?php foreach ($members as $member): ?>
+                                    <option value="<?= $member['id_anggota'] ?>" <?= (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == $member['id_anggota']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -108,6 +130,23 @@
                     <div class="mb-3">
                         <label class="form-label">Bidang Riset</label>
                         <input type="text" name="bidang" id="edit_bidang" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_id_penulis" class="form-label">Penulis</label>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                            <input type="hidden" id="edit_id_penulis" name="id_penulis">
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                        <?php else: ?>
+                            <select class="form-select" id="edit_id_penulis" name="id_penulis" required>
+                                <option value="">Pilih Penulis</option>
+                                <?php foreach ($members as $member): ?>
+                                    <option value="<?= $member['id_anggota'] ?>">
+                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -142,9 +181,15 @@
         let deleteId = null;
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
-        window.editFocus = function (id, bidang) {
+        window.editFocus = function (id, bidang, penulis) {
             $('#editFocusForm').attr('action', '/admin/fokus/' + id + '/update');
             $('#edit_bidang').val(bidang);
+
+            if ($('#edit_id_penulis').is('select')) {
+                $('#edit_id_penulis').val(penulis);
+            } else {
+                $('#edit_id_penulis').val(penulis);
+            }
         };
 
         window.confirmDelete = function (id) {

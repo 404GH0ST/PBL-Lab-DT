@@ -20,6 +20,9 @@ class DashboardController extends Controller
             'total_news' => 0,
             'total_gallery' => 0,
             'total_publications' => 0,
+            'total_activities' => 0,
+            'total_courses' => 0,
+            'total_research' => 0,
             'pending_approvals' => 0
         ];
 
@@ -29,11 +32,71 @@ class DashboardController extends Controller
             'news' => $stats['total_news'],
             'gallery' => $stats['total_gallery'],
             'publications' => $stats['total_publications'],
+            'activities' => $stats['total_activities'],
+            'courses' => $stats['total_courses'],
+            'research' => $stats['total_research'],
             'pending_approvals' => $stats['pending_approvals']
         ];
 
-        // Fetch Recent Activity (using View)
-        $recentActivity = $this->db()->query("SELECT * FROM view_recent_activity ORDER BY activity_time DESC LIMIT 10");
+        // Customize for Operator
+        $currentUser = session('user');
+        if (isset($currentUser['role']) && $currentUser['role'] === 'operator') {
+            try {
+                $opStatsResult = $this->db()->query("SELECT * FROM get_operator_stats(:id)", ['id' => $currentUser['id']]);
+                $opStats = $opStatsResult[0] ?? ['my_contributions' => 0, 'my_pending' => 0];
+
+                // Overwrite keys to pass to view (View will handle label changes based on role)
+                $viewStats['users'] = $opStats['my_contributions'];
+                $viewStats['pending_approvals'] = $opStats['my_pending'];
+            } catch (\Exception $e) {
+                // Fallback
+            }
+        }
+
+        // Fetch Recent Activity (using ActivityLog View)
+        $activityLogModel = new \App\Models\ActivityLog($this->db());
+        $logs = $activityLogModel->getRecentActivities(10);
+
+        $recentActivity = array_map(function ($log) {
+            // Map Action Type to Human Readable Action
+            $actionMap = [
+                'create' => [
+                    'Berita' => 'Memposting Berita',
+                    'Galeri' => 'Mengunggah Foto',
+                    'default' => 'Menambahkan ' . $log['module']
+                ],
+                'update' => 'Memperbarui ' . $log['module'],
+                'approve' => 'Menyetujui ' . $log['module'],
+                'reject' => 'Menolak ' . $log['module'],
+                'delete' => 'Menghapus ' . $log['module']
+            ];
+
+            $action = '';
+            if ($log['action_type'] === 'create') {
+                $action = $actionMap['create'][$log['module']] ?? $actionMap['create']['default'];
+            } else {
+                $action = $actionMap[$log['action_type']] ?? $log['action_type'];
+            }
+
+            // Map keys to View expectations
+            return [
+                'user_name' => $log['user_name'],
+                'foto_profil' => $log['foto_profil'],
+                'action' => $action,
+                'module' => $log['module'],
+                'title' => $log['resource_name'],
+                'activity_time' => $log['created_at'],
+                'status' => match ($log['action_type']) {
+                    'create', 'update' => 'pending',
+                    'approve' => 'approved',
+                    'reject' => 'rejected',
+                    default => 'info'
+                }
+            ];
+        }, $logs);
+
+        // Fetch Top Contributors (using View)
+        $topContributors = $this->db()->query("SELECT * FROM view_top_contributors");
 
         return $this->view('admin/dashboard', [
             'title' => 'Dashboard - Lab Admin',
@@ -41,6 +104,7 @@ class DashboardController extends Controller
             'pageTitle' => 'Ringkasan Dashboard',
             'stats' => $viewStats,
             'recentActivity' => $recentActivity,
+            'topContributors' => $topContributors
         ]);
     }
 }

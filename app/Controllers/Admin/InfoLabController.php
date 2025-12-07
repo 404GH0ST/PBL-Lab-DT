@@ -29,7 +29,26 @@ class InfoLabController extends Controller
     public function update()
     {
         $data = $_POST;
+
+        $userId = $_SESSION['user']['id'] ?? null;
+        $userRole = $_SESSION['user']['role'] ?? 'operator';
+        $status = ($userRole === 'admin') ? 'approved' : 'pending';
+
+        $data['id_editor'] = $userId;
+        $data['status'] = $status;
+
+        if ($status === 'approved') {
+            $data['id_admin_penilai'] = $userId;
+            $data['catatan_admin'] = 'Auto-approved by author';
+        }
+
         $this->contactModel->updateContactInfo($data);
-        $this->redirect('/admin/info-lab?success=updated');
+
+        $msg = ($status === 'approved')
+            ? 'Informasi lab berhasil diperbarui.'
+            : 'Perubahan informasi lab berhasil dikirim untuk persetujuan Admin.';
+
+        $_SESSION['flash_success'] = $msg;
+        $this->redirect('/admin/info-lab');
     }
 }

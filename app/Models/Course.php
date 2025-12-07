@@ -11,22 +11,28 @@ class Course extends Model
 
     public function getAllCourses()
     {
-        return $this->db->query("SELECT * FROM {$this->table} ORDER BY id_perkuliahan ASC");
+        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota ORDER BY p.id_perkuliahan ASC");
+    }
+
+    public function getAllApprovedCourses()
+    {
+        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.status = 'approved' ORDER BY p.id_perkuliahan ASC");
     }
 
     public function getCourseById($id)
     {
-        $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_perkuliahan = :id", ['id' => $id]);
+        $result = $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.id_perkuliahan = :id", ['id' => $id]);
         return $result[0] ?? null;
     }
 
     public function createCourse($data)
     {
-        $sql = "INSERT INTO {$this->table} (judul_perkuliahan, deskripsi, gambar) VALUES (:judul, :deskripsi, :gambar)";
+        $sql = "INSERT INTO {$this->table} (judul_perkuliahan, deskripsi, gambar, id_penulis) VALUES (:judul, :deskripsi, :gambar, :id_penulis)";
         return $this->db->execute($sql, [
             'judul' => $data['judul_perkuliahan'],
             'deskripsi' => $data['deskripsi'],
-            'gambar' => $data['gambar'] ?? null
+            'gambar' => $data['gambar'] ?? null,
+            'id_penulis' => $data['id_penulis'] ?? null
         ]);
     }
 
@@ -46,6 +52,10 @@ class Course extends Model
         if (isset($data['gambar'])) {
             $fields[] = "gambar = :gambar";
             $params['gambar'] = $data['gambar'];
+        }
+        if (isset($data['id_penulis'])) {
+            $fields[] = "id_penulis = :id_penulis";
+            $params['id_penulis'] = $data['id_penulis'];
         }
 
         $fields[] = "updated_at = CURRENT_TIMESTAMP";

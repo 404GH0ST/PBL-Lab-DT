@@ -11,22 +11,28 @@ class Activity extends Model
 
     public function getAllActivities()
     {
-        return $this->db->query("SELECT * FROM {$this->table} ORDER BY id_kegiatan ASC");
+        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota ORDER BY k.id_kegiatan ASC");
+    }
+
+    public function getAllApprovedActivities()
+    {
+        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.status = 'approved' ORDER BY k.id_kegiatan ASC");
     }
 
     public function getActivityById($id)
     {
-        $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_kegiatan = :id", ['id' => $id]);
+        $result = $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.id_kegiatan = :id", ['id' => $id]);
         return $result[0] ?? null;
     }
 
     public function createActivity($data)
     {
-        $sql = "INSERT INTO {$this->table} (judul_kegiatan, deskripsi, gambar) VALUES (:judul, :deskripsi, :gambar)";
+        $sql = "INSERT INTO {$this->table} (judul_kegiatan, deskripsi, gambar, id_penulis) VALUES (:judul, :deskripsi, :gambar, :id_penulis)";
         return $this->db->execute($sql, [
             'judul' => $data['judul_kegiatan'],
             'deskripsi' => $data['deskripsi'],
-            'gambar' => $data['gambar'] ?? null
+            'gambar' => $data['gambar'] ?? null,
+            'id_penulis' => $data['id_penulis'] ?? null
         ]);
     }
 
@@ -46,6 +52,10 @@ class Activity extends Model
         if (isset($data['gambar'])) {
             $fields[] = "gambar = :gambar";
             $params['gambar'] = $data['gambar'];
+        }
+        if (isset($data['id_penulis'])) {
+            $fields[] = "id_penulis = :id_penulis";
+            $params['id_penulis'] = $data['id_penulis'];
         }
 
         $fields[] = "updated_at = CURRENT_TIMESTAMP";

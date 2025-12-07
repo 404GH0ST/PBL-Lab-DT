@@ -147,13 +147,19 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="id_anggota" class="form-label">Author</label>
-                            <select class="form-select" id="id_anggota" name="id_anggota" required>
-                                <?php foreach ($members as $member): ?>
-                                    <option value="<?= $member['id_anggota'] ?>">
-                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                                <input type="text" class="form-control"
+                                    value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                                <input type="hidden" name="id_anggota" value="<?= $_SESSION['user']['id'] ?>">
+                            <?php else: ?>
+                                <select class="form-select" id="id_anggota" name="id_anggota" required>
+                                    <?php foreach ($members as $member): ?>
+                                        <option value="<?= $member['id_anggota'] ?>">
+                                            <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php endif; ?>
                         </div>
                         <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                             <div class="col-md-6 mb-3">

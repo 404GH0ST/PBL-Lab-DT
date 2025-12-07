@@ -13,6 +13,7 @@ use App\Models\Fasilitas;
 use App\Models\FokusRiset;
 use App\Models\Activity;
 use App\Models\Course;
+use App\Models\Contact;
 
 /**
  * Home Controller
@@ -27,6 +28,8 @@ class HomeController extends Controller
     protected $fokusModel;
     protected $activityModel;
     protected $courseModel;
+    protected $contactModel;
+    protected $globalData = [];
 
     public function __construct()
     {
@@ -38,6 +41,20 @@ class HomeController extends Controller
         $this->fokusModel = $this->loadModel(FokusRiset::class);
         $this->activityModel = $this->loadModel(Activity::class);
         $this->courseModel = $this->loadModel(Course::class);
+        $this->contactModel = $this->loadModel(Contact::class);
+
+        $this->globalData = [
+            'infoLab' => $this->contactModel->getApprovedContactInfo()
+        ];
+    }
+
+    /**
+     * Override view method to inject global data
+     */
+    protected function view(string $view, array $data = []): string
+    {
+        $data = array_merge($this->globalData, $data);
+        return parent::view($view, $data);
     }
 
     /**
@@ -46,8 +63,8 @@ class HomeController extends Controller
     public function index()
     {
         $visiMisiModel = $this->loadModel(VisiMisi::class);
-        $visi = $visiMisiModel->getVisi();
-        $misi = $visiMisiModel->getMisi();
+        $visi = $visiMisiModel->getApprovedByType('visi');
+        $misi = $visiMisiModel->getApprovedByType('misi');
 
         // Use stored procedure to get sorted publications
         $recentPublications = $this->publicationModel->getSortedPublications(4);
@@ -65,16 +82,16 @@ class HomeController extends Controller
         // Fokus riset
         $focusList = [];
         try {
-            $focusList = $this->fokusModel->getAllFocus('ASC');
+            $focusList = $this->fokusModel->getApprovedFocus('ASC');
         } catch (\Exception $e) {
             $focusList = [];
         }
 
         // Fetch additional sections for homepage (Limited)
-        $facilities = $this->fasilitasModel->getPaginatedFacilities(3, 0); // Limit 3
-        $activities = $this->activityModel->getAllActivities();
+        $facilities = $this->fasilitasModel->getPaginatedApprovedFacilities(3, 0); // Limit 3
+        $activities = $this->activityModel->getAllApprovedActivities();
         $activities = array_slice($activities, 0, 3);
-        $courses = $this->courseModel->getAllCourses();
+        $courses = $this->courseModel->getAllApprovedCourses();
         $courses = array_slice($courses, 0, 3);
 
         return $this->view('home', [
@@ -100,8 +117,8 @@ class HomeController extends Controller
     public function aboutPage()
     {
         $members = $this->memberModel->getAllMembers();
-        $activities = $this->activityModel->getAllActivities();
-        $courses = $this->courseModel->getAllCourses();
+        $activities = $this->activityModel->getAllApprovedActivities();
+        $courses = $this->courseModel->getAllApprovedCourses();
 
         return $this->view('about', [
             'title' => 'About Us - Profile Lab DT',
@@ -115,10 +132,10 @@ class HomeController extends Controller
     {
         $page = $_GET['page'] ?? 1;
         $limit = 6; // Adjust limit as needed
-        $total = $this->fasilitasModel->countAllFacilities();
+        $total = $this->fasilitasModel->countApprovedFacilities();
         $pagination = new Pagination($total, $limit, $page);
 
-        $facilities = $this->fasilitasModel->getPaginatedFacilities($limit, $pagination->getOffset());
+        $facilities = $this->fasilitasModel->getPaginatedApprovedFacilities($limit, $pagination->getOffset());
 
         return $this->view('facility', [
             'title' => 'Facility - Profile Lab DT',
@@ -131,17 +148,26 @@ class HomeController extends Controller
     public function galleryPage()
     {
         $page = $_GET['page'] ?? 1;
-        $limit = 9;
-        $total = $this->galleryModel->countApprovedPhotos();
-        $pagination = new Pagination($total, $limit, $page);
+        $category = $_GET['category'] ?? null;
+        $limit = 12;
 
-        $photos = $this->galleryModel->getPaginatedApprovedPhotos($limit, $pagination->getOffset());
+        if ($category && $category !== 'Semua') {
+            $total = $this->galleryModel->countApprovedPhotosByCategory($category);
+            $pagination = new Pagination($total, $limit, $page);
+            $photos = $this->galleryModel->getPaginatedApprovedPhotosByCategory($limit, $pagination->getOffset(), $category);
+        } else {
+            $total = $this->galleryModel->countApprovedPhotos();
+            $pagination = new Pagination($total, $limit, $page);
+            $photos = $this->galleryModel->getPaginatedApprovedPhotos($limit, $pagination->getOffset());
+        }
 
         return $this->view('gallery', [
             'title' => 'Gallery - Profile Lab DT',
             'photos' => $photos,
             'pagination' => $pagination,
-            'baseUrl' => '/gallery'
+            'baseUrl' => '/gallery',
+            'currentCategory' => $category ?? 'Semua',
+            'layout' => 'layouts/main'
         ]);
     }
 
@@ -172,7 +198,7 @@ class HomeController extends Controller
             // Count result search
             $total = $this->newsModel->countSearchNews($keyword);
         } else {
-            $total = $this->newsModel->countAllNews();
+            $total = $this->newsModel->countApprovedNews();
         }
 
         $pagination = new Pagination($total, $limit, $page);

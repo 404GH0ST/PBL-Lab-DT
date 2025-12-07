@@ -18,6 +18,7 @@
                         <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Kegiatan
                         </th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Deskripsi</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Penulis</th>
                         <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                             Aksi</th>
                     </tr>
@@ -58,10 +59,14 @@
                                     <span class="text-xs text-muted text-truncate d-block"
                                         style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><?= htmlspecialchars(strip_tags($activity['deskripsi'])) ?></span>
                                 </td>
+                                <td>
+                                    <span
+                                        class="text-sm text-dark fw-medium"><?= htmlspecialchars($activity['penulis'] ?? 'System') ?></span>
+                                </td>
                                 <td class="text-end pe-4">
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
                                         <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editActivity('<?= $activity['id_kegiatan'] ?>', '<?= htmlspecialchars($activity['judul_kegiatan']) ?>', '<?= htmlspecialchars($activity['deskripsi']) ?>', '<?= htmlspecialchars($activity['gambar'] ?? '') ?>')"
+                                            onclick="editActivity('<?= $activity['id_kegiatan'] ?>', '<?= htmlspecialchars($activity['judul_kegiatan']) ?>', '<?= htmlspecialchars($activity['deskripsi']) ?>', '<?= htmlspecialchars($activity['gambar'] ?? '') ?>', '<?= $activity['id_penulis'] ?? '' ?>')"
                                             data-bs-toggle="modal" data-bs-target="#editActivityModal" title="Edit Kegiatan">
                                             <i class="bi bi-pencil"></i>
                                         </button>
@@ -114,6 +119,23 @@
                         <div class="form-text text-muted">Lihat daftar icon di <a href="https://icons.getbootstrap.com/"
                                 target="_blank">Bootstrap Icons</a></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="id_penulis" class="form-label">Penulis</label>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                            <input type="hidden" name="id_penulis" value="<?= $_SESSION['user']['id'] ?>">
+                        <?php else: ?>
+                            <select class="form-select" id="id_penulis" name="id_penulis" required>
+                                <option value="">Pilih Penulis</option>
+                                <?php foreach ($members as $member): ?>
+                                    <option value="<?= $member['id_anggota'] ?>" <?= (isset($_SESSION['user']['id']) && $_SESSION['user']['id'] == $member['id_anggota']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
@@ -155,6 +177,23 @@
                         <div class="form-text text-muted">Lihat daftar icon di <a href="https://icons.getbootstrap.com/"
                                 target="_blank">Bootstrap Icons</a></div>
                     </div>
+                    <div class="mb-3">
+                        <label for="edit_id_penulis" class="form-label">Penulis</label>
+                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
+                            <input type="hidden" id="edit_id_penulis" name="id_penulis">
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
+                        <?php else: ?>
+                            <select class="form-select" id="edit_id_penulis" name="id_penulis" required>
+                                <option value="">Pilih Penulis</option>
+                                <?php foreach ($members as $member): ?>
+                                    <option value="<?= $member['id_anggota'] ?>">
+                                        <?= htmlspecialchars($member['nama_lengkap']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
@@ -187,12 +226,21 @@
 <script>
     let deleteActivityId = null;
 
-    function editActivity(id, judul, deskripsi, gambar) {
+    function editActivity(id, judul, deskripsi, gambar, penulis) {
         $('#editActivityForm').attr('action', '/admin/activities/' + id + '/update');
         $('#edit_judul_kegiatan').val(judul);
         $('#edit_deskripsi').val(deskripsi);
 
         $('#edit_gambar').val(gambar);
+
+        // Handle penulis
+        if ($('#edit_id_penulis').is('select')) {
+            $('#edit_id_penulis').val(penulis);
+        } else {
+            // For operator, we keep it as is, or if logic dictates we overwrite with current user?
+            // Based on News implementation, we set the hidden input.
+            $('#edit_id_penulis').val(penulis);
+        }
     }
 
     function confirmDelete(id) {

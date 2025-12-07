@@ -26,7 +26,7 @@ return [
         'driver' => 'pgsql',
         'host' => '40.81.228.120',
         'port' => 5432,
-        'database' => 'pbl_dt',
+        'database' => 'pbl_dt2',
         'username' => 'postgres',
         'password' => '$d%NonV7t842aXVD',
         'charset' => 'utf8',
