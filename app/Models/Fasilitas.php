@@ -15,6 +15,19 @@ class Fasilitas extends Model
         return $this->db->query($sql);
     }
 
+    public function countAllFacilities()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedFacilities($limit, $offset)
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY id_fasilitas DESC LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
+    }
+
     public function getFacilityById($id)
     {
         $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_fasilitas = :id", ['id' => $id]);

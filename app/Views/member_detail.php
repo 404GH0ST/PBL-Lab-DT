@@ -1,161 +1,373 @@
-<section class="bg-white" style="min-height: 100vh;">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <nav aria-label="breadcrumb" class="mb-4">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="/about" class="text-decoration-none">Tentang Kami</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($member['nama_lengkap']) ?></li>
-                    </ol>
-                </nav>
+<!DOCTYPE html>
+<html lang="id">
 
-                <div class="card shadow-lg rounded-4 overflow-hidden border-0">
-                    <div class="row g-0">
-                        <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4">
-                            <div class="text-center w-100">
-                                <div class="avatar-container mb-3 mx-auto" style="width: 200px; height: 200px; overflow: hidden; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);">
-                                    <?php if (!empty($member['foto_profil'])): ?>
-                                        <img src="/uploads/foto_profil/<?= htmlspecialchars($member['foto_profil']) ?>" 
-                                             alt="<?= htmlspecialchars($member['nama_lengkap']) ?>" 
-                                             class="w-100 h-100 object-fit-cover">
-                                    <?php else: ?>
-                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary text-white display-1 fw-bold">
-                                            <?= strtoupper(substr($member['nama_lengkap'], 0, 1)) ?>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <h5 class="fw-bold mb-1"><?= htmlspecialchars($member['nama_lengkap']) ?></h5>
-                                <p class="text-muted mb-3"><?= htmlspecialchars($member['role'] === 'admin' ? 'Administrator' : 'Anggota Lab') ?></p>
-                                
-                                <div class="d-flex justify-content-center gap-2">
-                                    <?php if (!empty($member['email'])): ?>
-                                        <a href="mailto:<?= htmlspecialchars($member['email']) ?>" class="btn btn-outline-primary btn-sm rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
-                                            <i class="bi bi-envelope-fill"></i>
-                                        </a>
-                                    <?php endif; ?>
-                                    <!-- Add more social links if available in DB -->
-                                </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $pageTitle ?? 'Profil Anggota' ?></title>
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- CSS Files -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <style>
+        .nav-pills .nav-link {
+            color: #575757;
+            font-weight: 600;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            margin-right: 10px;
+            border-radius: 8px;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #7ABA54;
+            color: #fff;
+            border-color: #7ABA54;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .search-box input {
+            padding-left: 40px;
+            border-radius: 8px;
+        }
+
+        .content-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+            height: 100%;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .content-img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .category-text {
+            color: #7ABA54;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .card-custom-btn {
+            border: 1px solid #d0d0d0;
+            background: transparent;
+            color: #333;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .card-custom-btn:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <!-- Navbar -->
+    <?php include __DIR__ . '/components/navbar.php'; ?>
+
+    <div class="container py-5 mt-5">
+        <h2 class="text-vision-gradient fw-bold mb-4" style="font-size: 32px;">Profile Anggota</h2>
+
+        <!-- Profile Header Card -->
+        <div class="card shadow-sm border-0 rounded-4 p-4 mb-5 bg-white">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <div class="rounded-circle overflow-hidden d-inline-block" style="width: 200px; height: 200px;">
+                        <?php if (!empty($member['foto_profil'])): ?>
+                            <img src="/uploads/foto_profil/<?= htmlspecialchars($member['foto_profil']) ?>"
+                                alt="<?= htmlspecialchars($member['nama_lengkap']) ?>" class="w-100 h-100 object-fit-cover">
+                        <?php else: ?>
+                            <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                <i class="bi bi-person display-1 text-secondary"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-md-6 border-end-md">
+                            <h3 class="text-vision-gradient fw-bold mb-3">
+                                <?= htmlspecialchars($member['nama_lengkap']) ?>
+                            </h3>
+
+                            <div class="mb-3">
+                                <p class="text-secondary fw-bold mb-1" style="font-size: 14px;">Jabatan :</p>
+                                <p class="mb-0 fw-medium">
+                                    <?= $member['role'] === 'admin' ? 'Kepala Lab / Admin' : 'Anggota Laboratorium' ?>
+                                </p>
+                            </div>
+
+
+
+                            <div class="mb-3">
+                                <p class="text-secondary fw-bold mb-1" style="font-size: 14px;">NIP/NIM :</p>
+                                <p class="mb-0 fw-medium"><?= htmlspecialchars($member['nip_nim'] ?? '-') ?></p>
                             </div>
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-body p-4 p-lg-5">
-                                <h2 class="fw-bold mb-4 text-dark">Profil Anggota</h2>
-                                
-                                <div class="mb-4">
-                                    <h6 class="text-uppercase text-muted fw-bold small ls-1">Informasi Dasar</h6>
-                                    <hr class="mt-1 mb-3">
-                                    <div class="row g-3">
-                                        <div class="col-sm-4 fw-semibold text-secondary">Nama Lengkap</div>
-                                        <div class="col-sm-8 text-dark"><?= htmlspecialchars($member['nama_lengkap']) ?></div>
-                                        
-                                        <div class="col-sm-4 fw-semibold text-secondary">Username</div>
-                                        <div class="col-sm-8 text-dark">@<?= htmlspecialchars($member['username']) ?></div>
+                        <div class="col-md-6 ps-md-4">
+                            <div class="mb-4">
+                                <p class="text-secondary fw-bold mb-1" style="font-size: 14px;">Biografi :</p>
+                                <p class="mb-0 text-muted">
+                                    <?= !empty($member['bio']) ? nl2br(htmlspecialchars($member['bio'])) : 'Belum memiliki bio.' ?>
+                                </p>
+                            </div>
 
-                                        <?php if (!empty($member['nip_nim'])): ?>
-                                        <div class="col-sm-4 fw-semibold text-secondary">NIP/NIM</div>
-                                        <div class="col-sm-8 text-dark"><?= htmlspecialchars($member['nip_nim']) ?></div>
-                                        <?php endif; ?>
-                                        
-                                        <div class="col-sm-4 fw-semibold text-secondary">Status</div>
-                                        <div class="col-sm-8">
-                                            <?php if ($member['status_aktif']): ?>
-                                                <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Aktif</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">Tidak Aktif</span>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4">
-                                    <h6 class="text-uppercase text-muted fw-bold small ls-1">Biografi</h6>
-                                    <hr class="mt-1 mb-3">
-                                    <p class="text-secondary leading-relaxed">
-                                        <?= htmlspecialchars($member['nama_lengkap']) ?> adalah bagian dari tim Laboratorium Data Teknologi. 
-                                        Beliau berkontribusi dalam berbagai kegiatan penelitian dan pengembangan di laboratorium.
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="text-secondary fw-bold mb-1" style="font-size: 14px;">Email :</p>
+                                    <p class="mb-0 fw-medium text-primary text-break">
+                                        <?= htmlspecialchars($member['email']) ?>
                                     </p>
                                 </div>
-
-                                <!-- Publications Section -->
-                                <?php if (!empty($publications)): ?>
-                                <div class="mb-5">
-                                    <h6 class="text-uppercase text-muted fw-bold small ls-1 mb-4">Publikasi</h6>
-                                    <div class="row g-4">
-                                        <?php foreach ($publications as $pub): ?>
-                                            <div class="col-md-6">
-                                                <div class="card-modern h-100 d-flex flex-column">
-                                                    <div class="card-body d-flex flex-column">
-                                                        <h5 class="card-title fw-bold mb-3" style="color: #314755; line-height: 1.4;">
-                                                            <?= htmlspecialchars($pub['judul_publikasi']) ?>
-                                                        </h5>
-
-                                                        <div class="mt-auto mb-4">
-                                                            <p class="card-text text-muted mb-2" style="font-size: 0.9rem;">
-                                                                <i class="bi bi-calendar3 me-2"></i><?= htmlspecialchars($pub['tahun_terbit']) ?>
-                                                            </p>
-                                                            <span class="badge rounded-pill bg-secondary bg-opacity-25 text-secondary">
-                                                                <?= $pub['citation_count'] ?? 0 ?> Citations
-                                                            </span>
-                                                        </div>
-
-                                                        <a href="<?= htmlspecialchars($pub['link_publikasi'] ?? '#') ?>" target="_blank"
-                                                            class="btn btn-modern btn-outline-custom w-100 text-center"
-                                                            style="border-color: #19586E; color: #19586E;">Baca Publikasi</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
+                                <div class="col-6">
+                                    <p class="text-secondary fw-bold mb-1" style="font-size: 14px;">Status :</p>
+                                    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-3">
+                                        <?= $member['status_aktif'] ? 'Aktif' : 'Tidak Aktif' ?>
+                                    </span>
                                 </div>
-                                <?php endif; ?>
-
-                                <!-- News Section -->
-                                <?php if (!empty($news)): ?>
-                                <div class="mb-5">
-                                    <h6 class="text-uppercase text-muted fw-bold small ls-1 mb-4">Berita & Artikel</h6>
-                                    <div class="row g-4">
-                                        <?php foreach ($news as $item): ?>
-                                            <div class="col-md-6">
-                                                <div class="card h-100 border-0 shadow-sm">
-                                                    <?php if (!empty($item['gambar_utama'])): ?>
-                                                        <img src="/<?= htmlspecialchars($item['gambar_utama']) ?>" class="card-img-top" alt="<?= htmlspecialchars($item['judul']) ?>" style="height: 140px; object-fit: cover;">
-                                                    <?php endif; ?>
-                                                    <div class="card-body p-3">
-                                                        <h6 class="card-title fw-bold text-dark mb-2 line-clamp-2"><?= htmlspecialchars($item['judul']) ?></h6>
-                                                        <p class="card-text text-muted small mb-0"><?= date('d M Y', strtotime($item['tanggal_posting'])) ?></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                                <?php endif; ?>
-
-                                <!-- Gallery Section -->
-                                <?php if (!empty($gallery)): ?>
-                                <div class="mb-4">
-                                    <h6 class="text-uppercase text-muted fw-bold small ls-1 mb-4">Galeri</h6>
-                                    <div class="row g-4">
-                                        <?php foreach ($gallery as $photo): ?>
-                                            <div class="col-6 col-md-4">
-                                                <div class="card-modern overflow-hidden p-0 gallery-item">
-                                                    <img src="/<?= htmlspecialchars($photo['file_path']) ?>" alt="Gallery Image" class="img-fluid w-100"
-                                                        style="object-fit: cover; height: 200px; transition: transform 0.5s ease;">
-                                                    <div class="gallery-overlay">
-                                                        <p class="mb-0 fw-semibold"><?= htmlspecialchars($photo['deskripsi'] ?? '') ?></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Filter & Search -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-all-tab" data-bs-toggle="pill" data-bs-target="#pills-all"
+                        type="button" role="tab">Semua</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-pub-tab" data-bs-toggle="pill" data-bs-target="#pills-pub"
+                        type="button" role="tab">Publikasi</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-news-tab" data-bs-toggle="pill" data-bs-target="#pills-news"
+                        type="button" role="tab">Berita & Artikel</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-gallery-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-gallery" type="button" role="tab">Galeri</button>
+                </li>
+            </ul>
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" class="form-control border-0 shadow-sm" placeholder="Search" style="width: 250px;">
+            </div>
+        </div>
+
+        <!-- Content Tabs -->
+        <div class="tab-content" id="pills-tabContent">
+            <!-- ALL CONTENT -->
+            <div class="tab-pane fade show active" id="pills-all" role="tabpanel">
+                <div class="row g-4">
+                    <!-- Publications (Limit 3 for "All" tab) -->
+                    <?php foreach ($publications as $pub): ?>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card content-card p-3 bg-white">
+                                <div class="card-body">
+                                    <p class="category-text">Publikasi</p>
+                                    <h5 class="card-title fw-bold mb-2"><?= htmlspecialchars($pub['judul_publikasi']) ?>
+                                    </h5>
+                                    <p class="text-muted small mb-3"><?= htmlspecialchars($pub['tahun_terbit']) ?></p>
+                                    <p class="card-text text-muted small mb-4">
+                                        <?= htmlspecialchars(substr($pub['deskripsi'], 0, 100)) ?>...
+                                    </p>
+                                    <?php if (!empty($pub['link_publikasi'])): ?>
+                                        <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
+                                            class="btn card-custom-btn btn-sm py-2">Baca</a>
+                                    <?php else: ?>
+                                        <button class="btn card-custom-btn btn-sm py-2" disabled>Link tidak tersedia</button>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <!-- News (Limit 3) -->
+                    <?php foreach ($news as $item): ?>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card content-card p-3 bg-white">
+                                <div class="content-img mb-3 rounded-3 overflow-hidden">
+                                    <?php if (!empty($item['gambar_utama'])): ?>
+                                        <img src="/<?= htmlspecialchars($item['gambar_utama']) ?>"
+                                            class="w-100 h-100 object-fit-cover" alt="News">
+                                    <?php else: ?>
+                                        <i class="bi bi-newspaper display-4 text-muted"></i>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="category-text">Berita & Artikel</div>
+                                <h5 class="card-title fw-bold mb-2"><?= htmlspecialchars($item['judul']) ?></h5>
+                                <p class="text-muted small mb-3"><?= date('d F Y', strtotime($item['tanggal_posting'])) ?>
+                                </p>
+                                <a href="/news/<?= $item['slug'] ?>"
+                                    class="btn card-custom-btn btn-sm py-2 mt-auto">Selengkapnya</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <!-- Gallery (Limit 3) -->
+                    <?php foreach ($gallery as $photo): ?>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card content-card p-3 bg-white">
+                                <div class="content-img mb-3 rounded-3 overflow-hidden">
+                                    <img src="/<?= htmlspecialchars($photo['file_path']) ?>"
+                                        class="w-100 h-100 object-fit-cover" alt="Gallery">
+                                </div>
+                                <div class="category-text">Galeri</div>
+                                <p class="card-text text-muted small mb-0">
+                                    <?= htmlspecialchars($photo['deskripsi']) ?>
+                                </p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- PUBLICATIONS TAB -->
+            <div class="tab-pane fade" id="pills-pub" role="tabpanel">
+                <div class="row g-4">
+                    <?php if (empty($publications)): ?>
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">Belum ada publikasi.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($publications as $pub): ?>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card content-card p-3 bg-white">
+                                    <div class="card-body">
+                                        <p class="category-text">Publikasi</p>
+                                        <h5 class="card-title fw-bold mb-2"><?= htmlspecialchars($pub['judul_publikasi']) ?>
+                                        </h5>
+                                        <p class="text-muted small mb-3"><?= htmlspecialchars($pub['tahun_terbit']) ?></p>
+                                        <p class="card-text text-muted small mb-4">
+                                            <?= htmlspecialchars(substr($pub['deskripsi'], 0, 100)) ?>...
+                                        </p>
+                                        <?php if (!empty($pub['link_publikasi'])): ?>
+                                            <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
+                                                class="btn card-custom-btn btn-sm py-2">Baca</a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- NEWS TAB -->
+            <div class="tab-pane fade" id="pills-news" role="tabpanel">
+                <div class="row g-4">
+                    <?php if (empty($news)): ?>
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">Belum ada berita atau artikel.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($news as $item): ?>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card content-card p-3 bg-white">
+                                    <div class="content-img mb-3 rounded-3 overflow-hidden">
+                                        <?php if (!empty($item['gambar_utama'])): ?>
+                                            <img src="/<?= htmlspecialchars($item['gambar_utama']) ?>"
+                                                class="w-100 h-100 object-fit-cover" alt="News">
+                                        <?php else: ?>
+                                            <i class="bi bi-newspaper display-4 text-muted"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="category-text">Berita & Artikel</div>
+                                    <h5 class="card-title fw-bold mb-2"><?= htmlspecialchars($item['judul']) ?></h5>
+                                    <p class="text-muted small mb-3"><?= date('d F Y', strtotime($item['tanggal_posting'])) ?>
+                                    </p>
+                                    <a href="/news/<?= $item['slug'] ?>"
+                                        class="btn card-custom-btn btn-sm py-2 mt-auto">Selengkapnya</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- GALLERY TAB -->
+            <div class="tab-pane fade" id="pills-gallery" role="tabpanel">
+                <div class="row g-4">
+                    <?php if (empty($gallery)): ?>
+                        <div class="col-12 text-center py-5">
+                            <p class="text-muted">Belum ada foto di galeri.</p>
+                        </div>
+                    <?php else: ?>
+                        <?php foreach ($gallery as $photo): ?>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card content-card p-3 bg-white">
+                                    <div class="content-img mb-3 rounded-3 overflow-hidden">
+                                        <img src="/<?= htmlspecialchars($photo['file_path']) ?>"
+                                            class="w-100 h-100 object-fit-cover" alt="Gallery">
+                                    </div>
+                                    <div class="category-text">Galeri</div>
+                                    <p class="card-text text-muted small mb-0">
+                                        <?= htmlspecialchars($photo['deskripsi']) ?>
+                                    </p>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination (Dummy for now as per image example "1 2 3 ...") -->
+        <div class="d-flex justify-content-center mt-5">
+            <!-- Pagination logic can be added here if needed later -->
+        </div>
+
     </div>
-</section>
+
+    <!-- Footer -->
+    <?php include __DIR__ . '/components/footer.php'; ?>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple search filter script (optional)
+        document.querySelector('.search-box input').addEventListener('keyup', functi on (e) {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.tab-pane.active .col-md-6').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(term) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -57,19 +57,23 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="avatar-sm bg-light rounded-circle overflow-hidden" style="width: 32px; height: 32px;">
+                                        <div class="avatar-sm bg-light rounded-circle overflow-hidden"
+                                            style="width: 32px; height: 32px;">
                                             <?php if (!empty($item['foto_profil'])): ?>
-                                                <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>" 
-                                                     alt="Profile" class="w-100 h-100 object-fit-cover">
+                                                <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>"
+                                                    alt="Profile" class="w-100 h-100 object-fit-cover">
                                             <?php else: ?>
-                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold" style="font-size: 0.8rem;">
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold"
+                                                    style="font-size: 0.8rem;">
                                                     <?= strtoupper(substr($item['penulis'] ?? 'A', 0, 1)) ?>
                                                 </div>
                                             <?php endif; ?>
                                         </div>
                                         <div class="d-flex flex-column">
-                                            <span class="text-sm fw-medium text-dark"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
-                                            <span class="text-xs text-muted">@<?= htmlspecialchars($item['username'] ?? '') ?></span>
+                                            <span
+                                                class="text-sm fw-medium text-dark"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
+                                            <span
+                                                class="text-xs text-muted">@<?= htmlspecialchars($item['username'] ?? '') ?></span>
                                         </div>
                                     </div>
                                 </td>
@@ -284,6 +288,31 @@
 </div>
 
 <script>
+    $(document).ready(function () {
+        // Initialize Summernote
+        $('#isi_berita, #edit_isi_berita').summernote({
+            placeholder: 'Tulis isi berita di sini...',
+            tabsize: 2,
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+
+        // Delete confirmation handler
+        $('#confirmDeleteBtn').on('click', function () {
+            if (deleteNewsId) {
+                $('#deleteForm-' + deleteNewsId).submit();
+            }
+        });
+    });
+
     let deleteNewsId = null;
 
     function editNews(btn) {
@@ -300,7 +329,9 @@
 
         // Populate fields
         $('#edit_judul').val(judul);
-        $('#edit_isi_berita').val(isi);
+        // Set Summernote code
+        $('#edit_isi_berita').summernote('code', isi);
+
         $('#edit_id_penulis').val(penulis);
         $('#edit_status').val(status);
 
@@ -326,13 +357,4 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteNewsModal'));
         deleteModal.show();
     }
-
-    $(document).ready(function () {
-        // Delete confirmation handler
-        $('#confirmDeleteBtn').on('click', function () {
-            if (deleteNewsId) {
-                $('#deleteForm-' + deleteNewsId).submit();
-            }
-        });
-    });
 </script>

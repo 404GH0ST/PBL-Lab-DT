@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS berita CASCADE;
 DROP TABLE IF EXISTS info_lab CASCADE;
 DROP TABLE IF EXISTS profil_lab CASCADE;
 DROP TABLE IF EXISTS anggota CASCADE;
+DROP TABLE IF EXISTS fokus_riset CASCADE;
 DROP TYPE IF EXISTS role_enum CASCADE;
 DROP TYPE IF EXISTS status_approval_enum CASCADE;
 DROP TYPE IF EXISTS jenis_konten_enum CASCADE;
@@ -40,6 +41,7 @@ CREATE TABLE anggota (
     nip_nim VARCHAR(20),
     role role_enum NOT NULL DEFAULT 'operator',
     foto_profil VARCHAR(255),
+    bio TEXT,
     status_aktif BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -49,6 +51,7 @@ CREATE TABLE profil_lab (
     id SERIAL PRIMARY KEY,
     jenis_konten jenis_konten_enum NOT NULL,
     isi_konten TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- C. Tabel Info Lab (Kontak & Footer)
@@ -64,7 +67,9 @@ CREATE TABLE info_lab (
     link_linkedin VARCHAR(255),
     link_facebook VARCHAR(255),
     link_twitter VARCHAR(255),
-    deskripsi TEXT
+    deskripsi TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- D. Tabel Berita
 -- Mencakup kolom approval sesuai User Req B.1 (Alur Persetujuan)
@@ -82,7 +87,9 @@ CREATE TABLE berita (
     tanggal_validasi TIMESTAMP NULL,
     CONSTRAINT fk_berita_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE CASCADE,
     CONSTRAINT fk_berita_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE
-    SET NULL
+    SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- E. Tabel Galeri
 CREATE TABLE galeri (
@@ -98,7 +105,9 @@ CREATE TABLE galeri (
     -- Relasi
     CONSTRAINT fk_galeri_uploader FOREIGN KEY (id_uploader) REFERENCES anggota(id_anggota) ON DELETE CASCADE,
     CONSTRAINT fk_galeri_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE
-    SET NULL
+    SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- F. Tabel Publikasi
 -- Wajib link ke anggota sesuai User Req A.2
@@ -118,7 +127,9 @@ CREATE TABLE publikasi (
     -- Relasi
     CONSTRAINT fk_publikasi_anggota FOREIGN KEY (id_anggota) REFERENCES anggota(id_anggota) ON DELETE CASCADE,
     CONSTRAINT fk_publikasi_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE
-    SET NULL
+    SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 -- G. Tabel Fasilitas
 CREATE TABLE fasilitas (
@@ -127,14 +138,15 @@ CREATE TABLE fasilitas (
     deskripsi TEXT,
     foto_fasilitas VARCHAR(255),
     jumlah_unit INT DEFAULT 1,
-    kondisi kondisi_enum DEFAULT 'baik'
+    kondisi kondisi_enum DEFAULT 'baik',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- H. Tabel Fokus Riset
 CREATE TABLE IF NOT EXISTS fokus_riset (
     id_fokus SERIAL PRIMARY KEY,
-    judul VARCHAR(150) NOT NULL,
-    deskripsi TEXT,
-    ikon VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    bidang VARCHAR(150) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

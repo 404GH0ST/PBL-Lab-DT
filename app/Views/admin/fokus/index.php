@@ -13,44 +13,60 @@
             <span>Tambah Fokus</span>
         </button>
     </div>
-    <div class="card-body">
-        <?php if (empty($focus)): ?>
-            <div class="text-center py-5 text-muted">
-                <i class="bi bi-lightbulb display-4 mb-3 opacity-50"></i>
-                <p class="mb-0">Belum ada fokus riset.</p>
-            </div>
-        <?php else: ?>
-            <div class="row g-4">
-                <?php foreach ($focus as $f): ?>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 shadow-sm border-0">
-                            <div class="text-center pt-3">
-                                <?php if (!empty($f['ikon'])): ?>
-                                    <img src="/<?= htmlspecialchars($f['ikon']) ?>" class="rounded mb-3" alt="Icon" style="width:96px; height:96px; object-fit:cover;">
-                                <?php else: ?>
-                                    <div class="rounded-circle mb-3 bg-light d-flex align-items-center justify-content-center" style="width:96px; height:96px;">
-                                        <i class="bi bi-lightbulb fs-2 text-muted"></i>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+                            style="width: 50px;">No</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Bidang Riset</th>
+                        <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+                            style="width: 150px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($focus)): ?>
+                        <tr>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="bi bi-lightbulb display-4 mb-3 opacity-50"></i>
+                                    <p class="mb-0">Belum ada fokus riset.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($focus as $index => $f): ?>
+                            <tr>
+                                <td class="ps-4">
+                                    <span class="text-secondary text-sm"><?= $index + 1 + ($pagination->getOffset()) ?></span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-dark"><?= htmlspecialchars($f['bidang']) ?></span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex align-items-center gap-1 justify-content-end">
+                                        <button class="btn btn-sm btn-light text-primary"
+                                            onclick="editFocus(<?= $f['id_fokus'] ?>, '<?= htmlspecialchars(addslashes($f['bidang'])) ?>')"
+                                            data-bs-toggle="modal" data-bs-target="#editFocusModal" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-light text-danger"
+                                            onclick="confirmDelete(<?= $f['id_fokus'] ?>)" title="Hapus">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     </div>
-                                <?php endif; ?>
-                            </div>
-                            <div class="card-body text-start">
-                                <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($f['judul']) ?></h6>
-                                <p class="text-muted small mb-0"><?= nl2br(htmlspecialchars(substr($f['deskripsi'] ?? '', 0, 200))) ?></p>
-                            </div>
-                            <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
-                                <button class="btn btn-sm btn-light text-primary" onclick="editFocus(<?= $f['id_fokus'] ?>, '<?= htmlspecialchars(addslashes($f['judul'])) ?>', '<?= htmlspecialchars(addslashes($f['deskripsi'] ?? '')) ?>', '<?= htmlspecialchars($f['ikon'] ?? '') ?>')" data-bs-toggle="modal" data-bs-target="#editFocusModal">
-                                    <i class="bi bi-pencil"></i> Edit
-                                </button>
-                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="confirmDelete(<?= $f['id_fokus'] ?>)">
-                                    <i class="bi bi-trash"></i> Hapus
-                                </button>
-                                <form id="deleteForm-<?= $f['id_fokus'] ?>" action="/admin/fokus/<?= $f['id_fokus'] ?>/delete" method="POST" class="d-none"></form>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+                                    <form id="deleteForm-<?= $f['id_fokus'] ?>"
+                                        action="/admin/fokus/<?= $f['id_fokus'] ?>/delete" method="POST" class="d-none"></form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        <?php include __DIR__ . '/../../partials/pagination.php'; ?>
     </div>
 </div>
 
@@ -62,19 +78,12 @@
                 <h5 class="modal-title fw-bold">Tambah Fokus Riset</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/admin/fokus" method="POST" enctype="multipart/form-data">
+            <form action="/admin/fokus" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
-                        <input type="text" name="judul" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="deskripsi" class="form-control" rows="4"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ikon (opsional)</label>
-                        <input type="file" name="ikon" accept="image/*" class="form-control">
+                        <label class="form-label">Bidang Riset</label>
+                        <input type="text" name="bidang" class="form-control" required
+                            placeholder="Contoh: Machine Learning">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -94,23 +103,11 @@
                 <h5 class="modal-title fw-bold">Edit Fokus Riset</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editFocusForm" action="" method="POST" enctype="multipart/form-data">
+            <form id="editFocusForm" action="" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Judul</label>
-                        <input type="text" name="judul" id="edit_judul" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Deskripsi</label>
-                        <textarea name="deskripsi" id="edit_deskripsi" class="form-control" rows="4"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ganti Ikon (opsional)</label>
-                        <input type="file" name="ikon" accept="image/*" class="form-control">
-                        <div class="mt-2" id="current_icon_container" style="display:none;">
-                            <small class="text-muted d-block mb-1">Ikon Saat Ini:</small>
-                            <img src="" id="current_icon" class="img-fluid rounded border" style="max-height:80px;">
-                        </div>
+                        <label class="form-label">Bidang Riset</label>
+                        <input type="text" name="bidang" id="edit_bidang" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -130,7 +127,8 @@
                 <h5 class="modal-title fw-bold text-danger">Konfirmasi Penghapusan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">Apakah Anda yakin ingin menghapus fokus riset ini? Tindakan ini tidak dapat dibatalkan.</div>
+            <div class="modal-body">Apakah Anda yakin ingin menghapus fokus riset ini? Tindakan ini tidak dapat
+                dibatalkan.</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
@@ -144,17 +142,9 @@
         let deleteId = null;
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
-        window.editFocus = function (id, judul, deskripsi, ikon) {
+        window.editFocus = function (id, bidang) {
             $('#editFocusForm').attr('action', '/admin/fokus/' + id + '/update');
-            $('#edit_judul').val(judul);
-            $('#edit_deskripsi').val(deskripsi);
-
-            if (ikon) {
-                $('#current_icon').attr('src', '/' + ikon);
-                $('#current_icon_container').show();
-            } else {
-                $('#current_icon_container').hide();
-            }
+            $('#edit_bidang').val(bidang);
         };
 
         window.confirmDelete = function (id) {
