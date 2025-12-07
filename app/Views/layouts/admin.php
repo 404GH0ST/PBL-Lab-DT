@@ -370,6 +370,14 @@
                 <i class="bi bi-newspaper"></i>
                 <span>Berita</span>
             </a>
+            <a href="/admin/activities" class="nav-link <?= strpos($uri, '/admin/activities') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-calendar-event"></i>
+                <span>Kegiatan</span>
+            </a>
+            <a href="/admin/courses" class="nav-link <?= strpos($uri, '/admin/courses') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-book"></i>
+                <span>Perkuliahan</span>
+            </a>
             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                 <a href="/admin/approvals" class="nav-link <?= strpos($uri, '/admin/approvals') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-check-circle"></i>
@@ -415,6 +423,7 @@
     </div>
 
 
+    <?php include __DIR__ . '/../admin/partials/icon_picker.php'; ?>
     <?php include __DIR__ . '/../components/toast.php'; ?>
 
     <!-- Bootstrap 5 JS -->

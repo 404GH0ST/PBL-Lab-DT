@@ -77,7 +77,7 @@
                                 <td class="text-end pe-4">
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
                                         <button class="btn btn-sm btn-light text-primary"
-                                            onclick="editMember('<?= $member['id_anggota'] ?>', '<?= htmlspecialchars($member['nama_lengkap']) ?>', '<?= htmlspecialchars($member['username']) ?>', '<?= htmlspecialchars($member['email']) ?>', '<?= htmlspecialchars($member['nip_nim'] ?? '') ?>', '<?= $member['role'] ?>', <?= $member['status_aktif'] ? 'true' : 'false' ?>)"
+                                            onclick="editMember('<?= $member['id_anggota'] ?>', '<?= htmlspecialchars($member['nama_lengkap']) ?>', '<?= htmlspecialchars($member['username']) ?>', '<?= htmlspecialchars($member['email']) ?>', '<?= htmlspecialchars($member['nip_nim'] ?? '') ?>', '<?= htmlspecialchars($member['bio'] ?? '') ?>', '<?= $member['role'] ?>', <?= $member['status_aktif'] ? 'true' : 'false' ?>)"
                                             data-bs-toggle="modal" data-bs-target="#editMemberModal" title="Edit Member">
                                             <i class="bi bi-pencil"></i>
                                         </button>
@@ -157,6 +157,10 @@
                                     class="bi bi-card-heading text-muted"></i></span>
                             <input type="text" class="form-control border-start-0 ps-0" id="nip_nim" name="nip_nim">
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Biografi</label>
+                        <textarea class="form-control" id="bio" name="bio" rows="3"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
@@ -239,6 +243,10 @@
                             <input type="text" class="form-control border-start-0 ps-0" id="edit_nip_nim"
                                 name="nip_nim">
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_bio" class="form-label">Biografi</label>
+                        <textarea class="form-control" id="edit_bio" name="bio" rows="3"></textarea>
                     </div>
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                         <div class="mb-3">
@@ -342,7 +350,7 @@
         });
     });
 
-    function editMember(id, nama, username, email, nip, role, status) {
+    function editMember(id, nama, username, email, nip, bio, role, status) {
         // Update form action for POST update
         $('#editMemberForm').attr('action', '/admin/members/' + id + '/update');
         $('#edit_email').val(email);
@@ -350,6 +358,7 @@
         $('#edit_username').val(username);
         $('#edit_nip_nim').val(nip);
         $('#edit_role').val(role);
+        $('#edit_bio').val(bio);
         $('#edit_status_aktif').val(status ? '1' : '0');
     }
 

@@ -11,6 +11,8 @@ use App\Models\Publication;
 use App\Models\Member;
 use App\Models\Fasilitas;
 use App\Models\FokusRiset;
+use App\Models\Activity;
+use App\Models\Course;
 
 /**
  * Home Controller
@@ -23,6 +25,8 @@ class HomeController extends Controller
     protected $memberModel;
     protected $fasilitasModel;
     protected $fokusModel;
+    protected $activityModel;
+    protected $courseModel;
 
     public function __construct()
     {
@@ -32,6 +36,8 @@ class HomeController extends Controller
         $this->memberModel = $this->loadModel(Member::class);
         $this->fasilitasModel = $this->loadModel(Fasilitas::class);
         $this->fokusModel = $this->loadModel(FokusRiset::class);
+        $this->activityModel = $this->loadModel(Activity::class);
+        $this->courseModel = $this->loadModel(Course::class);
     }
 
     /**
@@ -59,10 +65,17 @@ class HomeController extends Controller
         // Fokus riset
         $focusList = [];
         try {
-            $focusList = $this->fokusModel->getAllFocus();
+            $focusList = $this->fokusModel->getAllFocus('ASC');
         } catch (\Exception $e) {
             $focusList = [];
         }
+
+        // Fetch additional sections for homepage (Limited)
+        $facilities = $this->fasilitasModel->getPaginatedFacilities(3, 0); // Limit 3
+        $activities = $this->activityModel->getAllActivities();
+        $activities = array_slice($activities, 0, 3);
+        $courses = $this->courseModel->getAllCourses();
+        $courses = array_slice($courses, 0, 3);
 
         return $this->view('home', [
             'title' => 'Welcome to Profile Lab DT',
@@ -73,8 +86,11 @@ class HomeController extends Controller
             'mostCitedPublications' => $mostCitedPublications,
             'gallery' => $gallery,
             'headOfLab' => $headOfLab,
-            'labMembers' => $labMembers
-            , 'focusList' => $focusList
+            'labMembers' => $labMembers,
+            'focusList' => $focusList,
+            'facilities' => $facilities,
+            'activities' => $activities,
+            'courses' => $courses
         ]);
     }
 
@@ -83,18 +99,32 @@ class HomeController extends Controller
      */
     public function aboutPage()
     {
+        $members = $this->memberModel->getAllMembers();
+        $activities = $this->activityModel->getAllActivities();
+        $courses = $this->courseModel->getAllCourses();
+
         return $this->view('about', [
-            'title' => 'About Us - Profile Lab DT'
+            'title' => 'About Us - Profile Lab DT',
+            'members' => $members,
+            'activities' => $activities,
+            'courses' => $courses
         ]);
     }
 
     public function FacilityPage()
     {
-        $facilities = $this->fasilitasModel->getAllFacilities();
+        $page = $_GET['page'] ?? 1;
+        $limit = 6; // Adjust limit as needed
+        $total = $this->fasilitasModel->countAllFacilities();
+        $pagination = new Pagination($total, $limit, $page);
+
+        $facilities = $this->fasilitasModel->getPaginatedFacilities($limit, $pagination->getOffset());
 
         return $this->view('facility', [
             'title' => 'Facility - Profile Lab DT',
-            'facilities' => $facilities
+            'facilities' => $facilities,
+            'pagination' => $pagination,
+            'baseUrl' => '/facility'
         ]);
     }
 

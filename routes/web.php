@@ -13,6 +13,7 @@ use App\Controllers\Admin\NewsController;
 use App\Controllers\Admin\ApprovalController;
 use App\Controllers\Admin\InfoLabController;
 
+
 $router = $app->router();
 
 
@@ -30,7 +31,7 @@ $router->get('/news/{slug}', [HomeController::class, 'newsDetail']);
 $router->get('/login', [HomeController::class, 'loginPage']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact/send', [ContactController::class, 'send']);
-$router->get('/member/{id}', [HomeController::class, 'memberDetail']);
+$router->get('/member/{id}', [App\Controllers\MemberController::class, 'show']);
 
 // ============================================
 // Auth Routes
@@ -83,19 +84,33 @@ $app->router()->post('/admin/news', [NewsController::class, 'store'])->middlewar
 $app->router()->post('/admin/news/{id}/update', [NewsController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news/{id}/delete', [NewsController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
-// Fasilitas Routes (Admin)
+// Fasilitas Routes
 use App\Controllers\Admin\FasilitasController;
 $app->router()->get('/admin/fasilitas', [FasilitasController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fasilitas', [FasilitasController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fasilitas/{id}/update', [FasilitasController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fasilitas/{id}/delete', [FasilitasController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
-// Fokus Riset Routes (Admin)
+// Fokus Riset Routes
 use App\Controllers\Admin\FokusRisetController;
 $app->router()->get('/admin/fokus', [FokusRisetController::class, 'index'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fokus', [FokusRisetController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fokus/{id}/update', [FokusRisetController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/fokus/{id}/delete', [FokusRisetController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
+// Activity Routes
+use App\Controllers\Admin\ActivityController;
+$app->router()->get('/admin/activities', [ActivityController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/activities', [ActivityController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/activities/{id}/update', [ActivityController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/activities/{id}/delete', [ActivityController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
+// Course Routes
+use App\Controllers\Admin\CourseController;
+$app->router()->get('/admin/courses', [CourseController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/courses', [CourseController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/courses/{id}/update', [CourseController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/courses/{id}/delete', [CourseController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
 // Lab I
 // ============================================

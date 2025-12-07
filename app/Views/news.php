@@ -22,9 +22,10 @@
                                 <?= htmlspecialchars($hero['judul']) ?>
                             </h5>
                             <p class="mb-0 small text-truncate">
-                                <?= nl2br(htmlspecialchars(substr($hero['isi_berita'], 0, 220))) ?>
+                                <?= htmlspecialchars(substr(strip_tags($hero['isi_berita']), 0, 220)) ?>
                             </p>
-                            <a href="/news/<?= htmlspecialchars($hero['slug']) ?>" class="btn btn-outline-light mt-2">Baca Selengkapnya</a>
+                            <a href="/news/<?= htmlspecialchars($hero['slug']) ?>" class="btn btn-outline-light mt-2">Baca
+                                Selengkapnya</a>
                         </div>
                     <?php endif; ?>
                 </div>
@@ -32,9 +33,11 @@
             <div class="col-12 col-lg-5 col-xl-4 d-flex flex-column gap-3">
                 <?php for ($i = 1; $i <= 3; $i++):
                     $side = $articles[$i] ?? null;
-                    if (!$side) continue;
-                ?>
-                    <a href="/news/<?= htmlspecialchars($side['slug']) ?>" class="border rounded-3 p-3 d-flex align-items-center gap-2 text-decoration-none">
+                    if (!$side)
+                        continue;
+                    ?>
+                    <a href="/news/<?= htmlspecialchars($side['slug']) ?>"
+                        class="border rounded-3 p-3 d-flex align-items-center gap-2 text-decoration-none">
                         <img src="/<?= $side['gambar_utama'] ?? 'assets/images/frame.png' ?>" alt="News Image"
                             class="rounded-3" style="width: 148px; height: auto; object-fit: cover;">
                         <div class="d-flex flex-column justify-content-between">
@@ -42,7 +45,9 @@
                                 <p class="m-0"><?= date('d M, Y', strtotime($side['tanggal_posting'] ?? 'now')) ?></p>
                                 <p class="m-0">—</p>
                             </div>
-                            <p class="m-0 fw-semibold" style="font-size: 14px; color: #0F9ECC;"><?= htmlspecialchars($side['judul']) ?></p>
+                            <p class="m-0 fw-semibold" style="font-size: 14px; color: #0F9ECC;">
+                                <?= htmlspecialchars($side['judul']) ?>
+                            </p>
                         </div>
                     </a>
                 <?php endfor; ?>
@@ -86,7 +91,8 @@
                                 <p class="text-muted small mt-2">
                                     <?= date('d F Y', strtotime($n['tanggal_posting'])) ?>
                                 </p>
-                                <a href="#" class="btn btn-outline-dark mt-2 w-100">Selengkapnya</a>
+                                <a href="/news/<?= htmlspecialchars($n['slug']) ?>"
+                                    class="btn btn-outline-dark mt-2 w-100">Selengkapnya</a>
                             </div>
                         </div>
                     </div>

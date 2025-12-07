@@ -11,7 +11,7 @@ class Member extends Model
 
     public function getAllMembers()
     {
-        return $this->db->query("SELECT * FROM {$this->table} ORDER BY created_at DESC");
+        return $this->db->query("SELECT * FROM {$this->table} ORDER BY CASE WHEN role = 'admin' THEN 0 ELSE 1 END, nama_lengkap ASC");
     }
 
     public function getMembersByRole($role)
@@ -40,8 +40,8 @@ class Member extends Model
 
     public function createMember($data)
     {
-        $sql = "INSERT INTO {$this->table} (username, password, email, nama_lengkap, nip_nim, role, foto_profil, status_aktif) 
-                VALUES (:username, :password, :email, :nama_lengkap, :nip_nim, :role, :foto_profil, :status_aktif)";
+        $sql = "INSERT INTO {$this->table} (username, password, email, nama_lengkap, nip_nim, role, foto_profil, bio, status_aktif) 
+                VALUES (:username, :password, :email, :nama_lengkap, :nip_nim, :role, :foto_profil, :bio, :status_aktif)";
 
         return $this->db->execute($sql, [
             'username' => $data['username'],
@@ -51,6 +51,7 @@ class Member extends Model
             'nip_nim' => $data['nip_nim'] ?? null,
             'role' => $data['role'] ?? 'operator',
             'foto_profil' => $data['foto_profil'] ?? null,
+            'bio' => $data['bio'] ?? null,
             'status_aktif' => $data['status_aktif'] ?? true
         ]);
     }
@@ -87,6 +88,10 @@ class Member extends Model
         if (isset($data['foto_profil'])) {
             $fields[] = "foto_profil = :foto_profil";
             $params['foto_profil'] = $data['foto_profil'];
+        }
+        if (isset($data['bio'])) {
+            $fields[] = "bio = :bio";
+            $params['bio'] = $data['bio'];
         }
         if (isset($data['status_aktif'])) {
             $fields[] = "status_aktif = :status_aktif";

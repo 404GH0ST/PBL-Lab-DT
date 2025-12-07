@@ -123,8 +123,7 @@
         <?php endif; ?>
 
         <!-- Button -->
-        <a href="/about" class="btn btn-modern btn-outline-custom mt-5"
-            style="border-color: #19586E; color: #19586E; text-decoration: none;">
+        <a href="/about" class="btn btn-modern btn-primary-custom mt-5" style="text-decoration: none;">
             Lihat Semua Anggota
         </a>
 
@@ -168,18 +167,18 @@
                     <!-- Mission Card -->
                     <div class="card-modern p-4 bg-white shadow-sm">
                         <div class="d-flex align-items-center mb-3">
-                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
-                                 style="width: 50px; height: 50px; background-color: #7ABC52; color: white;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3"
+                                style="width: 50px; height: 50px; background-color: #7ABC52; color: white;">
                                 <i class="bi bi-lightning-fill fs-4"></i>
                             </div>
                             <h3 class="fw-bold mb-0">Mission</h3>
                         </div>
-                        
+
                         <?php
                         // Parse Mission Content to split by points
                         $missionPoints = [];
                         $content = $misi['isi_konten'];
-                        
+
                         if (strpos($content, '<li') !== false) {
                             preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $content, $matches);
                             $missionPoints = $matches[1];
@@ -190,7 +189,8 @@
                         ?>
 
                         <?php if (!empty($missionPoints)): ?>
-                            <?php $idx = 1; foreach ($missionPoints as $point): ?>
+                            <?php $idx = 1;
+                            foreach ($missionPoints as $point): ?>
                                 <div class="p-3 rounded-3 mb-2" style="background-color: #E8F5E9;">
                                     <div class="text-dark mb-0 d-flex" style="line-height: 1.7;">
                                         <span class="fw-bold me-2"><?= $idx++ ?>.</span>
@@ -213,6 +213,111 @@
     </div>
 </section>
 
+<section id="facilities" style="background: #fcfcfc;" class="section-padding">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <p class="fw-bold text-uppercase" style="color: #7ABC52; letter-spacing: 1px;">Fasilitas</p>
+                <h2 class="fw-bold display-5">Fasilitas Laboratorium</h2>
+            </div>
+            <a href="/facility" class="btn btn-modern btn-primary-custom" style="text-decoration: none;">
+                Lihat Semua
+            </a>
+        </div>
+
+        <div class="row g-4">
+            <?php if (!empty($facilities)): ?>
+                <?php foreach ($facilities as $f): ?>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card-modern h-100 overflow-hidden p-0">
+                            <div class="position-relative" style="height: 200px;">
+                                <?php if (!empty($f['foto_fasilitas'])): ?>
+                                    <img src="/<?= htmlspecialchars($f['foto_fasilitas']) ?>"
+                                        alt="<?= htmlspecialchars($f['nama_fasilitas']) ?>" class="w-100 h-100 object-fit-cover">
+                                <?php else: ?>
+                                    <div class="w-100 h-100 bg-light d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-building display-4 text-muted"></i>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="p-4">
+                                <h5 class="fw-bold mb-2"><?= htmlspecialchars($f['nama_fasilitas']) ?></h5>
+                                <p class="text-muted small mb-3">
+                                    <?= htmlspecialchars(substr($f['deskripsi'] ?? '', 0, 100)) ?>...
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center text-secondary small">
+                                    <span><i class="bi bi-pc-display me-1"></i> <?= (int) $f['jumlah_unit'] ?> Units</span>
+                                    <span><i class="bi bi-check-circle me-1"></i> <?= htmlspecialchars($f['kondisi']) ?></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+
+<section id="activities" class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <p class="fw-bold text-uppercase" style="color: #7ABC52; letter-spacing: 1px;">Kegiatan</p>
+            <h2 class="fw-bold display-5">Kegiatan & Proyek</h2>
+        </div>
+        <div class="row g-4">
+            <?php foreach ($activities as $activity): ?>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card-modern h-100 p-4 text-center transition-hover">
+                        <div class="mb-4">
+                            <i class="<?= htmlspecialchars($activity['gambar'] ?? 'bi bi-activity') ?> display-4"
+                                style="color: #7ABA54;"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3"><?= htmlspecialchars($activity['judul_kegiatan']) ?></h4>
+                        <p class="text-muted mb-0">
+                            <?= htmlspecialchars($activity['deskripsi']) ?>
+                        </p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <div class="col-12 text-center mt-4">
+                <a href="/about" class="btn btn-modern btn-primary-custom" style="text-decoration: none;">
+                    Selengkapnya
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="courses" style="background: #fcfcfc;" class="section-padding">
+    <div class="container">
+        <div class="text-center mb-5">
+            <p class="fw-bold text-uppercase" style="color: #7ABC52; letter-spacing: 1px;">Akademik</p>
+            <h2 class="fw-bold display-5">Perkuliahan Terkait</h2>
+        </div>
+        <div class="row g-4">
+            <?php foreach ($courses as $course): ?>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card-modern h-100 p-4 text-center transition-hover">
+                        <div class="mb-4">
+                            <i class="<?= htmlspecialchars($course['gambar'] ?? 'bi bi-book') ?> display-4"
+                                style="color: #7ABA54;"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3"><?= htmlspecialchars($course['judul_perkuliahan']) ?></h4>
+                        <p class="text-muted mb-0">
+                            <?= htmlspecialchars($course['deskripsi']) ?>
+                        </p>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+            <div class="col-12 text-center mt-4">
+                <a href="/about" class="btn btn-modern btn-primary-custom" style="text-decoration: none;">
+                    Selengkapnya
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section id="focusRiset" style="background: #19586E;" class="section-padding">
     <div class="container text-center">
         <div class="mb-5">
@@ -223,19 +328,10 @@
             <?php if (!empty($focusList)): ?>
                 <?php foreach ($focusList as $f): ?>
                     <div class="col-6 col-md-4 col-lg-2">
-                        <div class="card-modern h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center"
-                            style="background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(6px); border: 1px solid rgba(255, 255, 255, 0.08);">
-                            <?php if (!empty($f['ikon'])): ?>
-                                <img src="/<?= htmlspecialchars($f['ikon']) ?>" alt="<?= htmlspecialchars($f['judul']) ?>" class="mb-3" style="width:64px; height:64px; object-fit:cover;">
-                            <?php else: ?>
-                                <div class="rounded-circle mb-3 d-flex align-items-center justify-content-center" style="width:64px; height:64px; background: rgba(255,255,255,0.12);">
-                                    <i class="bi bi-lightbulb fs-4 text-white"></i>
-                                </div>
-                            <?php endif; ?>
-                            <h5 class="fw-semibold text-white mb-0" style="font-size: 1rem;"><?= htmlspecialchars($f['judul']) ?></h5>
-                            <?php if (!empty($f['deskripsi'])): ?>
-                                <p class="text-white-50 small mt-2 mb-0" style="font-size:0.9rem;"><?= htmlspecialchars($f['deskripsi']) ?></p>
-                            <?php endif; ?>
+                        <div class="d-flex align-items-center justify-content-center p-3 text-center h-100"
+                            style="border: 1px solid white; border-radius: 8px; color: white; min-height: 60px;">
+                            <h5 class="fw-bold mb-0 text-white" style="font-size: 1rem;"><?= htmlspecialchars($f['bidang']) ?>
+                            </h5>
                         </div>
                     </div>
                 <?php endforeach; ?>

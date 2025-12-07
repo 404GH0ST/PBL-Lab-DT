@@ -9,9 +9,9 @@ class FokusRiset extends Model
     protected $table = 'fokus_riset';
     protected $primaryKey = 'id_fokus';
 
-    public function getAllFocus()
+    public function getAllFocus($order = 'DESC')
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY id_fokus DESC";
+        $sql = "SELECT * FROM {$this->table} ORDER BY id_fokus {$order}";
         return $this->db->query($sql);
     }
 
@@ -23,40 +23,35 @@ class FokusRiset extends Model
 
     public function createFocus($data)
     {
-        $sql = "INSERT INTO {$this->table} (judul, deskripsi, ikon) VALUES (:judul, :deskripsi, :ikon)";
+        $sql = "INSERT INTO {$this->table} (bidang) VALUES (:bidang)";
         return $this->db->execute($sql, [
-            'judul' => $data['judul'],
-            'deskripsi' => $data['deskripsi'] ?? null,
-            'ikon' => $data['ikon'] ?? null
+            'bidang' => $data['bidang']
         ]);
     }
 
     public function updateFocus($id, $data)
     {
-        $fields = [];
-        $params = ['id' => $id];
+        $params = ['id' => $id, 'bidang' => $data['bidang']];
 
-        if (isset($data['judul'])) {
-            $fields[] = 'judul = :judul';
-            $params['judul'] = $data['judul'];
-        }
-        if (isset($data['deskripsi'])) {
-            $fields[] = 'deskripsi = :deskripsi';
-            $params['deskripsi'] = $data['deskripsi'];
-        }
-        if (isset($data['ikon'])) {
-            $fields[] = 'ikon = :ikon';
-            $params['ikon'] = $data['ikon'];
-        }
-
-        if (empty($fields)) return false;
-
-        $sql = "UPDATE {$this->table} SET " . implode(', ', $fields) . " WHERE id_fokus = :id";
+        $sql = "UPDATE {$this->table} SET bidang = :bidang WHERE id_fokus = :id";
         return $this->db->execute($sql, $params);
     }
 
     public function deleteFocus($id)
     {
         return $this->db->execute("DELETE FROM {$this->table} WHERE id_fokus = :id", ['id' => $id]);
+    }
+
+    public function countAllFocus()
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table}";
+        $result = $this->db->query($sql);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedFocus($limit, $offset)
+    {
+        $sql = "SELECT * FROM {$this->table} ORDER BY id_fokus DESC LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 }
