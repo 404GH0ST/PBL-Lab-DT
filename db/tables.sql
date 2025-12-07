@@ -129,3 +129,12 @@ CREATE TABLE fasilitas (
     jumlah_unit INT DEFAULT 1,
     kondisi kondisi_enum DEFAULT 'baik'
 );
+
+-- H. Tabel Fokus Riset
+CREATE TABLE IF NOT EXISTS fokus_riset (
+    id_fokus SERIAL PRIMARY KEY,
+    judul VARCHAR(150) NOT NULL,
+    deskripsi TEXT,
+    ikon VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

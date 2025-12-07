@@ -26,6 +26,7 @@ $router->get('/facility', [HomeController::class, 'FacilityPage']);
 $router->get('/gallery', [HomeController::class, 'galleryPage']);
 $router->get('/publications', [HomeController::class, 'publicationPage']);
 $router->get('/news', [HomeController::class, 'NewsPage']);
+$router->get('/news/{slug}', [HomeController::class, 'newsDetail']);
 $router->get('/login', [HomeController::class, 'loginPage']);
 $router->get('/contact', [ContactController::class, 'index']);
 $router->post('/contact/send', [ContactController::class, 'send']);
@@ -81,6 +82,20 @@ $app->router()->get('/admin/news', [NewsController::class, 'index'])->middleware
 $app->router()->post('/admin/news', [NewsController::class, 'store'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news/{id}/update', [NewsController::class, 'update'])->middleware([AuthMiddleware::class]);
 $app->router()->post('/admin/news/{id}/delete', [NewsController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
+// Fasilitas Routes (Admin)
+use App\Controllers\Admin\FasilitasController;
+$app->router()->get('/admin/fasilitas', [FasilitasController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas', [FasilitasController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas/{id}/update', [FasilitasController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fasilitas/{id}/delete', [FasilitasController::class, 'destroy'])->middleware([AuthMiddleware::class]);
+
+// Fokus Riset Routes (Admin)
+use App\Controllers\Admin\FokusRisetController;
+$app->router()->get('/admin/fokus', [FokusRisetController::class, 'index'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus', [FokusRisetController::class, 'store'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus/{id}/update', [FokusRisetController::class, 'update'])->middleware([AuthMiddleware::class]);
+$app->router()->post('/admin/fokus/{id}/delete', [FokusRisetController::class, 'destroy'])->middleware([AuthMiddleware::class]);
 
 // Lab I
 // ============================================

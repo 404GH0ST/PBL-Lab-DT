@@ -358,6 +358,14 @@
                 <i class="bi bi-info-circle"></i>
                 <span>Info Lab</span>
             </a>
+            <a href="/admin/fasilitas" class="nav-link <?= strpos($uri, '/admin/fasilitas') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-tools"></i>
+                <span>Fasilitas</span>
+            </a>
+            <a href="/admin/fokus" class="nav-link <?= strpos($uri, '/admin/fokus') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-lightbulb"></i>
+                <span>Fokus Riset</span>
+            </a>
             <a href="/admin/news" class="nav-link <?= strpos($uri, '/admin/news') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-newspaper"></i>
                 <span>Berita</span>

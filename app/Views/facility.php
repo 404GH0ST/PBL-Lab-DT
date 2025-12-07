@@ -4,141 +4,33 @@
         </h2>
 
         <div class="row g-4 mt-2 mb-5">
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
+            <?php if (empty($facilities)): ?>
+                <div class="col-12 text-center text-muted py-5">
+                    <i class="bi bi-building display-4 mb-3"></i>
+                    <p>No facilities available.</p>
                 </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
+            <?php else: ?>
+                <?php foreach ($facilities as $f): ?>
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="card shadow rounded-3 p-3 card-facility">
+                            <div class="text-center">
+                                <?php if (!empty($f['foto_fasilitas'])): ?>
+                                    <img src="/<?= htmlspecialchars($f['foto_fasilitas']) ?>" alt="<?= htmlspecialchars($f['nama_fasilitas']) ?>" class="mx-auto d-block" style="width: 296px; height: 189px; object-fit: cover;">
+                                <?php else: ?>
+                                    <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block" style="width: 296px; height: 189px; object-fit: cover;">
+                                <?php endif; ?>
+                            </div>
+                            <div class="card-body text-start">
+                                <h5 class="card-title all-text-gradient fw-semibold py-3"><?= htmlspecialchars($f['nama_fasilitas']) ?></h5>
+                                <p class="card-text all-text-gradient">
+                                    <?= nl2br(htmlspecialchars($f['deskripsi'] ?? '')) ?>
+                                </p>
+                                <p class="text-muted small mt-2">Units: <?= (int)$f['jumlah_unit'] ?> &middot; Kondisi: <?= htmlspecialchars($f['kondisi']) ?></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card shadow rounded-3 p-3 card-facility">
-                    <div class="text-center">
-                        <img src="/assets/images/frame.png" alt="Facility Image" class="mx-auto d-block"
-                            style="width: 296px; height: 189px; object-fit: cover;">
-                    </div>
-                    <div class="card-body text-start">
-                        <h5 class="card-title all-text-gradient fw-semibold py-3">Ruang Server</h5>
-                        <p class="card-text all-text-gradient">
-                            Sistem Prediksi Penjualan Frozen Food dengan Metode Monte Carlo
-                            (Studi Kasus: Supermama Frozen Food)
-                        </p>
-                    </div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
 
         <!-- Pagination -->
