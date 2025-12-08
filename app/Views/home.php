@@ -136,7 +136,7 @@
             <div class="col-lg-4">
                 <div class="pe-lg-4">
                     <p class="fw-bold text-uppercase" style="color: #7ABC52; letter-spacing: 1px;">Visi & Misi</p>
-                    <h2 class="fw-bold display-5 mb-4">Our Vision & Mission</h2>
+                    <h2 class="fw-bold display-5 mb-4">Visi & Misi Kami</h2>
                     <p class="text-muted mb-4">
                         Kami berkomitmen untuk menjadi pusat unggulan dalam riset dan pengembangan teknologi data.
                     </p>
@@ -155,10 +155,10 @@
                                 style="width: 50px; height: 50px; background-color: #7ABC52; color: white;">
                                 <i class="bi bi-lightning-fill fs-4"></i>
                             </div>
-                            <h3 class="fw-bold mb-0">Vision</h3>
+                            <h3 class="fw-bold mb-0">Visi</h3>
                         </div>
                         <div class="p-4 rounded-3" style="background-color: #E8F5E9;">
-                            <div class="text-dark mb-0" style="line-height: 1.7;">
+                            <div class="text-black mb-0" style="line-height: 1.7;">
                                 <?= $visi['isi_konten'] ?>
                             </div>
                         </div>
@@ -171,7 +171,7 @@
                                 style="width: 50px; height: 50px; background-color: #7ABC52; color: white;">
                                 <i class="bi bi-lightning-fill fs-4"></i>
                             </div>
-                            <h3 class="fw-bold mb-0">Mission</h3>
+                            <h3 class="fw-bold mb-0">Misi</h3>
                         </div>
 
                         <?php
@@ -192,7 +192,7 @@
                             <?php $idx = 1;
                             foreach ($missionPoints as $point): ?>
                                 <div class="p-3 rounded-3 mb-2" style="background-color: #E8F5E9;">
-                                    <div class="text-dark mb-0 d-flex" style="line-height: 1.7;">
+                                    <div class="text-black mb-0 d-flex" style="line-height: 1.7;">
                                         <span class="fw-bold me-2"><?= $idx++ ?>.</span>
                                         <div><?= strip_tags($point, '<b><strong><i><em><u><span>') ?></div>
                                     </div>
@@ -200,7 +200,7 @@
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="p-4 rounded-3" style="background-color: #E8F5E9;">
-                                <div class="text-dark mb-0" style="line-height: 1.7;">
+                                <div class="text-black mb-0" style="line-height: 1.7;">
                                     <?= $misi['isi_konten'] ?>
                                 </div>
                             </div>
