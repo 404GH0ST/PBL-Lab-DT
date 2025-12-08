@@ -45,6 +45,8 @@ CREATE TABLE anggota (
     foto_profil VARCHAR(255),
     bio TEXT,
     status_aktif BOOLEAN DEFAULT TRUE,
+    reset_token VARCHAR(64) NULL,
+    reset_expires_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
