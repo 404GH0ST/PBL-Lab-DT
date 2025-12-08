@@ -1,7 +1,7 @@
 <div class="auth-card">
     <div class="text-center mb-4">
-        <h1 class="auth-title">Welcome Back</h1>
-        <p class="auth-subtitle">Please sign in to your account</p>
+        <h1 class="auth-title">Selamat Datang Kembali</h1>
+        <p class="auth-subtitle">Silakan masuk ke akun Anda</p>
         <?php if (isset($errors['login'])): ?>
             <div class="alert alert-danger">
                 <?php echo $errors['login']; ?>
@@ -22,11 +22,11 @@
         <!-- TODO: Contemplate if forgot password is needed -->
         <!-- 
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="#" class="text-sm text-decoration-none" style="color: #4f46e5;">Forgot password?</a>
+            <a href="#" class="text-sm text-decoration-none" style="color: #4f46e5;">Lupa password?</a>
         </div> -->
 
         <button type="submit" class="btn btn-primary">
-            Sign in
+            Masuk
         </button>
     </form>
 </div>

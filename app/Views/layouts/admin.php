@@ -334,6 +334,7 @@
         <nav class="mt-4">
             <?php $uri = $_SERVER['REQUEST_URI'] ?? '/'; ?>
             <?php $role = $_SESSION['user']['role'] ?? ''; ?>
+            <?php $user = $_SESSION['user'] ?? []; ?>
 
             <?php if ($role === 'operator'): ?>
                 <a href="/admin/dashboard" class="nav-link <?= strpos($uri, '/admin/dashboard') === 0 ? 'active' : '' ?>">

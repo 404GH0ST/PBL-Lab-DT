@@ -30,7 +30,7 @@ class AuthController extends Controller
         $password = $_POST['password'] ?? null;
 
         if (empty($username) || empty($password)) {
-            $this->errors['login'] = 'Username and password are required';
+            $this->errors['login'] = 'Username dan password wajib diisi';
         } else {
             $user = $this->memberModel->authenticate($username, $password);
             if ($user) {
@@ -47,7 +47,7 @@ class AuthController extends Controller
                 ];
                 return $this->redirect('/admin/dashboard');
             }
-            $this->errors['login'] = 'Invalid username or password';
+            $this->errors['login'] = 'Username atau password salah';
         }
 
         return $this->view('auth/login', [
