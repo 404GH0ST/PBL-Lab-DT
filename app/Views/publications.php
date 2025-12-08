@@ -3,25 +3,25 @@
         <h2 class="text-vision-gradient mb-5" style="font-size: 40px; font-weight: bold;">Daftar Publikasi
         </h2>
 
-        <!-- Filters -->
+        <!-- Filter -->
         <div class="p-3 border shadow rounded-3">
             <form action="">
                 <div class="row g-2">
-                    <!-- Search input -->
+                    <!-- Input Pencarian -->
                     <div class="col-lg-6">
                         <div class="input-group">
                             <input type="text" class="form-control" style="background-color: #F0F0F0;"
-                                placeholder="Search by keywoard, title, etc." aria-label="Search"
+                                placeholder="Cari berdasarkan kata kunci, judul, dll." aria-label="Pencarian"
                                 aria-describedby="button-search">
                             <button class="btn btn-secondary" type="submit" id="button-search">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
                     </div>
-                    <!-- Year Select Filter -->
+                    <!-- Filter Tahun -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="Year select" style="background-color: #F0F0F0;">
-                            <option value="" disabled="" selected>Year</option>
+                        <select class="form-select" aria-label="Pilih tahun" style="background-color: #F0F0F0;">
+                            <option value="" disabled="" selected>Tahun</option>
                             <option value="2025">2025</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
@@ -29,30 +29,30 @@
                             <option value="2021">2021</option>
                         </select>
                     </div>
-                    <!-- Author Filter(nanti pake select2) -->
+                    <!-- Filter Penulis (nanti pakai select2) -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="Author select" style="background-color: #F0F0F0;">
-                            <option value="" disabled="" selected>Author</option>
+                        <select class="form-select" aria-label="Pilih penulis" style="background-color: #F0F0F0;">
+                            <option value="" disabled="" selected>Penulis</option>
                             <option value="Fabrizio">Fabrizio</option>
                             <option value="Romano">Romano</option>
                         </select>
                     </div>
-                    <!-- Research Area -->
+                    <!-- Bidang Riset -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="area select"
+                        <select class="form-select" aria-label="Pilih bidang"
                             style="background-color: #F0F0F0; color: #314755;">
-                            <option value="" disabled="" selected>Research Area</option>
+                            <option value="" disabled="" selected>Bidang Riset</option>
                             <option value="Malang">Malang</option>
                             <option value="Jakarta">Jakarta</option>
                         </select>
                     </div>
-                    <!-- Created date -->
+                    <!-- Urutkan -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="created select"
+                        <select class="form-select" aria-label="Urutkan berdasarkan"
                             style="background-color: #F0F0F0; color: #314755;">
-                            <option value="" disabled="" selected>Sort by: Newest</option>
-                            <option value="Newest">Newest</option>
-                            <option value="Oldest">Oldest</option>
+                            <option value="" disabled="" selected>Urutkan: Terbaru</option>
+                            <option value="Newest">Terbaru</option>
+                            <option value="Oldest">Terlama</option>
                         </select>
                     </div>
                 </div>
@@ -73,9 +73,9 @@
                             <?= htmlspecialchars($pub['judul_publikasi']) ?>
                         </h3>
 
-                        <!-- Authors -->
+                        <!-- Penulis -->
                         <p class="mb-1" style="font-size:12px; color:#575757;">
-                            Authors: <?= htmlspecialchars($pub['nama_penulis']) ?>
+                            Penulis: <?= htmlspecialchars($pub['nama_penulis']) ?>
                         </p>
 
                         <p class="mb-3" style="font-size:12px; color:#575757;">
@@ -87,7 +87,7 @@
                             <?= htmlspecialchars($pub['deskripsi'] ?? 'Tidak ada deskripsi.') ?>
                         </p>
 
-                        <!-- READ BUTTON (Full width like the image) -->
+                        <!-- Tombol Baca (lebar penuh) -->
                         <div class="rounded-1 d-flex justify-content-center align-items-center mt-3"
                             style="background:#F0F0F0; height:37px;">
                             <?php if (!empty($pub['link_publikasi'])): ?>
