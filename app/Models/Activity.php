@@ -57,6 +57,18 @@ class Activity extends Model
             $fields[] = "id_penulis = :id_penulis";
             $params['id_penulis'] = $data['id_penulis'];
         }
+        if (isset($data['status'])) {
+            $fields[] = "status = :status";
+            $params['status'] = $data['status'];
+        }
+        if (isset($data['id_admin_penilai'])) {
+            $fields[] = "id_admin_penilai = :id_admin_penilai";
+            $params['id_admin_penilai'] = $data['id_admin_penilai'];
+        }
+        if (isset($data['catatan_admin'])) {
+            $fields[] = "catatan_admin = :catatan_admin";
+            $params['catatan_admin'] = $data['catatan_admin'];
+        }
 
         $fields[] = "updated_at = CURRENT_TIMESTAMP";
 
