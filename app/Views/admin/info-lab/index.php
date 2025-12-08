@@ -7,7 +7,7 @@
             </div>
             <div class="card-body">
 
-                <form action="/admin/contact/update" method="POST">
+                <form action="/admin/info-lab/update" method="POST">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nama_lab" class="form-label fw-bold">Nama Lab</label>
