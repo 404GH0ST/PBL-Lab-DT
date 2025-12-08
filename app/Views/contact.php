@@ -16,7 +16,7 @@
                     </div>
                     <div>
                         <span class="d-block fw-bold text-dark">Email Us</span>
-                        <span class="text-muted">datatechlab@college.edu</span>
+                        <span class="text-muted">lab.datatech@gmail.com</span>
                     </div>
                 </div>
             </div>
