@@ -119,4 +119,33 @@ class Member extends Model
 
         return null;
     }
+
+    public function findByEmail($email)
+    {
+        $result = $this->db->query("SELECT * FROM {$this->table} WHERE email = :email", ['email' => $email]);
+        return $result[0] ?? null;
+    }
+
+    public function setResetToken($id, $token, $expiresAt)
+    {
+        $sql = "UPDATE {$this->table} SET reset_token = :token, reset_expires_at = :expires WHERE id_anggota = :id";
+        return $this->db->execute($sql, [
+            'id' => $id,
+            'token' => $token,
+            'expires' => $expiresAt
+        ]);
+    }
+
+    public function findByResetToken($token)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE reset_token = :token AND reset_expires_at > NOW()";
+        $result = $this->db->query($sql, ['token' => $token]);
+        return $result[0] ?? null;
+    }
+
+    public function clearResetToken($id)
+    {
+        $sql = "UPDATE {$this->table} SET reset_token = NULL, reset_expires_at = NULL WHERE id_anggota = :id";
+        return $this->db->execute($sql, ['id' => $id]);
+    }
 }

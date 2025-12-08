@@ -19,11 +19,9 @@
             <label for="password" class="form-label text-sm fw-medium text-gray-700">Password</label>
             <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
         </div>
-        <!-- TODO: Contemplate if forgot password is needed -->
-        <!-- 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <a href="#" class="text-sm text-decoration-none" style="color: #4f46e5;">Lupa password?</a>
-        </div> -->
+        <div class="d-flex justify-content-end align-items-center mb-4">
+            <a href="/forgot-password" class="text-sm text-decoration-none" style="color: #7ABA54;">Lupa password?</a>
+        </div>
 
         <button type="submit" class="btn btn-primary">
             Masuk

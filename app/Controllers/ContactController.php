@@ -3,17 +3,18 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use Core\Mailer;
 use App\Models\Contact;
 
 class ContactController extends Controller
 {
     private $contactModel;
+    private $mailer;
 
     public function __construct()
     {
         $this->contactModel = $this->loadModel(Contact::class);
+        $this->mailer = new Mailer();
     }
 
     public function index()
@@ -33,14 +34,14 @@ class ContactController extends Controller
         $message = $_POST['message'] ?? '-';
 
         // Kirim email ke owner
-        $this->sendMail(
+        $this->mailer->send(
             "lab.datatech@gmail.com",
             "New Contact Message",
             $this->templateOwner($name, $email, $organization, $message)
         );
 
         // Kirim copy ke user
-        $this->sendMail(
+        $this->mailer->send(
             $email,
             "Thanks for reaching out!",
             $this->templateUser($name, $organization, $message)
@@ -50,37 +51,6 @@ class ContactController extends Controller
         $_SESSION['flash_success'] = 'Message sent successfully!';
         header("Location: /contact"); // Redirect back to contact page
         exit();
-    }
-
-    private function sendMail($to, $subject, $body)
-    {
-        $mail = new PHPMailer(true);
-
-        try {
-            // SMTP Config
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = 'pbl.labdt@gmail.com';
-            $mail->Password = 'zwln apxf nlcp nlrn';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-
-            // Sender
-            $mail->setFrom('pbl.labdt@gmail.com', 'PBL Lab DT');
-
-            // Receiver
-            $mail->addAddress($to);
-
-            // Content
-            $mail->isHTML(true);
-            $mail->Subject = $subject;
-            $mail->Body = $body;
-
-            return $mail->send();
-        } catch (Exception $e) {
-            return $mail->ErrorInfo;
-        }
     }
 
     private function templateOwner($name, $email, $organization, $message)

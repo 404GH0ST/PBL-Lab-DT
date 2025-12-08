@@ -40,6 +40,12 @@ $router->get('/login', [AuthController::class, 'login']);
 $router->post('/login', [AuthController::class, 'authenticate']);
 $router->get('/logout', [AuthController::class, 'logout']);
 
+// Forgot Password Routes
+$router->get('/forgot-password', [AuthController::class, 'forgotPassword']);
+$router->post('/forgot-password', [AuthController::class, 'sendResetLink']);
+$router->get('/reset-password/{token}', [AuthController::class, 'resetPassword']);
+$router->post('/reset-password', [AuthController::class, 'updatePassword']);
+
 // ============================================
 // Admin Routes
 // ============================================
@@ -225,6 +231,17 @@ $app->router()->post('/admin/courses/{id}/delete', [CourseController::class, 'de
 //     
 //     return view('contact', ['title' => 'Contact Us']);
 // })->middleware([CsrfMiddleware::class]);
+
+// Debug Route
+$app->router()->get('/test-db', function () {
+    try {
+        $db = new \Core\Database\Database(require __DIR__ . '/../config/app.php');
+        $db->getConnection();
+        echo "Database connection successful!";
+    } catch (\Exception $e) {
+        echo "Database connection failed: " . $e->getMessage();
+    }
+});
 
 // // ============================================
 // // Special Routes
