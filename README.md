@@ -40,20 +40,28 @@ Then visit `http://localhost:8000` in your browser.
 ```
 ├── app/
 │   ├── Controllers/     # Your controllers
-│   ├── Models/          # Your models (with plain SQL)
+│   ├── Middlewares/     # Application middlewares
+│   ├── Models/          # Your models
 │   └── Views/           # Your views
 ├── config/
 │   └── app.php         # Configuration
 ├── core/                # Framework core
 │   ├── Database/        # Database layer
-│   ├── Http/            # Request/Response
-│   ├── Middleware/      # Auth and CSRF middleware
+│   ├── Middleware/      # Core middleware
 │   ├── Application.php  # Main app
+│   ├── Controller.php   # Base controller
+│   ├── Mailer.php       # Mailer utility
+│   ├── Model.php        # Base model
+│   ├── Pagination.php   # Pagination utility
 │   ├── Router.php       # Router
 │   ├── Route.php        # Route class
-│   ├── Controller.php   # Base controller
-│   └── Model.php        # Base model
+│   └── helpers.php      # Helper functions
+├── db/                  # Database scripts
+│   ├── tables.sql       # Schema definition
+│   └── views_procedures.sql # Stored procedures
 ├── public/
+│   ├── assets/          # Static assets
+│   ├── uploads/         # User uploads
 │   ├── .htaccess       # Apache rewrite rules
 │   └── index.php       # Entry point
 ├── routes/
