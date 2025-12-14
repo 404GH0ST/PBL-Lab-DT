@@ -346,12 +346,15 @@
                 <span>Anggota</span>
             </a>
 
-            <?php if ($role === 'operator'): ?>
+            <?php if ($role === 'operator' || $role === 'admin'): ?>
                 <a href="/admin/publications"
                     class="nav-link <?= strpos($uri, '/admin/publications') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-journal-text"></i>
                     <span>Publikasi</span>
                 </a>
+            <?php endif; ?>
+
+            <?php if ($role === 'operator'): ?>
                 <a href="/admin/visimisi" class="nav-link <?= strpos($uri, '/admin/visimisi') === 0 ? 'active' : '' ?>">
                     <i class="bi bi-building"></i>
                     <span>Visi Misi</span>
