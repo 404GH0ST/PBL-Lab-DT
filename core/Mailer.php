@@ -46,4 +46,14 @@ class Mailer
             return false;
         }
     }
+
+    public function addEmbeddedImage($path, $cid, $name = '', $encoding = 'base64', $type = '', $disposition = 'inline')
+    {
+        try {
+            return $this->mail->addEmbeddedImage($path, $cid, $name, $encoding, $type, $disposition);
+        } catch (Exception $e) {
+            error_log("Mailer Image Error: " . $e->getMessage());
+            return false;
+        }
+    }
 }
