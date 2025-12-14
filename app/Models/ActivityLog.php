@@ -11,6 +11,17 @@ class ActivityLog extends Model
 
     public function getRecentActivities($limit = 10)
     {
+        return $this->getPaginatedLogs($limit, 0);
+    }
+
+    public function countAllLogs()
+    {
+        $result = $this->db->query("SELECT COUNT(*) as total FROM {$this->table}");
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedLogs($limit, $offset)
+    {
         $sql = "
             SELECT 
                 al.*,
@@ -19,24 +30,23 @@ class ActivityLog extends Model
             FROM activity_logs al
             LEFT JOIN anggota a ON al.user_id = a.id_anggota
             ORDER BY al.created_at DESC
-            LIMIT :limit
+            LIMIT :limit OFFSET :offset
         ";
 
-        return $this->db->query($sql, ['limit' => $limit]);
+        return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 
-    public function log($userId, $actionType, $module, $resourceId, $resourceName, $metaData = [])
+    public function log($userId, $actionType, $module, $resourceId, $resourceName)
     {
         $data = [
             'user_id' => $userId,
             'action_type' => $actionType,
             'module' => $module,
             'resource_id' => $resourceId,
-            'resource_name' => $resourceName,
-            'meta_data' => json_encode($metaData)
+            'resource_name' => $resourceName
         ];
 
-        $sql = "INSERT INTO {$this->table} (user_id, action_type, module, resource_id, resource_name, meta_data) VALUES (:user_id, :action_type, :module, :resource_id, :resource_name, :meta_data)";
+        $sql = "INSERT INTO {$this->table} (user_id, action_type, module, resource_id, resource_name) VALUES (:user_id, :action_type, :module, :resource_id, :resource_name)";
         return $this->db->execute($sql, $data);
     }
 }

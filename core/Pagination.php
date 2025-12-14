@@ -72,29 +72,35 @@ class Pagination
         );
 
         // Page Numbers
-        // Simple implementation: show all pages if <= 7, otherwise show window
-        // For brevity, let's implement a simple window: First ... Prev 2 [Current] Next 2 ... Last
-
-        $start = max(1, $this->currentPage - 2);
-        $end = min($this->totalPages, $this->currentPage + 2);
-
-        if ($start > 1) {
-            $html .= $this->renderPageItem($baseUrl, 1, $queryParams);
-            if ($start > 2) {
-                $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        if ($this->totalPages <= 10) {
+            // If total pages are 10 or less, show all numbers
+            for ($i = 1; $i <= $this->totalPages; $i++) {
+                $active = $i === $this->currentPage ? 'active' : '';
+                $html .= $this->renderPageItem($baseUrl, $i, $queryParams, $active);
             }
-        }
+        } else {
+            // If more than 10 pages, use windowing with truncation
+            $start = max(1, $this->currentPage - 2);
+            $end = min($this->totalPages, $this->currentPage + 2);
 
-        for ($i = $start; $i <= $end; $i++) {
-            $active = $i === $this->currentPage ? 'active' : '';
-            $html .= $this->renderPageItem($baseUrl, $i, $queryParams, $active);
-        }
-
-        if ($end < $this->totalPages) {
-            if ($end < $this->totalPages - 1) {
-                $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            if ($start > 1) {
+                $html .= $this->renderPageItem($baseUrl, 1, $queryParams);
+                if ($start > 2) {
+                    $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                }
             }
-            $html .= $this->renderPageItem($baseUrl, $this->totalPages, $queryParams);
+
+            for ($i = $start; $i <= $end; $i++) {
+                $active = $i === $this->currentPage ? 'active' : '';
+                $html .= $this->renderPageItem($baseUrl, $i, $queryParams, $active);
+            }
+
+            if ($end < $this->totalPages) {
+                if ($end < $this->totalPages - 1) {
+                    $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                }
+                $html .= $this->renderPageItem($baseUrl, $this->totalPages, $queryParams);
+            }
         }
 
         // Next Link
@@ -110,6 +116,14 @@ class Pagination
         $html .= '</ul></nav>';
 
         return $html;
+    }
+
+    /**
+     * Alias for render() to be explicit for admin views
+     */
+    public function renderAdmin(string $baseUrl, array $queryParams = []): string
+    {
+        return $this->render($baseUrl, $queryParams);
     }
 
     protected function renderPageItem($baseUrl, $page, $queryParams, $activeClass = '')

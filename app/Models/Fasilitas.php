@@ -11,7 +11,10 @@ class Fasilitas extends Model
 
     public function getAllFacilities()
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY id_fasilitas DESC";
+        $sql = "SELECT f.*, a.nama_lengkap as penulis, a.foto_profil 
+                FROM {$this->table} f 
+                LEFT JOIN anggota a ON f.id_penulis = a.id_anggota 
+                ORDER BY f.id_fasilitas DESC";
         return $this->db->query($sql);
     }
 
@@ -24,7 +27,11 @@ class Fasilitas extends Model
 
     public function getPaginatedFacilities($limit, $offset)
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY id_fasilitas DESC LIMIT :limit OFFSET :offset";
+        $sql = "SELECT f.*, a.nama_lengkap as penulis, a.foto_profil 
+                FROM {$this->table} f 
+                LEFT JOIN anggota a ON f.id_penulis = a.id_anggota 
+                ORDER BY f.id_fasilitas DESC 
+                LIMIT :limit OFFSET :offset";
         return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 
@@ -37,27 +44,36 @@ class Fasilitas extends Model
 
     public function getPaginatedApprovedFacilities($limit, $offset)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE status = 'approved' ORDER BY id_fasilitas DESC LIMIT :limit OFFSET :offset";
+        $sql = "SELECT f.*, a.nama_lengkap as penulis, a.foto_profil 
+                FROM {$this->table} f 
+                LEFT JOIN anggota a ON f.id_penulis = a.id_anggota 
+                WHERE f.status = 'approved' 
+                ORDER BY f.id_fasilitas DESC 
+                LIMIT :limit OFFSET :offset";
         return $this->db->query($sql, ['limit' => $limit, 'offset' => $offset]);
     }
 
     public function getFacilityById($id)
     {
-        $result = $this->db->query("SELECT * FROM {$this->table} WHERE id_fasilitas = :id", ['id' => $id]);
+        $result = $this->db->query("SELECT f.*, a.nama_lengkap as penulis, a.foto_profil 
+                                    FROM {$this->table} f 
+                                    LEFT JOIN anggota a ON f.id_penulis = a.id_anggota 
+                                    WHERE f.id_fasilitas = :id", ['id' => $id]);
         return $result[0] ?? null;
     }
 
     public function createFacility($data)
     {
-        $sql = "INSERT INTO {$this->table} (nama_fasilitas, deskripsi, foto_fasilitas, jumlah_unit, kondisi)
-                VALUES (:nama_fasilitas, :deskripsi, :foto_fasilitas, :jumlah_unit, :kondisi)";
+        $sql = "INSERT INTO {$this->table} (nama_fasilitas, deskripsi, foto_fasilitas, jumlah_unit, kondisi, id_penulis)
+                VALUES (:nama_fasilitas, :deskripsi, :foto_fasilitas, :jumlah_unit, :kondisi, :id_penulis)";
 
         return $this->db->execute($sql, [
             'nama_fasilitas' => $data['nama_fasilitas'],
             'deskripsi' => $data['deskripsi'] ?? null,
             'foto_fasilitas' => $data['foto_fasilitas'] ?? null,
             'jumlah_unit' => $data['jumlah_unit'] ?? 1,
-            'kondisi' => $data['kondisi'] ?? 'baik'
+            'kondisi' => $data['kondisi'] ?? 'baik',
+            'id_penulis' => $data['id_penulis'] ?? null
         ]);
     }
 

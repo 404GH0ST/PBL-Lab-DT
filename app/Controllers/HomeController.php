@@ -144,7 +144,6 @@ class HomeController extends Controller
             'baseUrl' => '/facility'
         ]);
     }
-
     public function galleryPage()
     {
         $page = $_GET['page'] ?? 1;
@@ -175,16 +174,51 @@ class HomeController extends Controller
     {
         $page = $_GET['page'] ?? 1;
         $limit = 10;
-        $total = $this->publicationModel->countApprovedPublications();
-        $pagination = new Pagination($total, $limit, $page);
 
-        $publications = $this->publicationModel->getPaginatedApprovedPublications($limit, $pagination->getOffset());
+        $filters = [
+            'search' => $_GET['search'] ?? null,
+            'year' => $_GET['year'] ?? null,
+            'author' => $_GET['author'] ?? null,
+            'sort' => $_GET['sort'] ?? 'Newest'
+        ];
+
+        // Fetch data for filters
+        $years = $this->publicationModel->getDistinctYears();
+        // Get authors who have approved publications
+        // We can reuse getMembersByRole or create a specific query, 
+        // but for now let's just get all members to be safe or maybe just ones with publications?
+        // Let's us MemberModel::getAllMembers() for simplicity or fetch distinct authors from publication table?
+        // Let's use getAllMembers for now.
+        $authors = $this->memberModel->getAllMembers();
+
+        $total = $this->publicationModel->countFilteredPublications($filters);
+        $pagination = new Pagination($total, $limit, $page);
+        $publications = $this->publicationModel->getFilteredPublications($filters, $limit, $pagination->getOffset());
+
+        // Append query params to pagination URL
+        $baseUrl = '/publications';
+        $queryParams = [];
+        if ($filters['search'])
+            $queryParams['search'] = $filters['search'];
+        if ($filters['year'])
+            $queryParams['year'] = $filters['year'];
+        if ($filters['author'])
+            $queryParams['author'] = $filters['author'];
+        if ($filters['sort'])
+            $queryParams['sort'] = $filters['sort'];
+
+        if (!empty($queryParams)) {
+            $baseUrl .= '?' . http_build_query($queryParams);
+        }
 
         return $this->view('publications', [
             'title' => 'Publication - Profile Lab DT',
             'publications' => $publications,
             'pagination' => $pagination,
-            'baseUrl' => '/publications'
+            'baseUrl' => $baseUrl,
+            'filters' => $filters,
+            'years' => $years,
+            'authors' => $authors
         ]);
     }
 

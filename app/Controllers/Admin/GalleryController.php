@@ -44,6 +44,13 @@ class GalleryController extends Controller
 
         // Handle File Upload
         if (isset($_FILES['file_path']) && $_FILES['file_path']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['file_path']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/gallery');
+                return;
+            }
+
             $uploadDir = __DIR__ . '/../../../public/uploads/gallery/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
@@ -73,6 +80,13 @@ class GalleryController extends Controller
 
         // Handle File Upload
         if (isset($_FILES['file_path']) && $_FILES['file_path']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['file_path']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/gallery');
+                return;
+            }
+
             $uploadDir = __DIR__ . '/../../../public/uploads/gallery/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);

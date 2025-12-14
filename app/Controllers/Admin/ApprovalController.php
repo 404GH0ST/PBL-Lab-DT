@@ -149,7 +149,7 @@ class ApprovalController extends Controller
                 break;
         }
 
-        $this->redirect('/admin/approvals');
+        $this->redirect('/admin/approvals?type=' . $type);
     }
 
     public function reject($type, $id)
@@ -188,6 +188,6 @@ class ApprovalController extends Controller
                 break;
         }
 
-        $this->redirect('/admin/approvals');
+        $this->redirect('/admin/approvals?type=' . $type);
     }
 }

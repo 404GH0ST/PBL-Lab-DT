@@ -183,8 +183,11 @@
                 </li>
             </ul>
             <div class="search-box">
-                <i class="bi bi-search"></i>
-                <input type="text" class="form-control border-0 shadow-sm" placeholder="Search" style="width: 250px;">
+                <form action="" method="GET">
+                    <i class="bi bi-search"></i>
+                    <input type="text" name="search" class="form-control border-0 shadow-sm" placeholder="Search"
+                        style="width: 250px;" value="<?= htmlspecialchars($keyword ?? '') ?>">
+                </form>
             </div>
         </div>
 
@@ -358,16 +361,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Simple search filter script (optional)
-        document.querySelector('.search-box input').addEventListener('keyup', functi on (e) {
-            const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.tab-pane.active .col-md-6').forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(term) ? 'block' : 'none';
-            });
-        });
-    </script>
+
 </body>
 
 </html>

@@ -11,17 +11,17 @@ class Course extends Model
 
     public function getAllCourses()
     {
-        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota ORDER BY p.id_perkuliahan ASC");
+        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota ORDER BY p.id_perkuliahan ASC");
     }
 
     public function getAllApprovedCourses()
     {
-        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.status = 'approved' ORDER BY p.id_perkuliahan ASC");
+        return $this->db->query("SELECT p.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.status = 'approved' ORDER BY p.id_perkuliahan ASC");
     }
 
     public function getCourseById($id)
     {
-        $result = $this->db->query("SELECT p.*, a.nama_lengkap as penulis FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.id_perkuliahan = :id", ['id' => $id]);
+        $result = $this->db->query("SELECT p.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} p LEFT JOIN anggota a ON p.id_penulis = a.id_anggota WHERE p.id_perkuliahan = :id", ['id' => $id]);
         return $result[0] ?? null;
     }
 

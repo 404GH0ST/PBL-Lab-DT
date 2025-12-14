@@ -1,13 +1,45 @@
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-header">
-                <h5 class="card-title mb-0 fw-bold text-dark">Informasi Lab</h5>
-                <p class="text-muted small mb-0">Perbarui detail kontak dan tautan media sosial</p>
+                <h5 class="card-title mb-0 fw-bold text-dark">Struktur Organisasi</h5>
+                <p class="text-muted small mb-0">Upload gambar struktur organisasi lab</p>
             </div>
             <div class="card-body">
+                <?php if (($contact['status'] ?? '') === 'rejected' && !empty($contact['catatan_admin'])): ?>
+                    <div class="alert alert-danger bg-danger-subtle border-danger text-danger mb-4">
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                            <h6 class="mb-0 fw-bold">Perubahan Ditolak</h6>
+                        </div>
+                        <p class="mb-0 small"><?= htmlspecialchars($contact['catatan_admin']) ?></p>
+                    </div>
+                <?php endif; ?>
 
-                <form action="/admin/info-lab/update" method="POST">
+                <form action="/admin/info-lab/update" method="POST" enctype="multipart/form-data">
+                    <!-- Structure Image Section -->
+                    <div class="mb-4 text-center">
+                        <div class="mb-3">
+                            <?php if (!empty($struktur['isi_konten'])): ?>
+                                <img src="/uploads/struktur/<?= htmlspecialchars($struktur['isi_konten']) ?>"
+                                    alt="Struktur Organisasi" class="img-fluid rounded border shadow-sm"
+                                    style="max-height: 400px;">
+                            <?php else: ?>
+                                <div class="bg-light rounded border d-flex align-items-center justify-content-center"
+                                    style="height: 200px;">
+                                    <span class="text-muted">Belum ada gambar struktur organisasi</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="input-group w-50 mx-auto">
+                            <input type="file" class="form-control" name="struktur_image" accept="image/*">
+                        </div>
+                        <div class="form-text">Format: JPG, PNG. Maks: 2MB.</div>
+                    </div>
+
+                    <hr>
+                    <h5 class="fw-bold mb-3">Informasi Kontak & Sosial Media</h5>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nama_lab" class="form-label fw-bold">Nama Lab</label>

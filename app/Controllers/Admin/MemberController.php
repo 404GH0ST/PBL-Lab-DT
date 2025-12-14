@@ -38,6 +38,13 @@ class MemberController extends Controller
         $data = $_POST;
 
         if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['foto_profil']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/members');
+                return;
+            }
+
             $tmp_name = $_FILES['foto_profil']['tmp_name'];
             $name = basename($_FILES['foto_profil']['name']);
             $destination = __DIR__ . '/../../../public/uploads/foto_profil/' . $name;
@@ -69,6 +76,13 @@ class MemberController extends Controller
 
         // Handle file upload for update
         if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['foto_profil']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/members');
+                return;
+            }
+
             $tmp_name = $_FILES['foto_profil']['tmp_name'];
             $name = basename($_FILES['foto_profil']['name']);
             $destination = __DIR__ . '/../../../public/uploads/foto_profil/' . $name;

@@ -24,28 +24,65 @@
                 <?php foreach ($facilities as $f): ?>
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 shadow-sm border-0">
-                            <div class="text-center pt-3">
+                            <div class="text-center pt-3 position-relative">
                                 <?php if (!empty($f['foto_fasilitas'])): ?>
                                     <img src="/<?= htmlspecialchars($f['foto_fasilitas']) ?>" class="card-img-top"
-                                        alt="<?= htmlspecialchars($f['nama_fasilitas']) ?>" style="height:180px; width:100%; object-fit:cover;">
+                                        alt="<?= htmlspecialchars($f['nama_fasilitas']) ?>"
+                                        style="height:180px; width:100%; object-fit:cover;">
                                 <?php else: ?>
                                     <img src="/assets/images/frame.png" class="card-img-top" alt="No Image"
                                         style="height:180px; width:100%; object-fit:cover;">
                                 <?php endif; ?>
+
+                                <?php
+                                $statusClass = match ($f['status'] ?? 'pending') {
+                                    'approved' => 'bg-success-subtle text-success',
+                                    'rejected' => 'bg-danger-subtle text-danger',
+                                    default => 'bg-warning-subtle text-warning'
+                                };
+                                $statusLabel = match ($f['status'] ?? 'pending') {
+                                    'approved' => 'Disetujui',
+                                    'rejected' => 'Ditolak',
+                                    default => 'Tertunda'
+                                };
+                                ?>
+                                <span
+                                    class="position-absolute top-0 end-0 m-2 badge <?= $statusClass ?> shadow-sm"><?= $statusLabel ?></span>
+
+                                <?php if (($f['status'] ?? '') === 'rejected' && !empty($f['catatan_admin'])): ?>
+                                    <div
+                                        class="position-absolute bottom-0 start-0 w-100 p-2 bg-danger bg-opacity-75 text-white text-xs text-start">
+                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                        <?= htmlspecialchars($f['catatan_admin']) ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title fw-bold text-truncate"><?= htmlspecialchars($f['nama_fasilitas']) ?></h6>
-                                <p class="text-muted small mb-2">Jumlah Unit: <?= (int)$f['jumlah_unit'] ?> &middot; Kondisi: <?= htmlspecialchars($f['kondisi']) ?></p>
+                                <p class="text-muted small mb-2">Jumlah Unit: <?= (int) $f['jumlah_unit'] ?> &middot; Kondisi:
+                                    <?= htmlspecialchars($f['kondisi']) ?>
+                                </p>
                                 <p class="mb-0"><?= nl2br(htmlspecialchars($f['deskripsi'] ?? '')) ?></p>
                             </div>
                             <div class="card-footer bg-white border-top-0 d-flex justify-content-between align-items-center">
-                                <button class="btn btn-sm btn-light text-primary" onclick="editFacility(<?= $f['id_fasilitas'] ?>, '<?= htmlspecialchars(addslashes($f['nama_fasilitas'])) ?>', '<?= htmlspecialchars(addslashes($f['deskripsi'] ?? '')) ?>', <?= (int)$f['jumlah_unit'] ?>, '<?= htmlspecialchars($f['kondisi']) ?>', '<?= htmlspecialchars($f['foto_fasilitas'] ?? '') ?>')" data-bs-toggle="modal" data-bs-target="#editFacilityModal">
+                                <button class="btn btn-sm btn-light text-primary edit-btn" data-id="<?= $f['id_fasilitas'] ?>"
+                                    data-nama="<?= htmlspecialchars($f['nama_fasilitas']) ?>"
+                                    data-deskripsi="<?= htmlspecialchars($f['deskripsi'] ?? '') ?>"
+                                    data-jumlah="<?= (int) $f['jumlah_unit'] ?>"
+                                    data-kondisi="<?= htmlspecialchars($f['kondisi']) ?>"
+                                    data-foto="<?= htmlspecialchars($f['foto_fasilitas'] ?? '') ?>"
+                                    data-status="<?= $f['status'] ?? 'pending' ?>"
+                                    data-catatan="<?= htmlspecialchars($f['catatan_admin'] ?? '') ?>" data-bs-toggle="modal"
+                                    data-bs-target="#editFacilityModal">
                                     <i class="bi bi-pencil"></i> Edit
                                 </button>
-                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="confirmDelete(<?= $f['id_fasilitas'] ?>)">
+                                <button type="button" class="btn btn-sm btn-light text-danger"
+                                    onclick="confirmDelete(<?= $f['id_fasilitas'] ?>)">
                                     <i class="bi bi-trash"></i> Hapus
                                 </button>
-                                <form id="deleteForm-<?= $f['id_fasilitas'] ?>" action="/admin/fasilitas/<?= $f['id_fasilitas'] ?>/delete" method="POST" class="d-none"></form>
+                                <form id="deleteForm-<?= $f['id_fasilitas'] ?>"
+                                    action="/admin/fasilitas/<?= $f['id_fasilitas'] ?>/delete" method="POST" class="d-none">
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -88,6 +125,16 @@
                         <label class="form-label">Foto (opsional)</label>
                         <input type="file" name="foto_fasilitas" accept="image/*" class="form-control">
                     </div>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="pending">Tertunda</option>
+                                <option value="approved">Disetujui</option>
+                                <option value="rejected">Ditolak</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
@@ -127,13 +174,29 @@
                             <option value="rusak">Rusak</option>
                         </select>
                     </div>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                        <div class="mb-3">
+                            <label for="edit_status" class="form-label">Status</label>
+                            <select class="form-select" id="edit_status" name="status">
+                                <option value="pending">Tertunda</option>
+                                <option value="approved">Disetujui</option>
+                                <option value="rejected">Ditolak</option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
                     <div class="mb-3">
                         <label class="form-label">Ganti Foto (opsional)</label>
                         <input type="file" name="foto_fasilitas" accept="image/*" class="form-control">
                         <div class="mt-2" id="current_facility_photo_container" style="display:none;">
                             <small class="text-muted d-block mb-1">Foto Saat Ini:</small>
-                            <img src="" id="current_facility_photo" class="img-fluid rounded border" style="max-height:120px;">
+                            <img src="" id="current_facility_photo" class="img-fluid rounded border"
+                                style="max-height:120px;">
                         </div>
+                    </div>
+                    <div class="mb-3" id="rejection_note_container" style="display: none;">
+                        <label class="form-label text-danger">Catatan Penolakan</label>
+                        <div class="alert alert-danger bg-danger-subtle border-danger text-danger p-2 mb-0 text-sm"
+                            id="rejection_note"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -153,7 +216,9 @@
                 <h5 class="modal-title fw-bold text-danger">Konfirmasi Penghapusan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">Apakah Anda yakin ingin menghapus fasilitas ini? Tindakan ini tidak dapat dibatalkan.</div>
+            <div class="modal-body">Apakah Anda yakin ingin menghapus fasilitas ini? Tindakan ini tidak dapat
+                dibatalkan.
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
@@ -167,7 +232,18 @@
         let deleteId = null;
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
 
-        window.editFacility = function (id, nama, deskripsi, jumlah, kondisi, foto) {
+        // Handle Edit Button Click
+        $('.edit-btn').click(function () {
+            const btn = $(this);
+            const id = btn.data('id');
+            const nama = btn.data('nama');
+            const deskripsi = btn.data('deskripsi');
+            const jumlah = btn.data('jumlah');
+            const kondisi = btn.data('kondisi');
+            const foto = btn.data('foto');
+            const status = btn.data('status');
+            const catatan = btn.data('catatan');
+
             $('#editFacilityForm').attr('action', '/admin/fasilitas/' + id + '/update');
             $('#edit_nama_fasilitas').val(nama);
             $('#edit_deskripsi').val(deskripsi);
@@ -180,7 +256,20 @@
             } else {
                 $('#current_facility_photo_container').hide();
             }
-        };
+
+            // Handle status
+            if ($('#edit_status').length) {
+                $('#edit_status').val(status);
+            }
+
+            // Handle rejection note
+            if (status === 'rejected' && catatan) {
+                $('#rejection_note').text(catatan);
+                $('#rejection_note_container').show();
+            } else {
+                $('#rejection_note_container').hide();
+            }
+        });
 
         window.confirmDelete = function (id) {
             deleteId = id;

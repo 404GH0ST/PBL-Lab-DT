@@ -29,11 +29,10 @@ class FokusRiset extends Model
 
     public function createFocus($data)
     {
-        $sql = "INSERT INTO {$this->table} (bidang, id_penulis, id_editor, status) VALUES (:bidang, :id_penulis, :id_editor, :status)";
+        $sql = "INSERT INTO {$this->table} (bidang, id_penulis, status) VALUES (:bidang, :id_penulis, :status)";
         return $this->db->execute($sql, [
             'bidang' => $data['bidang'],
             'id_penulis' => $data['id_penulis'] ?? null,
-            'id_editor' => $data['id_editor'] ?? null,
             'status' => $data['status'] ?? 'pending'
         ]);
     }
@@ -50,10 +49,6 @@ class FokusRiset extends Model
         if (isset($data['id_penulis'])) {
             $fields[] = "id_penulis = :id_penulis";
             $params['id_penulis'] = $data['id_penulis'];
-        }
-        if (isset($data['id_editor'])) {
-            $fields[] = "id_editor = :id_editor";
-            $params['id_editor'] = $data['id_editor'];
         }
         if (isset($data['status'])) {
             $fields[] = "status = :status";

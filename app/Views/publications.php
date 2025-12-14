@@ -4,15 +4,17 @@
         </h2>
 
         <!-- Filter -->
+        <!-- Filter -->
         <div class="p-3 border shadow rounded-3">
-            <form action="">
+            <form action="/publications" method="GET" id="filterForm">
                 <div class="row g-2">
                     <!-- Input Pencarian -->
                     <div class="col-lg-6">
                         <div class="input-group">
-                            <input type="text" class="form-control" style="background-color: #F0F0F0;"
+                            <input type="text" class="form-control" name="search" style="background-color: #F0F0F0;"
                                 placeholder="Cari berdasarkan kata kunci, judul, dll." aria-label="Pencarian"
-                                aria-describedby="button-search">
+                                aria-describedby="button-search"
+                                value="<?= htmlspecialchars($filters['search'] ?? '') ?>">
                             <button class="btn btn-secondary" type="submit" id="button-search">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -20,40 +22,50 @@
                     </div>
                     <!-- Filter Tahun -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="Pilih tahun" style="background-color: #F0F0F0;">
-                            <option value="" disabled="" selected>Tahun</option>
-                            <option value="2025">2025</option>
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
+                        <select class="form-select" name="year" aria-label="Pilih tahun"
+                            style="background-color: #F0F0F0;" onchange="this.form.submit()">
+                            <option value="">Semua Tahun</option>
+                            <?php foreach ($years as $y): ?>
+                                <option value="<?= $y['tahun_terbit'] ?>" <?= ($filters['year'] == $y['tahun_terbit']) ? 'selected' : '' ?>>
+                                    <?= $y['tahun_terbit'] ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-                    <!-- Filter Penulis (nanti pakai select2) -->
+                    <!-- Filter Penulis -->
                     <div class="col-lg-3">
-                        <select class="form-select" aria-label="Pilih penulis" style="background-color: #F0F0F0;">
-                            <option value="" disabled="" selected>Penulis</option>
-                            <option value="Fabrizio">Fabrizio</option>
-                            <option value="Romano">Romano</option>
+                        <select class="form-select" name="author" aria-label="Pilih penulis"
+                            style="background-color: #F0F0F0;" onchange="this.form.submit()">
+                            <option value="">Semua Penulis</option>
+                            <?php foreach ($authors as $auth): ?>
+                                <option value="<?= htmlspecialchars($auth['username']) ?>"
+                                    <?= ($filters['author'] == $auth['username']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($auth['nama_lengkap']) ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
-                    <!-- Bidang Riset -->
-                    <div class="col-lg-3">
+                    <!-- Bidang Riset (Hidden for now as no DB column) -->
+                    <!-- 
+                    <div class="col-lg-3 d-none">
                         <select class="form-select" aria-label="Pilih bidang"
                             style="background-color: #F0F0F0; color: #314755;">
                             <option value="" disabled="" selected>Bidang Riset</option>
-                            <option value="Malang">Malang</option>
-                            <option value="Jakarta">Jakarta</option>
                         </select>
                     </div>
+                     -->
                     <!-- Urutkan -->
-                    <div class="col-lg-3">
-                        <select class="form-select" aria-label="Urutkan berdasarkan"
-                            style="background-color: #F0F0F0; color: #314755;">
-                            <option value="" disabled="" selected>Urutkan: Terbaru</option>
-                            <option value="Newest">Terbaru</option>
-                            <option value="Oldest">Terlama</option>
-                        </select>
+                    <div class="col-lg-12 mt-2">
+                        <div class="d-flex justify-content-end align-items-center gap-2">
+                            <label class="text-muted small">Urutkan:</label>
+                            <select class="form-select w-auto" name="sort" aria-label="Urutkan berdasarkan"
+                                style="background-color: #F0F0F0; color: #314755;" onchange="this.form.submit()">
+                                <option value="Newest" <?= ($filters['sort'] == 'Newest') ? 'selected' : '' ?>>Terbaru
+                                </option>
+                                <option value="Oldest" <?= ($filters['sort'] == 'Oldest') ? 'selected' : '' ?>>Terlama
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </form>

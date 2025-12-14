@@ -3,7 +3,7 @@
         <div class="row g-4">
             <div class="col-lg-4">
                 <div class="d-flex flex-column justify-content-start">
-                    <img src="/assets/images/dt-logo.png" alt="dt-logo" style="width: 105px; height: 56px;"
+                    <img src="/assets/images/dt-logo-white.png" alt="dt-logo" style="width: 150px; height: auto;"
                         class="mb-3">
                     <p class="text-white" style="font-size: 14px;">
                         <?= htmlspecialchars($infoLab['deskripsi'] ?? 'Deskripsi Lab belum diatur.') ?>

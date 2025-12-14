@@ -16,7 +16,8 @@
                     </div>
                     <div>
                         <span class="d-block fw-bold text-dark">Email Kami</span>
-                        <span class="text-muted">lab.datatech@gmail.com</span>
+                        <span
+                            class="text-muted"><?= htmlspecialchars($infoLab['email'] ?? 'lab.datatech@gmail.com') ?></span>
                     </div>
                 </div>
             </div>

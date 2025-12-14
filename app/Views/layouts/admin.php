@@ -336,12 +336,10 @@
             <?php $role = $_SESSION['user']['role'] ?? ''; ?>
             <?php $user = $_SESSION['user'] ?? []; ?>
 
-            <?php if ($role === 'operator'): ?>
-                <a href="/admin/dashboard" class="nav-link <?= strpos($uri, '/admin/dashboard') === 0 ? 'active' : '' ?>">
-                    <i class="bi bi-speedometer2"></i>
-                    <span>Dashboard</span>
-                </a>
-            <?php endif; ?>
+            <a href="/admin/dashboard" class="nav-link <?= strpos($uri, '/admin/dashboard') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-speedometer2"></i>
+                <span>Dashboard</span>
+            </a>
 
             <a href="/admin/members" class="nav-link <?= strpos($uri, '/admin/members') === 0 ? 'active' : '' ?>">
                 <i class="bi bi-person-badge"></i>
@@ -394,6 +392,12 @@
                     <span>Persetujuan</span>
                 </a>
             <?php endif; ?>
+
+            <div class="border-top my-2 mx-3"></div>
+            <a href="/admin/my-profile" class="nav-link <?= strpos($uri, '/admin/my-profile') === 0 ? 'active' : '' ?>">
+                <i class="bi bi-person-circle"></i>
+                <span>Profil Saya</span>
+            </a>
             <div class="mt-auto border-top pt-2">
                 <a href="/logout" class="nav-link text-danger">
                     <i class="bi bi-box-arrow-right"></i>
@@ -411,21 +415,25 @@
             </button>
             <h4 class="m-0 fw-semibold"><?= $pageTitle ?? 'Dashboard' ?></h4>
             <div class="user-menu text-decoration-none text-dark">
-                <div class="text-end d-none d-sm-block">
-                    <div class="fw-semibold"><?= $user['nama_lengkap'] ?? 'Admin User' ?></div>
-                    <small class="text-muted"><?= $user['email'] ?? 'admin@example.com' ?></small>
-                </div>
-                <div class="avatar overflow-hidden rounded-circle d-flex align-items-center justify-content-center"
-                    style="width: 32px; height: 32px;">
-                    <?php if (!empty($user['foto_profil'])): ?>
-                        <img src="/uploads/foto_profil/<?= htmlspecialchars($user['foto_profil']) ?>" alt="Profile"
-                            class="w-100 h-100 object-fit-cover">
-                    <?php else: ?>
-                        <div class="bg-light text-primary w-100 h-100 d-flex align-items-center justify-content-center">
-                            <?= strtoupper(substr($user['nama_lengkap'], 0, 2)) ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                <a href="/admin/my-profile" class="text-decoration-none text-dark d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-sm-block">
+                        <div class="fw-semibold"><?= $user['nama_lengkap'] ?? 'Admin User' ?></div>
+                        <small
+                            class="badge bg-<?= ($user['role'] ?? '') === 'admin' ? 'primary' : 'secondary' ?> me-1"><?= ucfirst($user['role'] ?? '') ?></small>
+                        <small class="text-muted"><?= $user['email'] ?? 'admin@example.com' ?></small>
+                    </div>
+                    <div class="avatar overflow-hidden rounded-circle d-flex align-items-center justify-content-center"
+                        style="width: 32px; height: 32px;">
+                        <?php if (!empty($user['foto_profil'])): ?>
+                            <img src="/uploads/foto_profil/<?= htmlspecialchars($user['foto_profil']) ?>" alt="Profile"
+                                class="w-100 h-100 object-fit-cover">
+                        <?php else: ?>
+                            <div class="bg-light text-primary w-100 h-100 d-flex align-items-center justify-content-center">
+                                <?= strtoupper(substr($user['nama_lengkap'], 0, 2)) ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </a>
             </div>
         </div>
 

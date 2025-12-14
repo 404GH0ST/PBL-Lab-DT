@@ -11,7 +11,7 @@ class VisiMisi extends Model
 
     public function getAllVisiMisi()
     {
-        return $this->db->query("SELECT * FROM {$this->table} WHERE jenis_konten IN ('visi', 'misi') ORDER BY jenis_konten DESC");
+        return $this->db->query("SELECT t.*, a.nama_lengkap, a.foto_profil FROM {$this->table} t LEFT JOIN anggota a ON t.id_editor = a.id_anggota WHERE t.jenis_konten IN ('visi', 'misi') ORDER BY t.jenis_konten DESC");
     }
 
     public function getByType($type)

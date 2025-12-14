@@ -1,18 +1,16 @@
 <section id="hero">
     <div class="container d-flex flex-column justify-content-center align-items-center text-center">
-        <h1 class="fw-bold mb-4 animate-fade text-hero text-white">Laboratorium <span class="gradient-text-hero">Data
-                Technology</span></h1>
-        <p class="subtext-hero animate-fade mb-5" style="animation-delay: .2s; max-width: 800px;">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
+        <h1 class="fw-bold mb-4 animate-fade text-hero text-white">
+            Laboratorium <span style="color: #7ABC52;">Data Teknologi</span>
+        </h1>
         <div class="d-flex justify-content-center align-items-center gap-3" style="font-size: 18px;">
             <a href="/publications" class="btn btn-modern btn-primary-custom animate-fade"
                 style="animation-delay: .4s; text-decoration: none;">
-                Explore Research
+                Jelajahi Riset
             </a>
             <a href="/gallery" class="btn btn-modern btn-outline-custom animate-fade"
                 style="animation-delay: .4s; text-decoration: none;">
-                View Galeri
+                Lihat Galeri
             </a>
         </div>
     </div>
@@ -159,7 +157,7 @@
                         </div>
                         <div class="p-4 rounded-3" style="background-color: #E8F5E9;">
                             <div class="text-black mb-0" style="line-height: 1.7;">
-                                <?= $visi['isi_konten'] ?>
+                                <?= $visi['isi_konten'] ?? 'Visi belum tersedia.' ?>
                             </div>
                         </div>
                     </div>
@@ -177,7 +175,7 @@
                         <?php
                         // Parse Mission Content to split by points
                         $missionPoints = [];
-                        $content = $misi['isi_konten'];
+                        $content = $misi['isi_konten'] ?? '';
 
                         if (strpos($content, '<li') !== false) {
                             preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $content, $matches);
@@ -201,7 +199,7 @@
                         <?php else: ?>
                             <div class="p-4 rounded-3" style="background-color: #E8F5E9;">
                                 <div class="text-black mb-0" style="line-height: 1.7;">
-                                    <?= $misi['isi_konten'] ?>
+                                    <?= $misi['isi_konten'] ?? 'Misi belum tersedia.' ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -460,7 +458,8 @@
                     </div>
                     <div>
                         <span class="d-block fw-bold text-dark">Email Kami</span>
-                        <span class="text-muted">lab.datatech@gmail.com</span>
+                        <span
+                            class="text-muted"><?= htmlspecialchars($infoLab['email'] ?? 'lab.datatech@gmail.com') ?></span>
                     </div>
                 </div>
             </div>

@@ -54,6 +54,11 @@ class ActivityController extends Controller
             'id_penulis' => $_POST['id_penulis'] ?? $_SESSION['user']['id']
         ];
 
+        // Reset status to pending if not admin
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         if ($this->activityModel->updateActivity($id, $data)) {
             $_SESSION['flash_success'] = 'Kegiatan berhasil diperbarui.';
             header('Location: /admin/activities');

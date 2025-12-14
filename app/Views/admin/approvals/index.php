@@ -218,7 +218,7 @@
                                                         <form action="/admin/approvals/news/<?= $item['id_berita'] ?>/approve"
                                                             method="POST">
                                                             <button type="submit"
-                                                                class="btn btn-success btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                                                                class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
                                                                 <i class="bi bi-check-lg"></i> Setujui
                                                             </button>
                                                         </form>
@@ -285,7 +285,7 @@
                                                     <form action="/admin/approvals/gallery/<?= $item['id_galeri'] ?>/approve"
                                                         method="POST" class="d-grid">
                                                         <button type="submit"
-                                                            class="btn btn-success btn-sm fw-semibold shadow-sm">
+                                                            class="btn btn-primary btn-sm fw-semibold shadow-sm">
                                                             <i class="bi bi-check-lg me-1"></i> Setujui Foto
                                                         </button>
                                                     </form>
@@ -387,7 +387,7 @@
                                                             action="/admin/approvals/publication/<?= $item['id_publikasi'] ?>/approve"
                                                             method="POST">
                                                             <button type="submit"
-                                                                class="btn btn-success btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                                                                class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
                                                                 <i class="bi bi-check-lg"></i> Setujui
                                                             </button>
                                                         </form>
@@ -431,17 +431,23 @@
                                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($item['judul_kegiatan']) ?>
                                                 </h5>
                                                 <p class="card-text text-muted small">
-                                                    <?= htmlspecialchars(substr(strip_tags($item['deskripsi']), 0, 100)) ?>...
+                                                    <?= htmlspecialchars(strip_tags($item['deskripsi'])) ?>
                                                 </p>
                                                 <div class="d-flex align-items-center gap-2 mb-3">
-                                                    <i class="bi bi-person-circle text-secondary"></i>
+                                                    <?php if (!empty($item['foto_profil'])): ?>
+                                                        <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>"
+                                                            alt="Profile" class="rounded-circle"
+                                                            style="width: 24px; height: 24px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <i class="bi bi-person-circle text-secondary"></i>
+                                                    <?php endif; ?>
                                                     <span
                                                         class="text-sm fw-medium"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
                                                 </div>
                                                 <div class="d-grid gap-2">
                                                     <form action="/admin/approvals/activity/<?= $item['id_kegiatan'] ?>/approve"
                                                         method="POST">
-                                                        <button type="submit" class="btn btn-success btn-sm w-100"><i
+                                                        <button type="submit" class="btn btn-primary btn-sm w-100"><i
                                                                 class="bi bi-check-lg me-1"></i> Setujui</button>
                                                     </form>
                                                     <button type="button" class="btn btn-outline-danger btn-sm w-100"
@@ -482,10 +488,16 @@
                                                     <?= htmlspecialchars($item['judul_perkuliahan']) ?>
                                                 </h5>
                                                 <p class="card-text text-muted small">
-                                                    <?= htmlspecialchars(substr(strip_tags($item['deskripsi']), 0, 100)) ?>...
+                                                    <?= htmlspecialchars(strip_tags($item['deskripsi'])) ?>
                                                 </p>
                                                 <div class="d-flex align-items-center gap-2 mb-3">
-                                                    <i class="bi bi-person-circle text-secondary"></i>
+                                                    <?php if (!empty($item['foto_profil'])): ?>
+                                                        <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>"
+                                                            alt="Profile" class="rounded-circle"
+                                                            style="width: 24px; height: 24px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <i class="bi bi-person-circle text-secondary"></i>
+                                                    <?php endif; ?>
                                                     <span
                                                         class="text-sm fw-medium"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
                                                 </div>
@@ -493,7 +505,7 @@
                                                     <form
                                                         action="/admin/approvals/course/<?= $item['id_perkuliahan'] ?>/approve"
                                                         method="POST">
-                                                        <button type="submit" class="btn btn-success btn-sm w-100"><i
+                                                        <button type="submit" class="btn btn-primary btn-sm w-100"><i
                                                                 class="bi bi-check-lg me-1"></i> Setujui</button>
                                                     </form>
                                                     <button type="button" class="btn btn-outline-danger btn-sm w-100"
@@ -548,7 +560,7 @@
                                                         <form action="/admin/approvals/focus/<?= $item['id_fokus'] ?>/approve"
                                                             method="POST">
                                                             <button type="submit"
-                                                                class="btn btn-success btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                                                                class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
                                                                 <i class="bi bi-check-lg"></i> Setujui
                                                             </button>
                                                         </form>
@@ -598,13 +610,24 @@
                                                 <h5 class="card-title fw-bold"><?= htmlspecialchars($item['nama_fasilitas']) ?>
                                                 </h5>
                                                 <p class="card-text text-muted small">
-                                                    <?= htmlspecialchars(substr(strip_tags($item['deskripsi'] ?? ''), 0, 100)) ?>...
+                                                    <?= htmlspecialchars(strip_tags($item['deskripsi'] ?? '')) ?>
                                                 </p>
+                                                <div class="d-flex align-items-center gap-2 mb-3">
+                                                    <?php if (!empty($item['foto_profil'])): ?>
+                                                        <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>"
+                                                            alt="Profile" class="rounded-circle"
+                                                            style="width: 24px; height: 24px; object-fit: cover;">
+                                                    <?php else: ?>
+                                                        <i class="bi bi-person-circle text-secondary"></i>
+                                                    <?php endif; ?>
+                                                    <span
+                                                        class="text-sm fw-medium"><?= htmlspecialchars($item['penulis'] ?? 'Unknown') ?></span>
+                                                </div>
                                                 <div class="d-grid gap-2">
                                                     <form
                                                         action="/admin/approvals/fasilitas/<?= $item['id_fasilitas'] ?>/approve"
                                                         method="POST">
-                                                        <button type="submit" class="btn btn-success btn-sm w-100"><i
+                                                        <button type="submit" class="btn btn-primary btn-sm w-100"><i
                                                                 class="bi bi-check-lg me-1"></i> Setujui</button>
                                                     </form>
                                                     <button type="button" class="btn btn-outline-danger btn-sm w-100"
@@ -634,10 +657,7 @@
                         <?php else: ?>
                             <div class="card border-0 shadow-sm rounded-4">
                                 <div class="card-body">
-                                    <div class="alert alert-warning mb-4">
-                                        <i class="bi bi-exclamation-triangle-fill me-2"></i> Perubahan Informasi
-                                        Laboratorium Menunggu Persetujuan
-                                    </div>
+
                                     <?php
                                     // Should be only one pending info lab record usually, or singleton pattern
                                     $item = $pendingInfoLab[0];
@@ -647,15 +667,58 @@
                                         <dd class="col-sm-9"><?= htmlspecialchars($item['nama_lab']) ?></dd>
 
                                         <dt class="col-sm-3">Deskripsi</dt>
-                                        <dd class="col-sm-9"><?= htmlspecialchars(substr($item['deskripsi'], 0, 150)) ?>...
-                                        </dd>
+                                        <dd class="col-sm-9"><?= htmlspecialchars($item['deskripsi']) ?></dd>
 
                                         <dt class="col-sm-3">Alamat</dt>
                                         <dd class="col-sm-9"><?= htmlspecialchars($item['alamat'] ?? '-') ?></dd>
+
+                                        <dt class="col-sm-3">Kontak</dt>
+                                        <dd class="col-sm-9">
+                                            <div><i class="bi bi-envelope me-2 text-muted"></i>
+                                                <?= htmlspecialchars($item['email'] ?? '-') ?></div>
+                                            <div><i class="bi bi-telephone me-2 text-muted"></i>
+                                                <?= htmlspecialchars($item['telepon'] ?? '-') ?></div>
+                                        </dd>
+
+                                        <dt class="col-sm-3">Tautan</dt>
+                                        <dd class="col-sm-9">
+                                            <div class="d-flex gap-2 flex-wrap">
+                                                <?php if (!empty($item['link_maps'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_maps']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-secondary" title="Google Maps"><i
+                                                            class="bi bi-geo-alt-fill"></i> Maps</a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($item['link_instagram'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_instagram']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-danger" title="Instagram"><i
+                                                            class="bi bi-instagram"></i></a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($item['link_linkedin'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_linkedin']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-primary" title="LinkedIn"><i
+                                                            class="bi bi-linkedin"></i></a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($item['link_facebook'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_facebook']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-primary" title="Facebook"><i
+                                                            class="bi bi-facebook"></i></a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($item['link_twitter'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_twitter']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-dark" title="Twitter/X"><i
+                                                            class="bi bi-twitter-x"></i></a>
+                                                <?php endif; ?>
+                                                <?php if (!empty($item['link_youtube'])): ?>
+                                                    <a href="<?= htmlspecialchars($item['link_youtube']) ?>" target="_blank"
+                                                        class="btn btn-sm btn-outline-danger" title="YouTube"><i
+                                                            class="bi bi-youtube"></i></a>
+                                                <?php endif; ?>
+                                            </div>
+                                        </dd>
                                     </dl>
                                     <div class="d-flex gap-2">
                                         <form action="/admin/approvals/info_lab/<?= $item['id'] ?>/approve" method="POST">
-                                            <button type="submit" class="btn btn-success btn-sm px-4"><i
+                                            <button type="submit" class="btn btn-primary btn-sm px-4"><i
                                                     class="bi bi-check-lg me-1"></i> Setujui Perubahan</button>
                                         </form>
                                         <button type="button" class="btn btn-outline-danger btn-sm px-4"
@@ -691,6 +754,9 @@
                                                 class="py-3 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                                                 Konten</th>
                                             <th
+                                                class="py-3 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
+                                                Editor</th>
+                                            <th
                                                 class="text-end pe-4 py-3 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
                                                 Aksi</th>
                                         </tr>
@@ -699,16 +765,35 @@
                                         <?php foreach ($pendingVisiMisi as $item): ?>
                                             <tr>
                                                 <td class="ps-4 fw-bold text-dark text-capitalize">
-                                                    <?= htmlspecialchars($item['jenis_konten']) ?></td>
-                                                <td><small
-                                                        class="text-muted"><?= htmlspecialchars(substr(strip_tags($item['isi_konten']), 0, 100)) ?>...</small>
+                                                    <?= htmlspecialchars($item['jenis_konten']) ?>
+                                                </td>
+                                                <td>
+                                                    <div class="text-muted small"><?= $item['isi_konten'] ?></div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <div class="avatar-sm rounded-circle overflow-hidden"
+                                                            style="width: 24px; height: 24px;">
+                                                            <?php if (!empty($item['foto_profil'])): ?>
+                                                                <img src="/uploads/foto_profil/<?= htmlspecialchars($item['foto_profil']) ?>"
+                                                                    alt="Profile" class="w-100 h-100 object-fit-cover">
+                                                            <?php else: ?>
+                                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold"
+                                                                    style="font-size: 0.6rem;">
+                                                                    <?= strtoupper(substr($item['nama_lengkap'] ?? '?', 0, 1)) ?>
+                                                                </div>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                        <span
+                                                            class="text-sm fw-medium"><?= htmlspecialchars($item['nama_lengkap'] ?? '-') ?></span>
+                                                    </div>
                                                 </td>
                                                 <td class="text-end pe-4">
                                                     <div class="d-flex justify-content-end gap-2">
                                                         <form action="/admin/approvals/visi_misi/<?= $item['id'] ?>/approve"
                                                             method="POST">
                                                             <button type="submit"
-                                                                class="btn btn-success btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                                                                class="btn btn-primary btn-sm px-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
                                                                 <i class="bi bi-check-lg"></i> Setujui
                                                             </button>
                                                         </form>
@@ -766,6 +851,34 @@
                     </div>
 
                     <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Helper to get query param
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const type = urlParams.get('type');
+
+                            // Map types to tab selectors
+                            const tabMap = {
+                                'news': '#news-tab',
+                                'gallery': '#gallery-tab',
+                                'publication': '#publications-tab',
+                                'activity': '#activities-tab',
+                                'course': '#courses-tab',
+                                'focus': '#focus-tab',
+                                'fasilitas': '#fasilitas-tab',
+                                'info_lab': '#infolab-tab',
+                                'visi_misi': '#visimisi-tab'
+                            };
+
+                            if (type && tabMap[type]) {
+                                const tabTrigger = document.querySelector(tabMap[type]);
+                                if (tabTrigger) {
+                                    // Use Bootstrap's Tab API to show the tab
+                                    const tab = new bootstrap.Tab(tabTrigger);
+                                    tab.show();
+                                }
+                            }
+                        });
+
                         function openRejectModal(type, id) {
                             const form = document.getElementById('rejectForm');
                             form.action = `/admin/approvals/${type}/${id}/reject`;

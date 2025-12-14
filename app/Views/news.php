@@ -57,12 +57,8 @@
         <h2 class="text-vision-gradient" style="font-size: 40px; font-weight: bold;">Berita & Artikel Laboratorium</h2>
 
         <div class="d-flex justify-content-between align-items-center my-4">
-            <ul class="nav nav-tabs gallery-tabs justify-content-start">
-                <li class="nav-item"><a class="nav-link active" href="#">Semua</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Kegiatan</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Ruang Lab</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Acara</a></li>
-            </ul>
+            <!-- Filter removed as requested -->
+            <div></div>
             <form method="GET" action="/news">
                 <div class="input-group w-100">
                     <input type="text" name="search" value="<?= htmlspecialchars($keyword ?? '') ?>"
@@ -104,7 +100,7 @@
             <?php endif; ?>
         </div>
 
-         <!-- Pagination -->
+        <!-- Pagination -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center align-items-center mx-auto mt-4 p-2 rounded-3 custom-pagination"
                 style="width: fit-content; background-color: #F0F0F0;">

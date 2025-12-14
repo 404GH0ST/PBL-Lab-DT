@@ -11,17 +11,17 @@ class Activity extends Model
 
     public function getAllActivities()
     {
-        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota ORDER BY k.id_kegiatan ASC");
+        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota ORDER BY k.id_kegiatan ASC");
     }
 
     public function getAllApprovedActivities()
     {
-        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.status = 'approved' ORDER BY k.id_kegiatan ASC");
+        return $this->db->query("SELECT k.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.status = 'approved' ORDER BY k.id_kegiatan ASC");
     }
 
     public function getActivityById($id)
     {
-        $result = $this->db->query("SELECT k.*, a.nama_lengkap as penulis FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.id_kegiatan = :id", ['id' => $id]);
+        $result = $this->db->query("SELECT k.*, a.nama_lengkap as penulis, a.foto_profil FROM {$this->table} k LEFT JOIN anggota a ON k.id_penulis = a.id_anggota WHERE k.id_kegiatan = :id", ['id' => $id]);
         return $result[0] ?? null;
     }
 
@@ -79,5 +79,24 @@ class Activity extends Model
     public function deleteActivity($id)
     {
         return $this->db->execute("DELETE FROM {$this->table} WHERE id_kegiatan = :id", ['id' => $id]);
+    }
+
+    public function countApprovedActivities()
+    {
+        $result = $this->db->query("SELECT COUNT(*) as total FROM {$this->table} WHERE status = 'approved'");
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getPaginatedApprovedActivities($limit, $offset)
+    {
+        return $this->db->query(
+            "SELECT k.*, a.nama_lengkap as penulis, a.foto_profil 
+             FROM {$this->table} k 
+             LEFT JOIN anggota a ON k.id_penulis = a.id_anggota 
+             WHERE k.status = 'approved' 
+             ORDER BY k.id_kegiatan ASC 
+             LIMIT :limit OFFSET :offset",
+            ['limit' => $limit, 'offset' => $offset]
+        );
     }
 }

@@ -24,7 +24,7 @@ CREATE TYPE role_enum AS ENUM ('admin', 'operator');
 -- Enum untuk Status Approval (Penting untuk fitur ACC Admin)
 CREATE TYPE status_approval_enum AS ENUM ('pending', 'approved', 'rejected');
 -- Enum untuk Jenis Konten Profil
-CREATE TYPE jenis_konten_enum AS ENUM ('visi', 'misi', 'sejarah', 'struktur_organisasi');
+CREATE TYPE jenis_konten_enum AS ENUM ('visi', 'misi', 'struktur_organisasi');
 -- Enum untuk Kondisi Fasilitas
 CREATE TYPE kondisi_enum AS ENUM ('baik', 'rusak_ringan', 'rusak_berat');
 -- Enum untuk Jenis Publikasi
@@ -167,7 +167,9 @@ CREATE TABLE fasilitas (
     id_admin_penilai INT NULL,
     catatan_admin TEXT NULL,
     tanggal_validasi TIMESTAMP NULL,
+    id_penulis INT,
     -- Relasi
+    CONSTRAINT fk_fasilitas_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     CONSTRAINT fk_fasilitas_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -185,7 +187,6 @@ CREATE TABLE IF NOT EXISTS fokus_riset (
     id_penulis INT,
     id_editor INT NULL,
     -- Relasi
-    CONSTRAINT fk_fokus_riset_editor FOREIGN KEY (id_editor) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     CONSTRAINT fk_fokus_riset_penulis FOREIGN KEY (id_penulis) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     CONSTRAINT fk_fokus_riset_admin FOREIGN KEY (id_admin_penilai) REFERENCES anggota(id_anggota) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -238,7 +239,6 @@ CREATE TABLE activity_logs (
     module VARCHAR(50) NOT NULL, -- 'Berita', 'Galeri', etc.
     resource_id INT NULL,
     resource_name VARCHAR(255),
-    meta_data JSONB DEFAULT '{}',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_activity_user FOREIGN KEY (user_id) REFERENCES anggota(id_anggota) ON DELETE SET NULL
 );

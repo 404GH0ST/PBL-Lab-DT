@@ -190,6 +190,9 @@
                     </table>
                 </div>
             </div>
+            <div class="card-footer bg-white border-0 pt-3 pb-3 mt-2">
+                <?= $pagination->renderAdmin($baseUrl) ?>
+            </div>
         </div>
     </div>
 </div>

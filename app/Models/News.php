@@ -106,6 +106,17 @@ class News extends Model
         return $result[0]['total'] ?? 0;
     }
 
+    public function searchApprovedNewsByAuthor($authorId, $keyword)
+    {
+        $sql = "SELECT b.*, a.nama_lengkap as penulis, a.foto_profil, a.username 
+                FROM {$this->table} b
+                JOIN anggota a ON b.id_penulis = a.id_anggota
+                WHERE b.status = 'approved' AND b.id_penulis = :id
+                AND (b.judul LIKE :keyword OR b.isi_berita LIKE :keyword)
+                ORDER BY b.tanggal_posting DESC";
+        return $this->db->query($sql, ['id' => $authorId, 'keyword' => "%$keyword%"]);
+    }
+
     public function createNews($data)
     {
         $sql = "INSERT INTO {$this->table} (judul, slug, isi_berita, gambar_utama, id_penulis, status) 

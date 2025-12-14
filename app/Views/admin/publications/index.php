@@ -1,13 +1,13 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <div>
-            <h5 class="card-title mb-1 fw-bold text-dark">Publications List</h5>
-            <p class="text-muted small mb-0">Manage research publications and journals</p>
+            <h5 class="card-title mb-1 fw-bold text-dark">Daftar Publikasi</h5>
+            <p class="text-muted small mb-0">Kelola publikasi penelitian dan jurnal</p>
         </div>
         <button type="button" class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
             data-bs-target="#addPublicationModal">
             <i class="bi bi-plus-lg"></i>
-            <span>Add Publication</span>
+            <span>Tambah Publikasi</span>
         </button>
     </div>
     <div class="card-body p-0">
@@ -15,13 +15,13 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Title</th>
-                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Citations</th>
-                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Year</th>
-                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Author</th>
+                        <th class="ps-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Judul</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Sitasi</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tahun</th>
+                        <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Penulis</th>
                         <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
                         <th class="text-end pe-4 text-uppercase text-secondary text-xs font-weight-bolder opacity-7">
-                            Actions</th>
+                            Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,7 +30,7 @@
                             <td colspan="6" class="text-center py-5 text-muted">
                                 <div class="d-flex flex-column align-items-center">
                                     <i class="bi bi-journal-text display-4 mb-3 opacity-50"></i>
-                                    <p class="mb-0">No publications found</p>
+                                    <p class="mb-0">Belum ada publikasi ditemukan</p>
                                 </div>
                             </td>
                         </tr>
@@ -55,7 +55,7 @@
                                             style="width: 32px; height: 32px;">
                                             <?php if (!empty($pub['foto_profil'])): ?>
                                                 <img src="/uploads/foto_profil/<?= htmlspecialchars($pub['foto_profil']) ?>"
-                                                    alt="Profile" class="w-100 h-100 object-fit-cover">
+                                                    alt="Profil" class="w-100 h-100 object-fit-cover">
                                             <?php else: ?>
                                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary fw-bold"
                                                     style="font-size: 0.8rem;">
@@ -90,18 +90,18 @@
                                     <div class="d-flex align-items-center gap-1 justify-content-end">
                                         <?php if (!empty($pub['link_publikasi'])): ?>
                                             <a href="<?= htmlspecialchars($pub['link_publikasi']) ?>" target="_blank"
-                                                class="btn btn-sm btn-light text-info" title="View Link">
+                                                class="btn btn-sm btn-light text-info" title="Lihat Tautan">
                                                 <i class="bi bi-link-45deg"></i>
                                             </a>
                                         <?php endif; ?>
                                         <button class="btn btn-sm btn-light text-primary"
                                             onclick="editPublication(<?= $pub['id_publikasi'] ?>, '<?= htmlspecialchars($pub['judul_publikasi']) ?>', <?= $pub['tahun_terbit'] ?>, '<?= htmlspecialchars($pub['link_publikasi'] ?? '') ?>', '<?= htmlspecialchars($pub['deskripsi'] ?? '') ?>', <?= $pub['id_anggota'] ?>, '<?= $pub['status'] ?>', '<?= htmlspecialchars($pub['catatan_admin'] ?? '') ?>', <?= $pub['citation_count'] ?? 0 ?>)"
                                             data-bs-toggle="modal" data-bs-target="#editPublicationModal"
-                                            title="Edit Publication">
+                                            title="Edit Publikasi">
                                             <i class="bi bi-pencil"></i>
                                         </button>
                                         <button type="button" class="btn btn-sm btn-light text-danger"
-                                            onclick="confirmDelete(<?= $pub['id_publikasi'] ?>)" title="Delete Publication">
+                                            onclick="confirmDelete(<?= $pub['id_publikasi'] ?>)" title="Hapus Publikasi">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
@@ -123,30 +123,30 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">Add New Publication</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold">Tambah Publikasi Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <form action="/admin/publications" method="POST">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="judul_publikasi" class="form-label">Title</label>
+                            <label for="judul_publikasi" class="form-label">Judul</label>
                             <input type="text" class="form-control" id="judul_publikasi" name="judul_publikasi"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="citation_count" class="form-label">Citations</label>
+                            <label for="citation_count" class="form-label">Sitasi</label>
                             <input type="number" class="form-control" id="citation_count" name="citation_count"
                                 value="0" min="0">
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="tahun_terbit" class="form-label">Year</label>
+                            <label for="tahun_terbit" class="form-label">Tahun</label>
                             <input type="number" class="form-control" id="tahun_terbit" name="tahun_terbit"
                                 value="<?= date('Y') ?>" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="id_anggota" class="form-label">Author</label>
+                            <label for="id_anggota" class="form-label">Penulis</label>
                             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'operator'): ?>
                                 <input type="text" class="form-control"
                                     value="<?= htmlspecialchars($_SESSION['user']['nama_lengkap']) ?>" disabled>
@@ -165,9 +165,9 @@
                             <div class="col-md-6 mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-select" id="status" name="status">
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
-                                    <option value="rejected">Rejected</option>
+                                    <option value="pending">Tertunda</option>
+                                    <option value="approved">Disetujui</option>
+                                    <option value="rejected">Ditolak</option>
                                 </select>
                             </div>
                         <?php endif; ?>
@@ -183,8 +183,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary px-4">Create Publication</button>
+                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4">Buat Publikasi</button>
                 </div>
             </form>
         </div>
@@ -196,30 +196,30 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold">Edit Publication</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold">Edit Publikasi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <form id="editPublicationForm" action="" method="POST">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-3">
-                            <label for="edit_judul_publikasi" class="form-label">Title</label>
+                            <label for="edit_judul_publikasi" class="form-label">Judul</label>
                             <input type="text" class="form-control" id="edit_judul_publikasi" name="judul_publikasi"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="edit_citation_count" class="form-label">Citations</label>
+                            <label for="edit_citation_count" class="form-label">Sitasi</label>
                             <input type="number" class="form-control" id="edit_citation_count" name="citation_count"
                                 min="0">
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="edit_tahun_terbit" class="form-label">Year</label>
+                            <label for="edit_tahun_terbit" class="form-label">Tahun</label>
                             <input type="number" class="form-control" id="edit_tahun_terbit" name="tahun_terbit"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="edit_id_anggota" class="form-label">Author</label>
+                            <label for="edit_id_anggota" class="form-label">Penulis</label>
                             <select class="form-select" id="edit_id_anggota" name="id_anggota" disabled>
                                 <?php foreach ($members as $member): ?>
                                     <option value="<?= $member['id_anggota'] ?>">
@@ -227,14 +227,12 @@
                                     </option>
                                 <?php endforeach; ?>
                             </select>
-                            <div class="form-text">Author cannot be changed.</div>
+                            <div class="form-text">Penulis tidak dapat diubah.</div>
                         </div>
                         <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
                             <div class="col-md-6 mb-3">
                                 <label for="edit_status" class="form-label">Status</label>
                                 <select class="form-select" id="edit_status" name="status">
-                                    <option value="pending">Pending</option>
-                                    <option value="approved">Approved</option>
                                     <option value="pending">Tertunda</option>
                                     <option value="approved">Disetujui</option>
                                     <option value="rejected">Ditolak</option>
@@ -259,8 +257,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary px-4">Update Changes</button>
+                    <button type="button" class="btn btn-light text-muted" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary px-4">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -272,15 +270,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fw-bold text-danger">Confirm Deletion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title fw-bold text-danger">Konfirmasi Hapus</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this publication? This action cannot be undone.
+                Apakah Anda yakin ingin menghapus publikasi ini? Tindakan ini tidak dapat dibatalkan.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Hapus</button>
             </div>
         </div>
     </div>
@@ -339,7 +337,7 @@
 
             if (!isValid) {
                 e.preventDefault();
-                alert('Please fill in all required fields.');
+                alert('Mohon isi semua field yang wajib.');
             }
         });
 

@@ -53,10 +53,6 @@
                         href="/contact">Kontak</a>
                 </li>
 
-                <li class="nav-item ms-lg-2">
-                    <a class="btn btn-sm btn-primary-custom px-4 rounded-3" href="/login"
-                        style="text-decoration: none;">Login</a>
-                </li>
             </ul>
         </div>
     </div>

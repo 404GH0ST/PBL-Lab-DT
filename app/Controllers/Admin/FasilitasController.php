@@ -31,6 +31,13 @@ class FasilitasController extends Controller
 
         // Handle Photo Upload
         if (isset($_FILES['foto_fasilitas']) && $_FILES['foto_fasilitas']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['foto_fasilitas']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/fasilitas');
+                return;
+            }
+
             $uploadDir = __DIR__ . '/../../../public/uploads/fasilitas/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
@@ -43,6 +50,8 @@ class FasilitasController extends Controller
                 $data['foto_fasilitas'] = 'uploads/fasilitas/' . $fileName;
             }
         }
+
+        $data['id_penulis'] = $_SESSION['user']['id'] ?? null;
 
         $created = $this->fasilitasModel->createFacility($data);
         if ($created) {
@@ -58,8 +67,20 @@ class FasilitasController extends Controller
     {
         $data = $_POST;
 
+        // Reset status to pending if not admin
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+            $data['status'] = 'pending';
+        }
+
         // Handle Photo Upload (optional)
         if (isset($_FILES['foto_fasilitas']) && $_FILES['foto_fasilitas']['error'] === UPLOAD_ERR_OK) {
+            // Check file size (2MB limit)
+            if ($_FILES['foto_fasilitas']['size'] > 2 * 1024 * 1024) {
+                $_SESSION['flash_error'] = 'Ukuran file terlalu besar. Maksimal 2MB.';
+                $this->redirect('/admin/fasilitas');
+                return;
+            }
+
             $uploadDir = __DIR__ . '/../../../public/uploads/fasilitas/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);

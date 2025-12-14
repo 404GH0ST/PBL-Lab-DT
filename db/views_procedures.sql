@@ -20,7 +20,10 @@ SELECT
         (SELECT COUNT(*) FROM publikasi WHERE status = 'pending') +
         (SELECT COUNT(*) FROM kegiatan WHERE status = 'pending') +
         (SELECT COUNT(*) FROM perkuliahan WHERE status = 'pending') +
-        (SELECT COUNT(*) FROM fokus_riset WHERE status = 'pending')
+        (SELECT COUNT(*) FROM fokus_riset WHERE status = 'pending') +
+        (SELECT COUNT(*) FROM fasilitas WHERE status = 'pending') +
+        (SELECT COUNT(*) FROM info_lab WHERE status = 'pending') +
+        (SELECT COUNT(*) FROM profil_lab WHERE status = 'pending')
     ) AS pending_approvals;
 
 -- 2. Stored Procedure to Refresh Stats
@@ -126,7 +129,7 @@ BEGIN
         action_type := 'create';
         
         -- Get User ID (generic approach)
-        IF TG_TABLE_NAME = 'berita' OR TG_TABLE_NAME = 'kegiatan' OR TG_TABLE_NAME = 'perkuliahan' OR TG_TABLE_NAME = 'fokus_riset' THEN
+        IF TG_TABLE_NAME = 'berita' OR TG_TABLE_NAME = 'kegiatan' OR TG_TABLE_NAME = 'perkuliahan' OR TG_TABLE_NAME = 'fokus_riset' OR TG_TABLE_NAME = 'fasilitas' THEN
             user_id := NEW.id_penulis;
         ELSIF TG_TABLE_NAME = 'galeri' THEN
             user_id := NEW.id_uploader;
@@ -342,7 +345,8 @@ BEGIN
         (SELECT COUNT(*) FROM publikasi WHERE id_anggota = user_id AND status = 'approved') +
         (SELECT COUNT(*) FROM kegiatan WHERE id_penulis = user_id AND status = 'approved') +
         (SELECT COUNT(*) FROM perkuliahan WHERE id_penulis = user_id AND status = 'approved') +
-        (SELECT COUNT(*) FROM fokus_riset WHERE id_penulis = user_id AND status = 'approved')
+        (SELECT COUNT(*) FROM fokus_riset WHERE id_penulis = user_id AND status = 'approved') +
+        (SELECT COUNT(*) FROM fasilitas WHERE id_penulis = user_id AND status = 'approved')
     ) as my_contributions,
     (
         (SELECT COUNT(*) FROM berita WHERE id_penulis = user_id AND status = 'pending') +
@@ -350,7 +354,8 @@ BEGIN
         (SELECT COUNT(*) FROM publikasi WHERE id_anggota = user_id AND status = 'pending') +
         (SELECT COUNT(*) FROM kegiatan WHERE id_penulis = user_id AND status = 'pending') +
         (SELECT COUNT(*) FROM perkuliahan WHERE id_penulis = user_id AND status = 'pending') +
-        (SELECT COUNT(*) FROM fokus_riset WHERE id_penulis = user_id AND status = 'pending')
+        (SELECT COUNT(*) FROM fokus_riset WHERE id_penulis = user_id AND status = 'pending') +
+        (SELECT COUNT(*) FROM fasilitas WHERE id_penulis = user_id AND status = 'pending')
     ) as my_pending;
 END;
 $$;

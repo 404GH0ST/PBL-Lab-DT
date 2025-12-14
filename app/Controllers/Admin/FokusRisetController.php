@@ -50,7 +50,6 @@ class FokusRisetController extends Controller
             $data['id_penulis'] = $userId;
         }
 
-        $data['id_editor'] = $userId;
         $data['status'] = $status;
 
         if ($status === 'approved') {

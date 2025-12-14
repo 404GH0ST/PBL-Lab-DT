@@ -53,9 +53,15 @@ class DashboardController extends Controller
             }
         }
 
-        // Fetch Recent Activity (using ActivityLog View)
+        // Fetch Recent Activity (using ActivityLog View and Pagination)
         $activityLogModel = new \App\Models\ActivityLog($this->db());
-        $logs = $activityLogModel->getRecentActivities(10);
+
+        $page = $_GET['page'] ?? 1;
+        $limit = 10;
+        $totalLogs = $activityLogModel->countAllLogs();
+        $pagination = new \Core\Pagination($totalLogs, $limit, $page);
+
+        $logs = $activityLogModel->getPaginatedLogs($limit, $pagination->getOffset());
 
         $recentActivity = array_map(function ($log) {
             // Map Action Type to Human Readable Action
@@ -104,7 +110,9 @@ class DashboardController extends Controller
             'pageTitle' => 'Ringkasan Dashboard',
             'stats' => $viewStats,
             'recentActivity' => $recentActivity,
-            'topContributors' => $topContributors
+            'topContributors' => $topContributors,
+            'pagination' => $pagination,
+            'baseUrl' => '/admin/dashboard'
         ]);
     }
 }

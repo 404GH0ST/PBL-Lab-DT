@@ -158,4 +158,118 @@ class Publication extends Model
         $sql = "SELECT * FROM get_sorted_publications(:limit)";
         return $this->db->query($sql, ['limit' => $limit]);
     }
+
+    public function countSearchPublications($keyword)
+    {
+        $sql = "SELECT COUNT(*) as total FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE p.status = 'approved' AND (p.judul_publikasi LIKE :keyword OR a.nama_lengkap LIKE :keyword OR p.deskripsi LIKE :keyword)";
+        $result = $this->db->query($sql, ['keyword' => "%$keyword%"]);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function searchPublications($keyword, $limit, $offset)
+    {
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis, a.foto_profil, a.username 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE p.status = 'approved' AND (p.judul_publikasi LIKE :keyword OR a.nama_lengkap LIKE :keyword OR p.deskripsi LIKE :keyword)
+                ORDER BY p.tahun_terbit DESC
+                LIMIT :limit OFFSET :offset";
+        return $this->db->query($sql, ['keyword' => "%$keyword%", 'limit' => $limit, 'offset' => $offset]);
+    }
+    public function getFilteredPublications($filters, $limit, $offset)
+    {
+        $fields = ["p.status = 'approved'"];
+        $params = [];
+
+        if (!empty($filters['search'])) {
+            $fields[] = "(p.judul_publikasi LIKE :search OR a.nama_lengkap LIKE :search OR p.deskripsi LIKE :search)";
+            $params['search'] = "%{$filters['search']}%";
+        }
+
+        if (!empty($filters['year'])) {
+            $fields[] = "p.tahun_terbit = :year";
+            $params['year'] = $filters['year'];
+        }
+
+        if (!empty($filters['author'])) {
+            $fields[] = "a.username = :author"; // Using username for SEO friendly URL if possible, or ID
+            $params['author'] = $filters['author'];
+        }
+
+        $where = implode(' AND ', $fields);
+
+        $orderBy = "p.tahun_terbit DESC";
+        if (!empty($filters['sort'])) {
+            switch ($filters['sort']) {
+                case 'Oldest':
+                    $orderBy = "p.tahun_terbit ASC";
+                    break;
+                case 'Newest':
+                    $orderBy = "p.tahun_terbit DESC";
+                    break;
+            }
+        }
+
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis, a.foto_profil, a.username 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE {$where}
+                ORDER BY {$orderBy}
+                LIMIT :limit OFFSET :offset";
+
+        $params['limit'] = $limit;
+        $params['offset'] = $offset;
+
+        return $this->db->query($sql, $params);
+    }
+
+    public function countFilteredPublications($filters)
+    {
+        $fields = ["p.status = 'approved'"];
+        $params = [];
+
+        if (!empty($filters['search'])) {
+            $fields[] = "(p.judul_publikasi LIKE :search OR a.nama_lengkap LIKE :search OR p.deskripsi LIKE :search)";
+            $params['search'] = "%{$filters['search']}%";
+        }
+
+        if (!empty($filters['year'])) {
+            $fields[] = "p.tahun_terbit = :year";
+            $params['year'] = $filters['year'];
+        }
+
+        if (!empty($filters['author'])) {
+            $fields[] = "a.username = :author";
+            $params['author'] = $filters['author'];
+        }
+
+        $where = implode(' AND ', $fields);
+
+        $sql = "SELECT COUNT(*) as total 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE {$where}";
+
+        $result = $this->db->query($sql, $params);
+        return $result[0]['total'] ?? 0;
+    }
+
+    public function getDistinctYears()
+    {
+        $sql = "SELECT DISTINCT tahun_terbit FROM {$this->table} WHERE status = 'approved' ORDER BY tahun_terbit DESC";
+        return $this->db->query($sql);
+    }
+
+    public function searchApprovedPublicationsByAuthor($authorId, $keyword)
+    {
+        $sql = "SELECT p.*, a.nama_lengkap as nama_penulis, a.foto_profil, a.username 
+                FROM {$this->table} p
+                JOIN anggota a ON p.id_anggota = a.id_anggota
+                WHERE p.status = 'approved' AND p.id_anggota = :id
+                AND (p.judul_publikasi LIKE :keyword OR p.deskripsi LIKE :keyword)
+                ORDER BY p.tahun_terbit DESC";
+        return $this->db->query($sql, ['id' => $authorId, 'keyword' => "%$keyword%"]);
+    }
 }

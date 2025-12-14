@@ -36,9 +36,18 @@ class MemberController extends Controller
         }
 
         // Fetch related APPROVED content
-        $publications = $this->publicationModel->getApprovedPublicationsByAuthor($id);
-        $news = $this->newsModel->getApprovedNewsByAuthor($id);
-        $gallery = $this->galleryModel->getApprovedPhotosByUploader($id);
+        $keyword = $_GET['search'] ?? null;
+
+        if ($keyword) {
+            $publications = $this->publicationModel->searchApprovedPublicationsByAuthor($id, $keyword);
+            $news = $this->newsModel->searchApprovedNewsByAuthor($id, $keyword);
+            $gallery = $this->galleryModel->searchApprovedPhotosByUploader($id, $keyword);
+        } else {
+            $publications = $this->publicationModel->getApprovedPublicationsByAuthor($id);
+            $news = $this->newsModel->getApprovedNewsByAuthor($id);
+            $gallery = $this->galleryModel->getApprovedPhotosByUploader($id);
+        }
+
         $infoLab = $this->contactModel->getApprovedContactInfo();
 
         return $this->view('member_detail', [
@@ -47,6 +56,7 @@ class MemberController extends Controller
             'publications' => $publications,
             'news' => $news,
             'gallery' => $gallery,
+            'keyword' => $keyword,
             'pageTitle' => 'Profil Anggota - ' . $member['nama_lengkap'],
             'layout' => false
         ]);
