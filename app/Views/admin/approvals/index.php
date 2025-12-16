@@ -768,7 +768,12 @@
                                                     <?= htmlspecialchars($item['jenis_konten']) ?>
                                                 </td>
                                                 <td>
-                                                    <div class="text-muted small"><?= $item['isi_konten'] ?></div>
+                                                    <?php if ($item['jenis_konten'] === 'struktur_organisasi'): ?>
+                                                        <img src="/uploads/struktur/<?= htmlspecialchars($item['isi_konten']) ?>"
+                                                            class="rounded shadow-sm" style="max-height: 100px; max-width: 200px;">
+                                                    <?php else: ?>
+                                                        <div class="text-muted small"><?= $item['isi_konten'] ?></div>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center gap-2">

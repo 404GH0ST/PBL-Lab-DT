@@ -148,7 +148,7 @@ class Publication extends Model
                 FROM {$this->table} p
                 JOIN anggota a ON p.id_anggota = a.id_anggota
                 WHERE p.status = 'approved'
-                ORDER BY p.citation_count DESC
+                ORDER BY p.citation_count DESC, p.tahun_terbit DESC
                 LIMIT :limit";
         return $this->db->query($sql, ['limit' => $limit]);
     }

@@ -17,8 +17,9 @@
 
                     <!-- Content -->
                     <?php if ($hero): ?>
-                        <div class="position-absolute bottom-0 start-0 end-0 p-3 text-white text-wrap">
-                            <h5 class="fw-semibold mb-1">
+                        <div class="position-absolute bottom-0 start-0 end-0 p-4 text-white text-wrap rounded-bottom-4"
+                            style="background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);">
+                            <h5 class="fw-semibold mb-1 text-white">
                                 <?= htmlspecialchars($hero['judul']) ?>
                             </h5>
                             <p class="mb-0 small text-truncate">

@@ -26,7 +26,7 @@
                             <div class="p-4">
                                 <h5 class="fw-bold mb-2"><?= htmlspecialchars($f['nama_fasilitas']) ?></h5>
                                 <p class="text-muted small mb-3">
-                                    <?= htmlspecialchars(substr($f['deskripsi'] ?? '', 0, 100)) ?>...
+                                    <?= htmlspecialchars($f['deskripsi'] ?? '') ?>
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center text-secondary small">
                                     <span><i class="bi bi-pc-display me-1"></i> <?= (int) $f['jumlah_unit'] ?> Units</span>

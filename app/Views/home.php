@@ -366,14 +366,14 @@
                             <div class="card-body d-flex flex-column">
                                 <div class="d-flex justify-content-between align-items-start mb-3">
                                     <?php
-                                    // Calculate max citations from the most cited list (since it's sorted DESC, first one is max)
-                                    $maxCitations = 0;
+                                    // Calculate max citations and get the ID of the winner (sorted by citations DESC, year DESC)
+                                    $mostCitedId = null;
                                     if (!empty($mostCitedPublications)) {
-                                        $maxCitations = $mostCitedPublications[0]['citation_count'];
+                                        $mostCitedId = $mostCitedPublications[0]['id_publikasi'];
                                     }
 
-                                    // Check if this publication has the max citations
-                                    $isMostCited = ($pub['citation_count'] > 0 && $pub['citation_count'] == $maxCitations);
+                                    // Check if this publication is the specific winner
+                                    $isMostCited = ($pub['id_publikasi'] == $mostCitedId);
 
                                     if ($isMostCited):
                                         ?>

@@ -3,6 +3,18 @@
         <h2 class="text-vision-gradient" style="font-size: 40px; font-weight: bold;">Tentang Kami
         </h2>
 
+        <?php if (!empty($struktur) && !empty($struktur['isi_konten'])): ?>
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h2 class="fw-bold mt-4 mb-3" style="color: #575757; font-size: 32px;">Struktur Organisasi</h2>
+                    <div class="card shadow rounded-3 border-0 overflow-hidden">
+                        <img src="/uploads/struktur/<?= htmlspecialchars($struktur['isi_konten']) ?>"
+                            alt="Struktur Organisasi" class="img-fluid w-100">
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <h2 class="fw-bold mt-4" style="color: #575757; font-size: 32px;">Anggota Laboratorium</h2>
         <div class="row g-4 mb-5">
             <?php foreach ($members as $member): ?>

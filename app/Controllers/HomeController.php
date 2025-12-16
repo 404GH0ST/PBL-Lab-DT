@@ -77,7 +77,7 @@ class HomeController extends Controller
         $labMembers = $this->memberModel->getMembersByRole('operator');
 
         // Limit members if needed, e.g., take top 3
-        $labMembers = array_slice($labMembers, 0, 3);
+        $labMembers = array_slice($labMembers, 0, 4);
 
         // Fokus riset
         $focusList = [];
@@ -120,11 +120,16 @@ class HomeController extends Controller
         $activities = $this->activityModel->getAllApprovedActivities();
         $courses = $this->courseModel->getAllApprovedCourses();
 
+        // Fetch Structure Organization
+        $visiMisiModel = $this->loadModel(VisiMisi::class);
+        $struktur = $visiMisiModel->getApprovedByType('struktur_organisasi');
+
         return $this->view('about', [
             'title' => 'About Us - Profile Lab DT',
             'members' => $members,
             'activities' => $activities,
-            'courses' => $courses
+            'courses' => $courses,
+            'struktur' => $struktur
         ]);
     }
 
